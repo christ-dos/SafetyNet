@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -29,10 +30,11 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 @Data
-public class PersonDataJsonDAO implements IPersonDAO {
+public class PersonDAO implements IPersonDAO {
 	
 	
 	private  List<Person> persons = new ArrayList<>();
+	
 	/**
 	 * Method that read the file data.json 
 	 * and get the data of the array persons
@@ -40,8 +42,8 @@ public class PersonDataJsonDAO implements IPersonDAO {
 	 * @return persons - a list with firstName, LastName,
 	 * address, city, phone, zip  and email
 	 */
-	
-	public List<Person> readJsonFilePersons() {
+	@PostConstruct
+	public  void readJsonFilePersons() {
 		
 		String FileJsonPath = "src/main/resources/data.json";
 		
@@ -58,37 +60,65 @@ public class PersonDataJsonDAO implements IPersonDAO {
 				jsonReader.close();
 				
 			} catch (FileNotFoundException e1) {
-				
-				log.error("File not found");
-				e1.printStackTrace();
+				log.error("File not found", e1);
 			} catch (IOException e) {
-				
-				log.error("The path of file does not be null");
-				e.printStackTrace();
+				log.error("The path of file does not be null", e);
 			}
 		}
-	
-		return persons;
 	}
 	
 	public List<Person> getListPersons() {
-		persons = readJsonFilePersons();
-		//setPersons(persons);
+		//persons = readJsonFilePersons();
+		
 		return getPersons();
 	}
 	
-	public List<Person> save(Person person) {
+	public Person getPerson(String lastName, String firstName) {
+		//persons = readJsonFilePersons();
+		for(Person element : persons) {
+			if(element.getLastName().equalsIgnoreCase(lastName) && element.getFirstName().equalsIgnoreCase(firstName)) {
+				log.info("DAO person found : " + firstName + " " + lastName );
+				return element;
+			}
+		}
+		//log.info("Get the person : " + firstName + " " + lastName );
+		return null;	
+	}
+	
+	public Person save(Person person) {
 		persons = getListPersons();
 		if(person != null) {
 			persons.add(person);
 			setPersons(persons);
 		}
-		return persons;
+		log.info("DAO person saved: " + person.getFirstName() + " " + person.getLastName() );
+		return person;
 	}
 	
-	public void deletePerson(Person person) {
-		
+	public void delete(Person person) {
 		persons.remove(person);
+		log.info("DAO person deleted : " + person.getFirstName() + " " + person.getLastName());
+	}
+	
+	public Person update(Person person) {
+		//Person personToUpdate = null;
+		
+		String firstName = person.getFirstName();
+		String lastName = person.getLastName();
+		Person personToUpdate = getPerson(lastName, firstName);
+		
+		if(personToUpdate != null) {
+			
+			personToUpdate.setAddress(person.getAddress());
+			personToUpdate.setCity(person.getCity());
+			personToUpdate.setZip(person.getZip());
+			personToUpdate.setPhone(person.getPhone());
+			personToUpdate.setEmail(person.getEmail());
+			
+			save(personToUpdate);
+			log.info("Dao person updated: " + person.getFirstName() + " " + person.getLastName());
+		}
+		return personToUpdate;
 	}
 
 
