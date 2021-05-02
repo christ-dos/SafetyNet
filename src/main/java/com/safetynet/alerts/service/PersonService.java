@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,47 +21,85 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class PersonService {
+public class PersonService implements IPersonService {
 	
 	@Autowired
-	private PersonDAO personDao;
+	private IPersonDAO iPersonDAO;
 	
 	
+	@Override
 	public List<Person> getListPersons() {
-
-		return personDao.getListPersons();
+		return iPersonDAO.getPersons();
 	}
 	
-	public Person getPerson(String lastName, String firstName) {
-		if(lastName == null || firstName == null) {
-			// Throws exception
-			log.info("This person not exist in file");
-		}
+	@Override
+	public Person getPerson(String firstName, String lastName) {
 		
-		Person person = personDao.getPerson(lastName, firstName);
+		if(firstName.isEmpty() || lastName.isEmpty()) {
+			// Throws exception
+			log.error("Service - The fields firstName and lastName can not be empty ");
+			throw new NullPointerException("The fields firstName and lastName can not be empty ");
+		}
+		Person person = iPersonDAO.getPerson(firstName, lastName);
 		if (person != null) {
 			return person;
 		}
-		throw new RuntimeException(); // Throws PersonNotFoundException
+		log.info("Service - Person not found");
+		//throw new PersonNotFoundException("Service - Person not found ");
+		return null;
+		//throw new RuntimeException(); // Throws PersonNotFoundException
 	}
 	
+	@Override
 	public Person addPerson(Person person) {
-		return personDao.save(person);
-		
-	}
-	public void deletePerson(String firstName, String lastName) {
-		Person person = personDao.getPerson(lastName, firstName);
-		
-		if(person != null) {
-			personDao.delete(person);
-			log.info("Service Person deleted : " + firstName + lastName);
-		}
-		log.info("je suis null");
+			Person personExist = getPerson(person.getFirstName(), person.getLastName());
+			
+			if(personExist != null && personExist.getFirstName().equalsIgnoreCase(person.getFirstName()) && person.getLastName().equalsIgnoreCase(personExist.getLastName())) {
+				log.info("Service - Person: " + person.getFirstName() + " " + person.getLastName() + " that we try to saved already exist");
+				return updatePerson(person);
+			}
+			log.info("Service - Person is saved : " + person.getFirstName() + " " + person.getLastName());
+			return iPersonDAO.save(person);
 	}
 	
+	@Override
+	public void deletePerson(String firstName, String lastName) {
+			Person person = iPersonDAO.getPerson(firstName, lastName);
+			
+			if(person != null) {
+				iPersonDAO.delete(person);
+				log.info("Service - Person deleted : " + firstName + lastName );
+			}
+	}
+	
+	@Override
 	public Person updatePerson(Person person) {
-		return personDao.update(person);
+		String firstName = person.getFirstName();
+		String lastName = person.getLastName();
+		Person personToUpdate = getPerson(firstName, lastName);
+		int indexPosition = getListPersons().indexOf(personToUpdate);
 		
+		if(personToUpdate != null) {
+			if (person.getAddress()!= personToUpdate.getAddress()) {
+				personToUpdate.setAddress(person.getAddress());
+			}
+			if (person.getCity() != personToUpdate.getCity()) {
+				personToUpdate.setCity(person.getCity());
+			}
+			if (person.getZip() != personToUpdate.getZip()) {
+				personToUpdate.setZip(person.getZip());
+			}
+			if (person.getPhone() != personToUpdate.getPhone()) {
+				personToUpdate.setPhone(person.getPhone());
+			}
+			if (person.getEmail() != personToUpdate.getEmail()) {
+				personToUpdate.setEmail(person.getEmail());
+			}
+			log.info("Service - person updated: " + personToUpdate.getFirstName() + " " + personToUpdate.getLastName());
+			
+			return iPersonDAO.update(indexPosition, personToUpdate);
+		}
+		throw new PersonNotFoundException("Service - Person not found, and can not be updated");
 	}
 
 }

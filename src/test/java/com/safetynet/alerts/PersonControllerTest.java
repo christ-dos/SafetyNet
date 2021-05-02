@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.PersonService;
+import com.safetynet.alerts.service.IPersonService;
 
 
 
@@ -26,7 +26,7 @@ public class PersonControllerTest {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private PersonService personService;
+	private IPersonService personService;
 	
 	
 	

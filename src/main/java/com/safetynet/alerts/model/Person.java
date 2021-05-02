@@ -1,5 +1,8 @@
 package com.safetynet.alerts.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -11,20 +14,26 @@ import lombok.Data;
 @Data
 public class Person {
 	
+	@NotNull
 	@JsonProperty("firstName")
 	String firstName;
 	
+	@NotNull
 	@JsonProperty("lastName")
 	String lastName;
 	
+	@NotBlank
 	@JsonProperty("address")
 	String address;
 	
+	@NotBlank
 	@JsonProperty("city")
 	String city;
 	
+	@NotBlank
 	@JsonProperty("zip")
 	String zip;
+	
 	
 	@JsonProperty("phone")
 	String phone;
@@ -32,7 +41,9 @@ public class Person {
 	@JsonProperty("email")
 	String email;
 	
-
+	// MedicalRecors medicalRecords;
+	
+	
 	public Person() {
 		
 	}

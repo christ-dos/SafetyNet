@@ -1,0 +1,19 @@
+package com.safetynet.alerts.service;
+
+import java.util.List;
+
+import com.safetynet.alerts.model.Person;
+
+public interface IPersonService {
+
+	List<Person> getListPersons();
+
+	Person getPerson(String firstName, String lastName);
+
+	Person addPerson(Person person);
+
+	void deletePerson(String firstName, String lastName);
+
+	Person updatePerson(Person person);
+
+}
