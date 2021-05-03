@@ -45,7 +45,7 @@ public class PersonService implements IPersonService {
 			return person;
 		}
 		log.info("Service - Person not found");
-		//throw new PersonNotFoundException("Service - Person not found ");
+		//throw new PersonNotFoundException("Service - Person not found ");//TODO a revoir
 		return null;
 		//throw new RuntimeException(); // Throws PersonNotFoundException
 	}

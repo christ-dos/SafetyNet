@@ -1,8 +1,8 @@
 package com.safetynet.alerts.DAO;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.alerts.model.Person;
@@ -21,12 +21,22 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class PersonDAO implements IPersonDAO {
 	
-	private List<Person> persons = new ArrayList<>();
+	@Autowired
+	private ReadFileJson readFileJson;
 	
+	private List<Person> persons; 
 	
-	public PersonDAO(ReadFileJson readFileJson) {
+	//private String filePathJson = "src/main/resources/data.json";
+	
+	//private String tabNameInFileJson = "persons";
+	
+
+	@Autowired
+	public PersonDAO( ReadFileJson readFileJson) {
 		this.persons = readFileJson.getPersons();
-		
+	}
+	
+	public PersonDAO() {
 	}
 
 	public List<Person> getPersons() {
@@ -36,7 +46,7 @@ public class PersonDAO implements IPersonDAO {
 	public Person getPerson(String firstName, String lastName) {
 		for(Person person : persons) {
 			if(person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName)) {
-				log.info("DAO - Person not found : " + firstName + " " + lastName );
+				log.info("DAO - Person found : " + firstName + " " + lastName );
 				return person;
 			}
 		}
@@ -55,8 +65,9 @@ public class PersonDAO implements IPersonDAO {
 	}
 	
 	public Person update(int indexPosition, Person person) {
-		log.info("DAO - Person updated : " + person.getFirstName() + " " + person.getLastName());
 		persons.set(indexPosition, person);
+		log.info("DAO - Person updated : " + person.getFirstName() + " " + person.getLastName());
 		return person;
 	}
+
 }
