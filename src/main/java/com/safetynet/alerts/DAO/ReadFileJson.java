@@ -64,7 +64,7 @@ public class ReadFileJson implements IReadFileJson {
 				JsonArray jsonPersonsArray= jsonObject.getJsonArray(tabNameInFileJson);
 				persons = mapper.readValue(jsonPersonsArray.toString(),new TypeReference<List<Person>>(){});
 				jsonReader.close();
-				//log.info("la methode read a ete appelleé" + persons);
+				log.info("la methode read a ete appelleé" + persons);
 			} catch (FileNotFoundException e1) {
 				log.error("File not found", e1);
 			} catch (IOException e) {

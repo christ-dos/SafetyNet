@@ -40,6 +40,7 @@ public class PersonDAO implements IPersonDAO {
 	}
 
 	public List<Person> getPersons() {
+		log.info("ma liste persons dans personsdao " );
 		 return persons;
 	}
 	

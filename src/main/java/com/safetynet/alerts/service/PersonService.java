@@ -41,13 +41,13 @@ public class PersonService implements IPersonService {
 			throw new NullPointerException("The fields firstName and lastName can not be empty ");
 		}
 		Person person = iPersonDAO.getPerson(firstName, lastName);
-		if (person != null) {
+		if(person != null) {
+			log.info("Service - Person found : " + person.getFirstName() + " " + person.getLastName());
 			return person;
 		}
 		log.info("Service - Person not found");
-		//throw new PersonNotFoundException("Service - Person not found ");//TODO a revoir
 		return null;
-		//throw new RuntimeException(); // Throws PersonNotFoundException
+		//throw new PersonNotFoundException("Service - Person not found exception");//TODO a revoir
 	}
 	
 	@Override
@@ -58,8 +58,11 @@ public class PersonService implements IPersonService {
 				log.info("Service - Person: " + person.getFirstName() + " " + person.getLastName() + " that we try to saved already exist");
 				return updatePerson(person);
 			}
+			if(personExist == null) {
 			log.info("Service - Person is saved : " + person.getFirstName() + " " + person.getLastName());
 			return iPersonDAO.save(person);
+			}
+			return null;
 	}
 	
 	@Override
@@ -77,9 +80,10 @@ public class PersonService implements IPersonService {
 		String firstName = person.getFirstName();
 		String lastName = person.getLastName();
 		Person personToUpdate = getPerson(firstName, lastName);
-		int indexPosition = getListPersons().indexOf(personToUpdate);
 		
-		if(personToUpdate != null) {
+		if(personToUpdate != null && personToUpdate.getFirstName().equalsIgnoreCase(person.getFirstName()) && person.getLastName().equalsIgnoreCase(personToUpdate.getLastName())) {
+			int  indexPosition = getListPersons().indexOf(personToUpdate);
+			
 			if (person.getAddress()!= personToUpdate.getAddress()) {
 				personToUpdate.setAddress(person.getAddress());
 			}
@@ -98,6 +102,7 @@ public class PersonService implements IPersonService {
 			log.info("Service - person updated: " + personToUpdate.getFirstName() + " " + personToUpdate.getLastName());
 			
 			return iPersonDAO.update(indexPosition, personToUpdate);
+			
 		}
 		throw new PersonNotFoundException("Service - Person not found, and can not be updated");
 	}
