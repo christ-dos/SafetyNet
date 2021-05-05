@@ -63,6 +63,12 @@
             <version>0.8.5</version>
             <type>maven-plugin</type>
         </dependency>
+        <!-- *************json path assert de jayway*********** -->
+        <dependency>
+		    <groupId>com.jayway.jsonpath</groupId>
+		    <artifactId>json-path-assert</artifactId>
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

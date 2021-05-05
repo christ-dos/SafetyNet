@@ -12,8 +12,10 @@ public interface IReadFileJson {
 	/**
 	 * Method that read the file data.json 
 	 * and add data in a arrayList persons
+	 * @param string2 
+	 * @param string 
 	 * @return 
 	 */
-	public List<Person> readJsonFilePersons();
+	public List<Person> readJsonFile(String arrayName);
 
 }

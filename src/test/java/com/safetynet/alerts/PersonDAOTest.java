@@ -75,7 +75,6 @@ public class PersonDAOTest {
 		//GIVEN
 		Person person = ipersonDAO.getPerson("Lily", "Cooper");
 		int indexLillyCooper= ipersonDAO.getPersons().indexOf(person);
-		log.info("mon index lillycooper" + indexLillyCooper);
 		Person personToUpdate = new Person("Lily","Cooper", "489 Rue des Fleurs", "Croix", "59170", "841-874-9845","lily@email.com");
 		//WHEN
 		Person resultAfterUpdate = ipersonDAO.update(indexLillyCooper, personToUpdate);

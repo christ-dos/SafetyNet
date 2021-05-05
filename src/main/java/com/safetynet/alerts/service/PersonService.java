@@ -71,7 +71,7 @@ public class PersonService implements IPersonService {
 			
 			if(person != null) {
 				iPersonDAO.delete(person);
-				log.info("Service - Person deleted : " + firstName + lastName );
+				log.info("Service - Person deleted : " + firstName +" "+ lastName );
 			}
 	}
 	
@@ -84,19 +84,19 @@ public class PersonService implements IPersonService {
 		if(personToUpdate != null && personToUpdate.getFirstName().equalsIgnoreCase(person.getFirstName()) && person.getLastName().equalsIgnoreCase(personToUpdate.getLastName())) {
 			int  indexPosition = getListPersons().indexOf(personToUpdate);
 			
-			if (person.getAddress()!= personToUpdate.getAddress()) {
+			if (!person.getAddress().equalsIgnoreCase(personToUpdate.getAddress())) {
 				personToUpdate.setAddress(person.getAddress());
 			}
-			if (person.getCity() != personToUpdate.getCity()) {
+			if (person.getCity().equalsIgnoreCase(personToUpdate.getCity())) {
 				personToUpdate.setCity(person.getCity());
 			}
-			if (person.getZip() != personToUpdate.getZip()) {
+			if (!person.getZip().equalsIgnoreCase(personToUpdate.getZip())) {
 				personToUpdate.setZip(person.getZip());
 			}
-			if (person.getPhone() != personToUpdate.getPhone()) {
+			if (!person.getPhone().equalsIgnoreCase(personToUpdate.getPhone())) {
 				personToUpdate.setPhone(person.getPhone());
 			}
-			if (person.getEmail() != personToUpdate.getEmail()) {
+			if (!person.getEmail().equalsIgnoreCase(personToUpdate.getEmail())) {
 				personToUpdate.setEmail(person.getEmail());
 			}
 			log.info("Service - person updated: " + personToUpdate.getFirstName() + " " + personToUpdate.getLastName());

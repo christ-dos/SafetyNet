@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -28,21 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class ReadFileJson implements IReadFileJson {
 	
-	private  List<Person> persons = new ArrayList<>();
+	//private  List<Person> persons = new ArrayList<>();
 	
 	private String filePathJson = "src/main/resources/data.json";
 	
-	private String tabNameInFileJson = "persons" ;
 	
 	@Autowired
 	ObjectMapper mapper;
-	
-	
-	
-	/**public ReadFileJson(List<Person> persons) {
-		super();
-		this.persons = persons;
-	}*/
 	
 
 	/**
@@ -51,20 +42,16 @@ public class ReadFileJson implements IReadFileJson {
 	 * @return 
 	 */
 	@Override
-	@PostConstruct
-	public List<Person> readJsonFilePersons() {
-		//String filePathJson = personDAO.getFilePathJson();
-		//String tabNameInFileJson = personDAO.getTabNameInFileJson();
+	public List<Person> readJsonFile(String ArrayName) {
+		List<Person> persons = new ArrayList<>();
 		if(filePathJson!= null) {
 			try(FileInputStream fileDataJson = new FileInputStream(filePathJson)) {
 				JsonReader jsonReader = Json.createReader(fileDataJson);
 				JsonObject jsonObject = jsonReader.readObject();
-				
-				//ObjectMapper mapper = new ObjectMapper();
-				JsonArray jsonPersonsArray= jsonObject.getJsonArray(tabNameInFileJson);
+				JsonArray jsonPersonsArray= jsonObject.getJsonArray(ArrayName);
 				persons = mapper.readValue(jsonPersonsArray.toString(),new TypeReference<List<Person>>(){});
 				jsonReader.close();
-				log.info("la methode read a ete appelleé" + persons);
+				log.info("readjsonFile - Method was called");
 			} catch (FileNotFoundException e1) {
 				log.error("File not found", e1);
 			} catch (IOException e) {

@@ -2,6 +2,8 @@ package com.safetynet.alerts.DAO;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,27 +24,21 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonDAO implements IPersonDAO {
 	
 	@Autowired
-	private ReadFileJson readFileJson;
+	private IReadFileJson ireadFileJson;
 	
 	private List<Person> persons; 
 	
-	//private String filePathJson = "src/main/resources/data.json";
 	
-	//private String tabNameInFileJson = "persons";
 	
-
-	@Autowired
-	public PersonDAO( ReadFileJson readFileJson) {
-		this.persons = readFileJson.getPersons();
+	@PostConstruct
+	public void readPersonsInFileJson() {
+		
+		persons = ireadFileJson.readJsonFile("persons");
 	}
 	
-	public PersonDAO() {
-	}
-
-	public List<Person> getPersons() {
-		log.info("ma liste persons dans personsdao " );
+	/**public List<Person> getPersons() {
 		 return persons;
-	}
+	}*/
 	
 	public Person getPerson(String firstName, String lastName) {
 		for(Person person : persons) {

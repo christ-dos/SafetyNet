@@ -2,8 +2,6 @@ package com.safetynet.alerts.controller;
 
 
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +33,17 @@ public class PersonController {
 	private IPersonService ipersonService;
 	
 	
-	@GetMapping(value= "/person")
+	/**@GetMapping(value= "/person")
 	public List <Person> getPersonDataJson()  {
 		log.info("Controller get list of persons");
 		return ipersonService.getListPersons();
-	}
+	}*/
 	
-	/**@GetMapping(value= "/person")
+	@GetMapping(value= "/person")
 	public Person getPersonDataJson(@Valid @RequestParam String firstName, @RequestParam String lastName)  {
 		//Person person = new Person("John", "Boyd","1509 Culver St","Culver", "97451", "841-874-6512","jaboyd@email.com");
-		return personService.getPerson(firstName, lastName);
-	}*/
+		return ipersonService.getPerson(firstName, lastName);
+	}
 	
 	@PostMapping(value= "/person")
 	public Person savePersonInFile(@Valid @RequestBody Person person) {

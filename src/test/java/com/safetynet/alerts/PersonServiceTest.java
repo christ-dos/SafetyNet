@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -26,18 +24,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
-import com.safetynet.alerts.DAO.ReadFileJson;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
 import com.safetynet.alerts.service.PersonService;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 @WebMvcTest(PersonService.class)
 @Data
-@Slf4j
 @AutoConfigureMockMvc
 public class PersonServiceTest {
 
@@ -50,10 +45,6 @@ public class PersonServiceTest {
 	@MockBean
 	private IPersonDAO ipersonDAO;
 	
-	@Autowired
-	private ReadFileJson readFileJson;
-	
-	//private Person person;
 	
 	
 	@Test
@@ -86,8 +77,8 @@ public class PersonServiceTest {
 	@Test
 	public void testGetPerson_whenFielsFirstNameAndLastNameIsNull_thenReturnNullPonterException() {
 		//GIVEN
-		String firstName = "";
-		String lastName = "";
+		String firstName = null;
+		String lastName = null;
 		//WHEN
 		
 		//THEN
@@ -104,7 +95,7 @@ public class PersonServiceTest {
 		//WHEN
 		Person resultAfterAddPerson = iPersonService.addPerson(personToAdd);
 		//THEN
-		//verify(personDAO, times(1)).getPerson(anyString(), anyString());
+		verify(ipersonDAO, times(1)).getPerson(anyString(), anyString());
 		verify(ipersonDAO, times(1)).save(any());
 		assertSame(personToAdd, resultAfterAddPerson);
 		assertEquals(personToAdd.getEmail(), resultAfterAddPerson.getEmail());
@@ -114,7 +105,7 @@ public class PersonServiceTest {
 	@Test
 	public void testAddPerson_whenPersonToAddExist_thenVerifyIfMethodUpdateIsCalled() {
 		//GIVEN
-		List <Person> myListPersons = readFileJson.getPersons();
+		List <Person> myListPersons = ipersonDAO.getPersons();
 		Person personRecordedInArray = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenz@email.com");
 		Person personToAddThatExist = new Person("Tenley", "Boyd", "15 NouvelleAdresse", "Culver", "97451", "841-874-6512", "tenz@email.com");
 		int index = myListPersons.indexOf(personRecordedInArray);
@@ -125,15 +116,17 @@ public class PersonServiceTest {
 		//WHEN
 		Person resultPersonExistAdded = iPersonService.addPerson(personToAddThatExist);
 		//THEN
+		//method getPerson is called 2 times, one time in method save and one time in method update
 		verify(ipersonDAO, times(2)).getPerson(anyString(), anyString());
 		verify(ipersonDAO, times(1)).update(index, personToAddThatExist);
-		assertNotEquals("1509 Culver St", resultPersonExistAdded.getAddress());
+		// the filed address was been updated in arrayList because person already exist
+		assertSame(personRecordedInArray.getAddress(), resultPersonExistAdded.getAddress());
 	}
 	
-	@Test
+	@Test 
 	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonWithAdressandPhoneAndEmailUpdated() {
 		//GIVEN
-		List <Person> myListPersons = readFileJson.getPersons();
+		List <Person> myListPersons = ipersonDAO.getPersons();
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );
 		Person personToUpdate = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "Culver", "97451", "841-874-6512", "jojo@email.com");
 		int index = myListPersons.indexOf(personRecordedInArray);
@@ -146,18 +139,15 @@ public class PersonServiceTest {
 		//THEN
 		verify(ipersonDAO, times(1)).getPerson(anyString(), anyString());
 		verify(ipersonDAO, times(1)).update(index, personToUpdate);
-		
-		assertNotSame(resultPersonUpdated, personRecordedInArray);
-		assertNotSame("29 15th St", resultPersonUpdated.getAddress());
-		assertNotSame("drk@email.com", resultPersonUpdated.getEmail());
-		assertNotSame("841-874-6513", resultPersonUpdated.getPhone());
-		
-		assertSame("Culver", resultPersonUpdated.getCity());
+		//all fields modified was been updated in arrayList
+		assertSame(personRecordedInArray.getAddress(), resultPersonUpdated.getAddress());
+		assertSame(personRecordedInArray.getEmail(), resultPersonUpdated.getEmail());
+		assertSame(personRecordedInArray.getPhone(), resultPersonUpdated.getPhone());
 	}
 	@Test
 	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonJonanathanMarrackWithTheFieldAdressModified() {
 		//GIVEN
-		List <Person> myListPersons = readFileJson.getPersons();
+		List <Person> myListPersons = ipersonDAO.getPersons();
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );
 		Person personToUpdate = new Person("Jonanathan", "Marrack", "30 rue des UrsulinesS", "Culver", "97451", "841-874-6513", "drk@email.com");
 		int index = myListPersons.indexOf(personRecordedInArray);
@@ -171,12 +161,8 @@ public class PersonServiceTest {
 		verify(ipersonDAO, times(1)).getPerson(anyString(), anyString());
 		verify(ipersonDAO, times(1)).update(index, personToUpdate);
 		
-		assertNotSame(resultPersonUpdated, personRecordedInArray);
-		assertNotSame("29 15th St", resultPersonUpdated.getAddress());
-		
-		assertSame("drk@email.com", resultPersonUpdated.getEmail());
-		assertSame("841-874-6513", resultPersonUpdated.getPhone());
-		assertSame("Culver", resultPersonUpdated.getCity());
+		// the field address that was been modified has been updated
+		assertSame(resultPersonUpdated.getAddress(), resultPersonUpdated.getAddress());
 	}
 	
 	@Test

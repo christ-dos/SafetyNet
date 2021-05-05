@@ -33,7 +33,6 @@ public class PersonControllerTest {
 	ObjectMapper objetMapper;
 	
 	
-	
 	public static String asJsonString(final Object obj) {
 	    try {
 	        return new ObjectMapper().writeValueAsString(obj);
@@ -44,7 +43,9 @@ public class PersonControllerTest {
 	
 	@Test
 	public void testGetPersonDataJsonInSuccess() throws Exception {
-		 mockMvc.perform(get("/person"))
+		//Person personTest = new Person("John","Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
+		
+		mockMvc.perform(get("/person?firstName=John&lastName=Boyd"))
 		.andDo(print())
 		.andExpect(status().isOk());
 	}
@@ -65,7 +66,7 @@ public class PersonControllerTest {
 	
 	@Test
 	public void testDeletePersonByFirstNameAndLastName() throws Exception {
-		mockMvc.perform(delete("/person?lastName=Boyd&firstName=john"))
+		mockMvc.perform(delete("/person?firstName=john&lastName=Boyd"))
 		.andExpect(status().isOk());
 	}
 
