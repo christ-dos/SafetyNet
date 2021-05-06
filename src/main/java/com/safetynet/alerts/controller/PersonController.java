@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
 
@@ -33,20 +34,21 @@ public class PersonController {
 	private IPersonService ipersonService;
 	
 	
-	/**@GetMapping(value= "/person")
+	 /**@GetMapping(value= "/person")
 	public List <Person> getPersonDataJson()  {
 		log.info("Controller get list of persons");
 		return ipersonService.getListPersons();
 	}*/
 	
 	@GetMapping(value= "/person")
-	public Person getPersonDataJson(@Valid @RequestParam String firstName, @RequestParam String lastName)  {
+	public Person getPersonDataJson(@Valid @RequestParam String firstName, @RequestParam String lastName) throws EmptyFieldsException  {
 		//Person person = new Person("John", "Boyd","1509 Culver St","Culver", "97451", "841-874-6512","jaboyd@email.com");
+		log.info("Controller - person found: " + firstName + " " + lastName );
 		return ipersonService.getPerson(firstName, lastName);
 	}
 	
 	@PostMapping(value= "/person")
-	public Person savePersonInFile(@Valid @RequestBody Person person) {
+	public Person savePersonInFile(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
 		return ipersonService.addPerson(person);
 	}
@@ -59,7 +61,7 @@ public class PersonController {
 	}
 	
 	@PutMapping(value= "/person")
-	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) {
+	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
 		return ipersonService.updatePerson(person);
 	}

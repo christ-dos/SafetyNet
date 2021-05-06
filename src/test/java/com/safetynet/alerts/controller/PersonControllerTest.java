@@ -1,4 +1,4 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.alerts.controller.PersonController;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
 
@@ -33,7 +32,7 @@ public class PersonControllerTest {
 	ObjectMapper objetMapper;
 	
 	
-	public static String asJsonString(final Object obj) {
+	public String asJsonString(final Object obj) {
 	    try {
 	        return new ObjectMapper().writeValueAsString(obj);
 	    }catch (Exception e) {

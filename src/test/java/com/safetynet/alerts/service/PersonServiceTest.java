@@ -1,4 +1,4 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.service;
 
 
 import static org.junit.Assert.assertNotNull;
@@ -24,10 +24,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.IPersonService;
-import com.safetynet.alerts.service.PersonService;
 
 import lombok.Data;
 
@@ -48,7 +47,7 @@ public class PersonServiceTest {
 	
 	
 	@Test
-	public void testGetPerson_whenInputExistWithFirstNameJohnAndLastNameBoyd_resultShouldGetObjectPersonJohnBoyd() {
+	public void testGetPerson_whenInputExistWithFirstNameJohnAndLastNameBoyd_resultShouldGetObjectPersonJohnBoyd() throws EmptyFieldsException {
 		//GIVEN
 		Person personInput = new Person("John", "Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
 		String firstName = personInput.getFirstName();
@@ -63,10 +62,10 @@ public class PersonServiceTest {
 	}
 	
 	@Test
-	public void testGetPerson_whenInputNotExist_resultShouldGiveNull() {
+	public void testGetPerson_whenInputNotExist_resultShouldGiveNull() throws EmptyFieldsException {
 		//GIVEN
 		String firstName = "Lubin";
-		String lastName = "Dupond";
+		String lastName = "Dujardin";
 		//WHEN
 		 Person resultNullExpected = iPersonService.getPerson(firstName, lastName);
 		//THEN
@@ -77,17 +76,17 @@ public class PersonServiceTest {
 	@Test
 	public void testGetPerson_whenFielsFirstNameAndLastNameIsNull_thenReturnNullPonterException() {
 		//GIVEN
-		String firstName = null;
-		String lastName = null;
+		String firstName = "John";
+		String lastName = "";
 		//WHEN
 		
 		//THEN
 		verify(ipersonDAO, times(0)).getPerson(anyString(), anyString());
-		assertThrows(NullPointerException.class, ()-> iPersonService.getPerson(firstName, lastName));
+		assertThrows(EmptyFieldsException.class, ()-> iPersonService.getPerson(firstName, lastName));
 	}
 	
 	@Test
-	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded() {
+	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded() throws EmptyFieldsException {
 		//GIVEN
 		Person personToAdd = new Person("Jojo", "Dupond", "1509 rue des fleurs","Rouvbaix","59100","000-000-0012","jojod@email.com");
 		when(ipersonDAO.getPerson(anyString(), anyString())).thenReturn(null);
@@ -103,7 +102,7 @@ public class PersonServiceTest {
 	}
 	
 	@Test
-	public void testAddPerson_whenPersonToAddExist_thenVerifyIfMethodUpdateIsCalled() {
+	public void testAddPerson_whenPersonToAddExist_thenVerifyIfMethodUpdateIsCalled() throws EmptyFieldsException {
 		//GIVEN
 		List <Person> myListPersons = ipersonDAO.getPersons();
 		Person personRecordedInArray = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenz@email.com");
@@ -124,11 +123,11 @@ public class PersonServiceTest {
 	}
 	
 	@Test 
-	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonWithAdressandPhoneAndEmailUpdated() {
+	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonWithAllFieldsUpdated() throws EmptyFieldsException {
 		//GIVEN
 		List <Person> myListPersons = ipersonDAO.getPersons();
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );
-		Person personToUpdate = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "Culver", "97451", "841-874-6512", "jojo@email.com");
+		Person personToUpdate = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "NewYork", "97450", "841-874-6512", "jojo@email.com");
 		int index = myListPersons.indexOf(personRecordedInArray);
 		
 		when(ipersonDAO.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
@@ -141,11 +140,14 @@ public class PersonServiceTest {
 		verify(ipersonDAO, times(1)).update(index, personToUpdate);
 		//all fields modified was been updated in arrayList
 		assertSame(personRecordedInArray.getAddress(), resultPersonUpdated.getAddress());
+		assertSame(personRecordedInArray.getCity(), resultPersonUpdated.getCity());
+		assertSame(personRecordedInArray.getZip(), resultPersonUpdated.getZip());
 		assertSame(personRecordedInArray.getEmail(), resultPersonUpdated.getEmail());
 		assertSame(personRecordedInArray.getPhone(), resultPersonUpdated.getPhone());
 	}
+	
 	@Test
-	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonJonanathanMarrackWithTheFieldAdressModified() {
+	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonJonanathanMarrackWithTheFieldAdressUpdated() throws EmptyFieldsException {
 		//GIVEN
 		List <Person> myListPersons = ipersonDAO.getPersons();
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );
@@ -166,7 +168,7 @@ public class PersonServiceTest {
 	}
 	
 	@Test
-	public void testUpdatePerson_whenPersonToUpdatedIsNull_thenReturnPersonNotFoundException() {
+	public void testUpdatePerson_whenPersonToUpdateNotExist_thenReturnPersonNotFoundException() {
 		//GIVEN
 		Person personToUpdateButNotExist = new Person("Babar", "Elephant", "29 15th St", "Culver", "97451", "841-874-6513", "babar@email.com" );
 		when(ipersonDAO.getPerson(anyString(), anyString())).thenReturn(null);

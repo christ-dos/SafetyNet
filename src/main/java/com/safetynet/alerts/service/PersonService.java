@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
@@ -33,15 +34,14 @@ public class PersonService implements IPersonService {
 	}
 	
 	@Override
-	public Person getPerson(String firstName, String lastName) {
-		
+	public Person getPerson(String firstName, String lastName) throws EmptyFieldsException {
 		if(firstName.isEmpty() || lastName.isEmpty()) {
 			// Throws exception
 			log.error("Service - The fields firstName and lastName can not be empty ");
-			throw new NullPointerException("The fields firstName and lastName can not be empty ");
+			throw new EmptyFieldsException("The fields firstName and lastName can not be empty");
 		}
 		Person person = iPersonDAO.getPerson(firstName, lastName);
-		if(person != null) {
+		if(person != null ) {
 			log.info("Service - Person found : " + person.getFirstName() + " " + person.getLastName());
 			return person;
 		}
@@ -51,18 +51,15 @@ public class PersonService implements IPersonService {
 	}
 	
 	@Override
-	public Person addPerson(Person person) {
+	public Person addPerson(Person person) throws EmptyFieldsException {
 			Person personExist = getPerson(person.getFirstName(), person.getLastName());
 			
-			if(personExist != null && personExist.getFirstName().equalsIgnoreCase(person.getFirstName()) && person.getLastName().equalsIgnoreCase(personExist.getLastName())) {
+			if(personExist != null ) {
 				log.info("Service - Person: " + person.getFirstName() + " " + person.getLastName() + " that we try to saved already exist");
 				return updatePerson(person);
 			}
-			if(personExist == null) {
 			log.info("Service - Person is saved : " + person.getFirstName() + " " + person.getLastName());
 			return iPersonDAO.save(person);
-			}
-			return null;
 	}
 	
 	@Override
@@ -71,23 +68,23 @@ public class PersonService implements IPersonService {
 			
 			if(person != null) {
 				iPersonDAO.delete(person);
-				log.info("Service - Person deleted : " + firstName +" "+ lastName );
+				log.info("Service - Person deleted : " + firstName + " " + lastName );
 			}
 	}
 	
 	@Override
-	public Person updatePerson(Person person) {
+	public Person updatePerson(Person person) throws EmptyFieldsException {
 		String firstName = person.getFirstName();
 		String lastName = person.getLastName();
 		Person personToUpdate = getPerson(firstName, lastName);
 		
-		if(personToUpdate != null && personToUpdate.getFirstName().equalsIgnoreCase(person.getFirstName()) && person.getLastName().equalsIgnoreCase(personToUpdate.getLastName())) {
+		if(personToUpdate != null ) {
 			int  indexPosition = getListPersons().indexOf(personToUpdate);
 			
 			if (!person.getAddress().equalsIgnoreCase(personToUpdate.getAddress())) {
 				personToUpdate.setAddress(person.getAddress());
 			}
-			if (person.getCity().equalsIgnoreCase(personToUpdate.getCity())) {
+			if (!person.getCity().equalsIgnoreCase(personToUpdate.getCity())) {
 				personToUpdate.setCity(person.getCity());
 			}
 			if (!person.getZip().equalsIgnoreCase(personToUpdate.getZip())) {

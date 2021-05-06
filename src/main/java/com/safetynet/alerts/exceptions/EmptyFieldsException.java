@@ -3,9 +3,10 @@ package com.safetynet.alerts.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND )
-public class PersonNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class EmptyFieldsException extends Exception {
 
+	
 	/**
 	 * Attribute that give an IDat the exception
 	 */
@@ -16,8 +17,10 @@ public class PersonNotFoundException extends RuntimeException {
 	 * 
 	 * @param message - The message that is send when an exception is throw
 	 */
-	public PersonNotFoundException(String message) {
-				super(message);
+	public EmptyFieldsException(String message) {
+		super(message);
 	}
+	
+	
 
 }
