@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 /**
- * Class that manage the requests of browser
+ * Class that manage the requests 
  * 
  * @author Christine Duarte
  *
@@ -29,7 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class PersonController {
-	
+	/**
+	 * Attribute of the class servicePerson
+	 */
 	@Autowired
 	private IPersonService ipersonService;
 	
@@ -40,19 +42,36 @@ public class PersonController {
 		return ipersonService.getListPersons();
 	}*/
 	
+	/**
+	 * Request get to obtain a person
+	 * @param firstName  - a String getted in the url request
+	 * @param lastName -a String getted in the url request
+	 * @return a person object
+	 * @throws EmptyFieldsException - when the field firstName or lastName is empty in the request
+	 */
 	@GetMapping(value= "/person")
-	public Person getPersonDataJson(@Valid @RequestParam String firstName, @RequestParam String lastName) throws EmptyFieldsException  {
-		//Person person = new Person("John", "Boyd","1509 Culver St","Culver", "97451", "841-874-6512","jaboyd@email.com");
+	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName) throws EmptyFieldsException  {
 		log.info("Controller - person found: " + firstName + " " + lastName );
 		return ipersonService.getPerson(firstName, lastName);
 	}
 	
+	/**
+	 * Request post to add a person at the ArrayList
+	 * @param person - a person getted by the body of the request
+	 * @return - the person added in the ArrayList
+	 * @throws EmptyFieldsException -  when the field firstName or lastName is empty in the request
+	 */
 	@PostMapping(value= "/person")
-	public Person savePersonInFile(@Valid @RequestBody Person person) throws EmptyFieldsException {
+	public Person savePerson(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
 		return ipersonService.addPerson(person);
 	}
 	
+	/**
+	 * Request Delete to delete a person of the ArrayList
+	 * @param firstName  - a String getted in the url request
+	 * @param lastName -a String getted in the url request
+	 */
 	@DeleteMapping(value= "/person")
 	public void deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
 		ipersonService.deletePerson(firstName, lastName);
@@ -60,6 +79,12 @@ public class PersonController {
 		
 	}
 	
+	/**
+	 * Request put to update a person of the ArrayList
+	 * @param person - a person getted by the body of the request
+	 * @return - the person updated in the ArrayList
+	 * @throws EmptyFieldsException -  when the field firstName or lastName is empty in the request
+	 */
 	@PutMapping(value= "/person")
 	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());

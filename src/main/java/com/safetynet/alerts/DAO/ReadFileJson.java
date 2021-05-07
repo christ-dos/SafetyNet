@@ -27,14 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class ReadFileJson implements IReadFileJson {
 	
-	//private  List<Person> persons = new ArrayList<>();
-	
 	private String filePathJson = "src/main/resources/data.json";
 	
 	
 	@Autowired
 	ObjectMapper mapper;
-	
 
 	/**
 	 * Method that read the file data.json 

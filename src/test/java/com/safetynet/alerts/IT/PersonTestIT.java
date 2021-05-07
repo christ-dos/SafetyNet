@@ -148,7 +148,7 @@ public class PersonTestIT {
 	}
 	
 	@Test
-	public void testRequetePut_whenpersonToUpdateNotExist_thenVerifyIfPersonNotFoundExceptionIsThrown() throws Exception {
+	public void testRequetePut_whenPersonToUpdateNotExist_thenVerifyIfPersonNotFoundExceptionIsThrown() throws Exception {
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Babar", "Elephant", "29 15th St", "Culver", "97451", "841-874-6513", "babar@email.com" );
 		

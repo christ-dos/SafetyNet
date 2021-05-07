@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-import com.safetynet.alerts.DAO.IPersonDAO;
-import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.model.Person;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +18,20 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonDAOTest {
 	
 	@Autowired
-	private IPersonDAO ipersonDAO;
+	private IPersonDAO iPersonDAO;
+	
 	
 	
 	@Test
-	public void testGetPersonDAO_whenExist_resultShouldGivenJacobBoyd() {
+	public void testGetPersonDAO_whenExist_resultShouldGiven() {
 		//GIVEN
-		String firstName = "Jacob";
-		String lastName = "Boyd";
+		String firstName = "Tessa";
+		String lastName = "Carman";
 		//WHEN
-		Person getPersonResult = ipersonDAO.getPerson(firstName, lastName);
+		Person getPersonResult = iPersonDAO.getPerson(firstName, lastName);
 		//THEN
-		assertEquals("Jacob", getPersonResult.getFirstName());
-		assertEquals("Boyd", getPersonResult.getLastName());
+		assertEquals("Tessa", getPersonResult.getFirstName());
+		assertEquals("Carman", getPersonResult.getLastName());
 	}
 	
 	@Test
@@ -41,7 +40,7 @@ public class PersonDAOTest {
 		String firstName = "Toto";
 		String lastName = "Zero";
 		//WHEN
-		Person getPersonResult = ipersonDAO.getPerson(firstName, lastName);
+		Person getPersonResult = iPersonDAO.getPerson(firstName, lastName);
 		//THEN
 		assertNull(getPersonResult);
 	}
@@ -51,7 +50,7 @@ public class PersonDAOTest {
 		//GIVEN
 		Person personTest = new Person("Tata","Zorro", "15 rue des Templiers","Relvas","6230","000-000-0000","zorrod@email.com");
 		//WHEN
-		Person resultPerson = ipersonDAO.save(personTest);
+		Person resultPerson = iPersonDAO.save(personTest);
 		//THEN
 		assertSame(personTest,resultPerson);
 		assertEquals("Tata",resultPerson.getFirstName());
@@ -64,8 +63,8 @@ public class PersonDAOTest {
 		String firstName = personTest.getFirstName();
 		String lastName = personTest.getLastName();
 		//WHEN
-		ipersonDAO.delete(personTest);
-		Person resultCallGetPersonAfterDelete = ipersonDAO.getPerson(firstName, lastName);
+		iPersonDAO.delete(personTest);
+		Person resultCallGetPersonAfterDelete = iPersonDAO.getPerson(firstName, lastName);
 		//THEN
 		assertNull(resultCallGetPersonAfterDelete);
 	}
@@ -73,12 +72,12 @@ public class PersonDAOTest {
 	@Test
 	public void testUpdatePersonDAO() {
 		//GIVEN
-		Person person = ipersonDAO.getPerson("Lily", "Cooper");
-		int indexLillyCooper= ipersonDAO.getPersons().indexOf(person);
+		Person person = iPersonDAO.getPerson("Lily", "Cooper");
+		int indexLillyCooper= iPersonDAO.getPersons().indexOf(person);
 		Person personToUpdate = new Person("Lily","Cooper", "489 Rue des Fleurs", "Croix", "59170", "841-874-9845","lily@email.com");
 		//WHEN
-		Person resultAfterUpdate = ipersonDAO.update(indexLillyCooper, personToUpdate);
-		int indexLillyCooperUpdated = ipersonDAO.getPersons().indexOf(personToUpdate);
+		Person resultAfterUpdate = iPersonDAO.update(indexLillyCooper, personToUpdate);
+		int indexLillyCooperUpdated = iPersonDAO.getPersons().indexOf(personToUpdate);
 		//THEN
 		assertEquals(person.getFirstName(), resultAfterUpdate.getFirstName());
 		assertEquals(indexLillyCooper, indexLillyCooperUpdated);

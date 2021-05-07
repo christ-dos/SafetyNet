@@ -60,12 +60,6 @@ public class Person {
 		this.email = email;
 	}
 	
-	public Person(String firstName, String lastName) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-
 	@Override
 	public String toString() {
 		return "Person [firstName=" + firstName + ", LastName=" + lastName + ", adress=" + address + ", city=" + city
