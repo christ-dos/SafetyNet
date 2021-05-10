@@ -13,7 +13,7 @@ public interface IPersonService {
 
 	Person addPerson(Person person) throws EmptyFieldsException;
 
-	void deletePerson(String firstName, String lastName);
+	String deletePerson(String firstName, String lastName);
 
 	Person updatePerson(Person person) throws EmptyFieldsException;
 

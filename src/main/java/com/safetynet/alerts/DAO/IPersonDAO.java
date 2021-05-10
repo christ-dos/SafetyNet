@@ -12,8 +12,8 @@ public interface IPersonDAO {
 	public void readPersonsInFileJson();
 	public List<Person> getPersons();
 	public Person getPerson(String firstName, String lastName);
-	public Person save(Person person);
-	public void delete(Person person);
+	public Person save(int index, Person person);
+	public String delete(Person person);
 	public Person update(int indexPosition, Person person);
 }
 

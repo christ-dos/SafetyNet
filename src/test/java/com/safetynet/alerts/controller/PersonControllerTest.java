@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -14,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,6 @@ import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
-import com.safetynet.alerts.service.PersonService;
 
 
 
@@ -41,10 +40,10 @@ public class PersonControllerTest {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private IPersonService iPersonService;
+	private IPersonService personServiceMock;
 	
 	@MockBean
-	private IPersonDAO iPersonDAO;
+	private IPersonDAO personDAOMock;
 	
 	@Autowired
 	ObjectMapper objetMapper;
@@ -62,8 +61,8 @@ public class PersonControllerTest {
 	public void testGetPerson_whenPersonExist_thenReturnStatusOk() throws Exception {
 		//GIVEN
 		Person personTest = new Person("John","Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(personTest);
-		when(iPersonDAO.getPerson(anyString(), anyString())).thenReturn(personTest);
+		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personTest);
+		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personTest);
 		//WHEN
 		
 		//THEN
@@ -77,7 +76,7 @@ public class PersonControllerTest {
 	@Test
 	public void testGetPerson_whenPersonNotexist_thenReturnStatusOk() throws Exception {
 		//GIVEN
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(null);
+		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(null);
 		//WHEN
 		
 		//THEN
@@ -91,7 +90,7 @@ public class PersonControllerTest {
 	@Test
 	public void testGetPerson_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
 		//GIVEN
-		 when(iPersonService.getPerson(anyString(), anyString()))
+		 when(personServiceMock.getPerson(anyString(), anyString()))
 		 .thenThrow(new EmptyFieldsException("The fields firstName and lastName can not be empty"));
 		//WHEN
 		
@@ -105,45 +104,37 @@ public class PersonControllerTest {
 	}
 	
 	@Test
-	public void testSavePerson_whenPersonToSaveExist_thenCallMethodUpdate() throws Exception {
+	public void testSavePerson_whenPersonToSaveExist_thenReturnNull() throws Exception {
 		//GIVEN
-		List <Person> myListPersons = iPersonDAO.getPersons();
-		Person personRecordedInArray = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenz@email.com");
-		int index = myListPersons.indexOf(personRecordedInArray);
-		Person personToAddThatExist = new Person("Tenley", "Boyd", "15 NouvelleAdresse", "Culver", "97451", "841-874-6512", "mynewemail@email.com");
+		List <Person> myListPersons = personDAOMock.getPersons();
+		Person personToAddExist = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenz@email.com");
+		int index = myListPersons.indexOf(personToAddExist);
 		
-		when(iPersonDAO.getPersons()).thenReturn(myListPersons);
-		when(iPersonService.addPerson(any())).thenReturn(personToAddThatExist);
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(iPersonDAO.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(iPersonService.updatePerson(any())).thenReturn(personToAddThatExist);
-		when(iPersonDAO.update(index, personToAddThatExist)).thenReturn(personToAddThatExist);		
+		when(personDAOMock.getPersons()).thenReturn(myListPersons);
+		when(personServiceMock.addPerson(any())).thenReturn(null);
 		//WHEN
 		
 		//THEN
 		 mockMvc.perform(MockMvcRequestBuilders
 				.post("/person")
-				.content(asJsonString(personToAddThatExist))
+				.content(asJsonString(personToAddExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("Tenley")))
-				.andExpect(jsonPath("$.lastName", is("Boyd")))
-				.andExpect(jsonPath("$.address", is("15 NouvelleAdresse")))
-				.andExpect(jsonPath("$.email", is("mynewemail@email.com")))
+				.andExpect(jsonPath("$").doesNotExist())
 				.andDo(print());
-		
 	}
 	
 	@Test
 	public void testSavePerson_whenPersonToSaveNotExist_thenCallMethodSave() throws Exception {
+		@SuppressWarnings("unchecked")
 		//GIVEN
+		ArrayList<Person> mockList = mock(ArrayList.class);
 		Person personToSave = new Person("Jojo", "Dupond", "1509 rue des fleurs","Rouvbaix","59100","000-000-0012","jojod@email.com");
-		
-		when(iPersonService.addPerson(any())).thenReturn(personToSave);
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(personToSave);
-		when(iPersonDAO.getPerson(anyString(), anyString())).thenReturn(null);
-		when(iPersonDAO.save(any())).thenReturn(personToSave);
+		when(personServiceMock.addPerson(any())).thenReturn(personToSave);
+		when(mockList.size()).thenReturn(23);
+		when(mockList.indexOf(personToSave)).thenReturn(-1);
+		when(personDAOMock.save(23, personToSave )).thenReturn(personToSave);
 		//WHEN
 		
 		//THEN
@@ -164,23 +155,15 @@ public class PersonControllerTest {
 	@Test
 	public void testDeletePerson_whenInputFirstNameJohnAndLastNameBoyd_shouldReturnNothing() throws Exception {
 		//GIVEN
-		PersonService personService = mock(PersonService.class);
+		when(personDAOMock.delete(any())).thenReturn("SUCESS");
+		when(personServiceMock.deletePerson(any(), any())).thenReturn("SUCESS");
+		
 		//WHEN
 		//THEN
 		mockMvc.perform(delete("/person?firstName=john&lastName=Boyd"))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$").doesNotExist())
+		.andExpect(jsonPath("$", is("SUCESS")))
 		.andDo(print());
-		 
-	    doAnswer(invocation -> {
-	        Object arg0 = invocation.getArgument(0);
-	        Object arg1 = invocation.getArgument(1);
-	        
-	        assertEquals("John", arg0);
-	        assertEquals("Boyd", arg1);
-	        return null;
-	    }).when(personService).deletePerson(any(String.class), any(String.class));
-	    personService.deletePerson("John", "Boyd");
 	}
 
 	@Test
@@ -188,14 +171,14 @@ public class PersonControllerTest {
 		//GIVEN
 		Person personToUpdated = new Person("John","Boyd", "1509 Culver St","Croix","97451","841-874-6512","jaboyd@email.com");
 		Person personRecordedInArray = new Person("John","Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
-		List <Person> myListPersons = iPersonDAO.getPersons();
+		List <Person> myListPersons = personDAOMock.getPersons();
 		int index = myListPersons.indexOf(personRecordedInArray);
 		
-		when(iPersonDAO.getPersons()).thenReturn(myListPersons);
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(iPersonDAO.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(iPersonService.updatePerson(any())).thenReturn(personToUpdated);
-		when(iPersonDAO.update(index, personToUpdated)).thenReturn(personToUpdated);		
+		when(personDAOMock.getPersons()).thenReturn(myListPersons);
+		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
+		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
+		when(personServiceMock.updatePerson(any())).thenReturn(personToUpdated);
+		when(personDAOMock.update(index, personToUpdated)).thenReturn(personToUpdated);		
 		//WHEN
 		
 		//THEN
@@ -216,14 +199,14 @@ public class PersonControllerTest {
 		//GIVEN
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );
 		Person personToUpdated = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "NewYork", "97450", "841-874-0000", "mynewemail@email.com");
-		List <Person> myListPersons = iPersonDAO.getPersons();
+		List <Person> myListPersons = personDAOMock.getPersons();
 		int index = myListPersons.indexOf(personRecordedInArray);
 		
-		when(iPersonDAO.getPersons()).thenReturn(myListPersons);
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(iPersonDAO.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(iPersonService.updatePerson(any())).thenReturn(personToUpdated);
-		when(iPersonDAO.update(index, personToUpdated)).thenReturn(personToUpdated);		
+		when(personDAOMock.getPersons()).thenReturn(myListPersons);
+		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
+		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
+		when(personServiceMock.updatePerson(any())).thenReturn(personToUpdated);
+		when(personDAOMock.update(index, personToUpdated)).thenReturn(personToUpdated);		
 		//WHEN
 		
 		//THEN
@@ -248,8 +231,8 @@ public class PersonControllerTest {
 		//GIVEN
 		Person personToUpdateButNotExist = new Person("Babar", "Elephant", "29 15th St", "Culver", "97451", "841-874-6513", "babar@email.com" );
 		
-		when(iPersonService.getPerson(anyString(), anyString())).thenReturn(null);
-		when(iPersonService.updatePerson(personToUpdateButNotExist))
+		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(null);
+		when(personServiceMock.updatePerson(personToUpdateButNotExist))
 		.thenThrow(new PersonNotFoundException("Service - Person not found, and can not be updated"));
 		//WHEN
 		

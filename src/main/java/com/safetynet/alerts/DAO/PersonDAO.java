@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonDAO implements IPersonDAO {
 	
 	@Autowired
-	private IReadFileJson iReadFileJson;
+	private IReadFileJson reader;
 	
 	private List<Person> persons; 
 	
@@ -33,12 +33,13 @@ public class PersonDAO implements IPersonDAO {
 	@PostConstruct
 	public void readPersonsInFileJson() {
 		
-		persons = iReadFileJson.readJsonFile("persons");
+		persons = reader.readJsonFile("persons");
+		log.info("readPersonn " + persons );
 	}
 	
-	/**public List<Person> getPersons() {
+	public List<Person> getPersons() {
 		 return persons;
-	}*/
+	}
 	
 	public Person getPerson(String firstName, String lastName) {
 		for(Person person : persons) {
@@ -50,15 +51,16 @@ public class PersonDAO implements IPersonDAO {
 		return null;
 	}
 	
-	public Person save(Person person) {
-		persons.add(person);
+	public Person save(int index, Person person) {
+		persons.add(index, person);
 		log.info("DAO - Person saved: " + person.getFirstName() + " " + person.getLastName() );
 		return person;
 	}
 	
-	public void delete(Person person) {
+	public String delete(Person person) {
 		persons.remove(person);
 		log.info("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());
+		return "SUCESS";
 	}
 	
 	public Person update(int indexPosition, Person person) {

@@ -33,10 +33,10 @@ public class PersonController {
 	 * Attribute of the class servicePerson
 	 */
 	@Autowired
-	private IPersonService ipersonService;
+	private IPersonService personService;
 	
 	
-	 /**@GetMapping(value= "/person")
+	/** @GetMapping(value= "/person")
 	public List <Person> getPersonDataJson()  {
 		log.info("Controller get list of persons");
 		return ipersonService.getListPersons();
@@ -52,7 +52,7 @@ public class PersonController {
 	@GetMapping(value= "/person")
 	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName) throws EmptyFieldsException  {
 		log.info("Controller - person found: " + firstName + " " + lastName );
-		return ipersonService.getPerson(firstName, lastName);
+		return personService.getPerson(firstName, lastName);
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class PersonController {
 	@PostMapping(value= "/person")
 	public Person savePerson(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
-		return ipersonService.addPerson(person);
+		return personService.addPerson(person);
 	}
 	
 	/**
@@ -73,9 +73,9 @@ public class PersonController {
 	 * @param lastName -a String getted in the url request
 	 */
 	@DeleteMapping(value= "/person")
-	public void deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
-		ipersonService.deletePerson(firstName, lastName);
+	public String deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
 		log.info("Controller - person deleted : " + firstName + " "+ lastName);
+		return personService.deletePerson(firstName, lastName);
 		
 	}
 	
@@ -88,7 +88,7 @@ public class PersonController {
 	@PutMapping(value= "/person")
 	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
-		return ipersonService.updatePerson(person);
+		return personService.updatePerson(person);
 	}
 	
 }

@@ -25,12 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonService implements IPersonService {
 	
 	@Autowired
-	private IPersonDAO iPersonDAO;
+	private IPersonDAO personDAO;
 	
 	
 	@Override
 	public List<Person> getListPersons() {
-		return iPersonDAO.getPersons();
+		return personDAO.getPersons();
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class PersonService implements IPersonService {
 			log.error("Service - The fields firstName and lastName can not be empty ");
 			throw new EmptyFieldsException("The fields firstName and lastName can not be empty");
 		}
-		Person person = iPersonDAO.getPerson(firstName, lastName);
+		Person person = personDAO.getPerson(firstName, lastName);
 		if(person != null ) {
 			log.info("Service - Person found : " + person.getFirstName() + " " + person.getLastName());
 			return person;
@@ -51,25 +51,30 @@ public class PersonService implements IPersonService {
 	}
 	
 	@Override
-	public Person addPerson(Person person) throws EmptyFieldsException {
-			Person personExist = getPerson(person.getFirstName(), person.getLastName());
+	public Person addPerson(Person person){
+			List<Person> MyList = personDAO.getPersons();
+			int index = MyList.indexOf(person);
+			int indexEnd = MyList.size();
 			
-			if(personExist != null ) {
-				log.info("Service - Person: " + person.getFirstName() + " " + person.getLastName() + " that we try to saved already exist");
-				return updatePerson(person);
+			if(index >=  0) {
+				log.info("Service - Person can not be saved because  : " + person.getFirstName() + " " + person.getLastName() + " already exist");
+				return null;
 			}
 			log.info("Service - Person is saved : " + person.getFirstName() + " " + person.getLastName());
-			return iPersonDAO.save(person);
+			return personDAO.save(indexEnd, person);
 	}
 	
 	@Override
-	public void deletePerson(String firstName, String lastName) {
-			Person person = iPersonDAO.getPerson(firstName, lastName);
+	public String deletePerson(String firstName, String lastName) {
+			Person person = personDAO.getPerson(firstName, lastName);
 			
 			if(person != null) {
-				iPersonDAO.delete(person);
+				
 				log.info("Service - Person deleted : " + firstName + " " + lastName );
+				return personDAO.delete(person);
 			}
+			return "Person Not Deleted";
+			
 	}
 	
 	@Override
@@ -81,24 +86,14 @@ public class PersonService implements IPersonService {
 		if(personToUpdate != null ) {
 			int  indexPosition = getListPersons().indexOf(personToUpdate);
 			
-			if (!person.getAddress().equalsIgnoreCase(personToUpdate.getAddress())) {
-				personToUpdate.setAddress(person.getAddress());
-			}
-			if (!person.getCity().equalsIgnoreCase(personToUpdate.getCity())) {
-				personToUpdate.setCity(person.getCity());
-			}
-			if (!person.getZip().equalsIgnoreCase(personToUpdate.getZip())) {
-				personToUpdate.setZip(person.getZip());
-			}
-			if (!person.getPhone().equalsIgnoreCase(personToUpdate.getPhone())) {
-				personToUpdate.setPhone(person.getPhone());
-			}
-			if (!person.getEmail().equalsIgnoreCase(personToUpdate.getEmail())) {
-				personToUpdate.setEmail(person.getEmail());
-			}
+			personToUpdate.setAddress(person.getAddress());
+			personToUpdate.setCity(person.getCity());
+			personToUpdate.setZip(person.getZip());
+			personToUpdate.setPhone(person.getPhone());
+			personToUpdate.setEmail(person.getEmail());
 			log.info("Service - person updated: " + personToUpdate.getFirstName() + " " + personToUpdate.getLastName());
 			
-			return iPersonDAO.update(indexPosition, personToUpdate);
+			return personDAO.update(indexPosition, personToUpdate);
 			
 		}
 		throw new PersonNotFoundException("Service - Person not found, and can not be updated");
