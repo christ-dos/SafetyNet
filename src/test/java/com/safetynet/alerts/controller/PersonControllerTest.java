@@ -244,7 +244,5 @@ public class PersonControllerTest {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 			    .andExpect(result -> assertEquals("The person that we want update not exist : " + personToUpdateButNotExist.getFirstName() + " " + personToUpdateButNotExist.getLastName(), result.getResolvedException().getMessage()))
 				.andDo(print());
-		
 	}
-
 }

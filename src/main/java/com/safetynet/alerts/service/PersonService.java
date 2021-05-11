@@ -28,8 +28,8 @@ public class PersonService implements IPersonService {
 	private IPersonDAO personDAO;
 	
 	
-	@Override
-	public List<Person> getListPersons() {
+	
+	private List<Person> getListPersons() {
 		return personDAO.getPersons();
 	}
 	
@@ -50,7 +50,7 @@ public class PersonService implements IPersonService {
 	
 	@Override
 	public Person addPerson(Person person){
-			List<Person> MyList = personDAO.getPersons();
+			List<Person> MyList = getListPersons();//personDAO.getPersons();
 			int index = MyList.indexOf(person);
 			int indexEnd = MyList.size();
 			if(index >=  0) {
@@ -77,16 +77,10 @@ public class PersonService implements IPersonService {
 		String firstName = person.getFirstName();
 		String lastName = person.getLastName();
 		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);
-		List<Person> MyList = personDAO.getPersons();
+		List<Person> MyList =getListPersons();// personDAO.getPersons();
 		if(resultPersonFinded != null) {
 			int  indexPosition = MyList.indexOf(resultPersonFinded);
-			log.info("mon index dans le if de person finded" + indexPosition);
 			personDAO.delete(resultPersonFinded);
-			/**resultPersonFinded.setAddress(person.getAddress());
-			resultPersonFinded.setCity(person.getCity());
-			resultPersonFinded.setZip(person.getZip());
-			resultPersonFinded.setPhone(person.getPhone());
-			resultPersonFinded.setEmail(person.getEmail());*/
 			log.info("Service - person updated: " + resultPersonFinded.getFirstName() + " " + resultPersonFinded.getLastName());
 			
 			return personDAO.save(indexPosition, person);

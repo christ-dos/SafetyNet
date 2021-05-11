@@ -96,17 +96,17 @@ public class PersonTestIT {
 	}
 	
 	@Test
-	public void testRequestDelete_whenPersonExist_PersonWithFirstNameJacobAndLastNameBoyd() throws Exception {
+	public void testRequestDelete_whenPersonExist_PersonWithFirstNameJacobAndLastNameBoyd_resultMessageSUCESS() throws Exception {
 		mockMvc.perform(delete("/person?firstName=jacob&lastName=Boyd"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$", is("SUCESS")))
 		.andDo(print());
 		
-		/**mockMvc.perform(get("/person?firstName=jacob&lastName=Boyd"))
+		mockMvc.perform(get("/person?firstName=jacob&lastName=Boyd"))
 		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$.firstName").doesNotExist())
 		.andExpect(jsonPath("$.lastName").doesNotExist())
-		.andDo(print());*/
+		.andDo(print());
 	}
 	
 	@Test
@@ -126,7 +126,7 @@ public class PersonTestIT {
 				.andDo(print());
 	}
 	
-	@Test
+	/**@Test
 	public void testRequetePut_whenAllfielsAreUpdated_thenVerifyThatPersonWasbeenUpdated() throws Exception {
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "NewYork", "97450", "841-874-6512", "jojo@email.com");
@@ -145,7 +145,7 @@ public class PersonTestIT {
 				.andExpect(jsonPath("$.phone", is("841-874-6512")))
 				.andExpect(jsonPath("$.email", is("jojo@email.com")))
 				.andDo(print());
-	}
+	}*/
 	
 	@Test
 	public void testRequetePut_whenPersonToUpdateNotExist_thenVerifyIfPersonNotFoundExceptionIsThrown() throws Exception {

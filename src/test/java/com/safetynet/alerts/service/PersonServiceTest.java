@@ -160,7 +160,7 @@ public class PersonServiceTest {
 	}
 	
 	@Test
-	public void testDeleteService_whenPersonExist() {
+	public void testDeletePerson_whenPersonExist() {
 		//GIVEN
 		Person personToDeleted = new Person("John", "Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
 		String firstName = personToDeleted.getFirstName();
@@ -173,6 +173,25 @@ public class PersonServiceTest {
 		//THEN
 		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
 		verify(personDAOMock, times(1)).delete(any());
+		
+	}
+	
+	@Test
+	public void testDeletePerson_whenPersonNotExist() {
+		//GIVEN
+		Person personToDeleteNotExist = new Person("Alice", "Lefevre", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
+		String firstName = personToDeleteNotExist.getFirstName();
+		String lastName = personToDeleteNotExist.getLastName();
+		
+		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(null);
+		when(personDAOMock.delete(personToDeleteNotExist)).thenReturn("Person Not Deleted");
+		//WHEN
+		 String resultMessage = personServiceTest.deletePerson(firstName, lastName);
+		//THEN
+		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
+		//the method delete not invoked
+		verify(personDAOMock, times(0)).delete(any());
+		assertEquals("Person Not Deleted", resultMessage);
 		
 	}
 }

@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class PersonDAO implements IPersonDAO {
 	
+
 	@Autowired
 	private IReadFileJson reader;
 	
@@ -31,8 +32,7 @@ public class PersonDAO implements IPersonDAO {
 	
 	
 	@PostConstruct
-	public void readPersonsInFileJson() {
-		
+	public void runnerData() {
 		persons = reader.readJsonFile("persons");
 		log.info("readPersonn " + persons );
 	}

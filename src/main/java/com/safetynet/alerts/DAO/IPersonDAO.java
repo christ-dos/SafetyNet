@@ -8,8 +8,7 @@ import com.safetynet.alerts.model.Person;
 
 @Repository
 public interface IPersonDAO {
-	
-	public void readPersonsInFileJson();
+	//public void readPersonsInFileJson();
 	public List<Person> getPersons();
 	public Person getPerson(String firstName, String lastName);
 	public Person save(int index, Person person);
