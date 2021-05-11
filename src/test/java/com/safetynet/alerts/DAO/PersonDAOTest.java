@@ -85,7 +85,4 @@ public class PersonDAOTest {
 		assertNull(resultCallGetPersonAfterDelete);
 		assertEquals("SUCESS", result);
 	}
-	
-
-	
 }

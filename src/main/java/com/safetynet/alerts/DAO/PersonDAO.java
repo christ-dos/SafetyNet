@@ -63,10 +63,5 @@ public class PersonDAO implements IPersonDAO {
 		return "SUCESS";
 	}
 	
-	public Person update(int indexPosition, Person person) {
-		persons.set(indexPosition, person);
-		log.info("DAO - Person updated : " + person.getFirstName() + " " + person.getLastName());
-		return person;
-	}
 
 }

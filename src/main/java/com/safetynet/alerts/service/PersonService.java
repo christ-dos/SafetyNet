@@ -36,7 +36,6 @@ public class PersonService implements IPersonService {
 	@Override
 	public Person getPerson(String firstName, String lastName) throws EmptyFieldsException {
 		if(firstName.isEmpty() || lastName.isEmpty()) {
-			// Throws exception
 			log.error("Service - The fields firstName and lastName can not be empty ");
 			throw new EmptyFieldsException("The fields firstName and lastName can not be empty");
 		}
@@ -46,8 +45,7 @@ public class PersonService implements IPersonService {
 			return person;
 		}
 		log.info("Service - Person not found");
-		return null;
-		//throw new PersonNotFoundException("Service - Person not found exception");//TODO a revoir
+		throw new PersonNotFoundException("Service - Person not found exception");
 	}
 	
 	@Override
@@ -55,7 +53,6 @@ public class PersonService implements IPersonService {
 			List<Person> MyList = personDAO.getPersons();
 			int index = MyList.indexOf(person);
 			int indexEnd = MyList.size();
-			
 			if(index >=  0) {
 				log.info("Service - Person can not be saved because  : " + person.getFirstName() + " " + person.getLastName() + " already exist");
 				return null;
@@ -67,9 +64,7 @@ public class PersonService implements IPersonService {
 	@Override
 	public String deletePerson(String firstName, String lastName) {
 			Person person = personDAO.getPerson(firstName, lastName);
-			
 			if(person != null) {
-				
 				log.info("Service - Person deleted : " + firstName + " " + lastName );
 				return personDAO.delete(person);
 			}
@@ -81,22 +76,22 @@ public class PersonService implements IPersonService {
 	public Person updatePerson(Person person) throws EmptyFieldsException {
 		String firstName = person.getFirstName();
 		String lastName = person.getLastName();
-		Person personToUpdate = getPerson(firstName, lastName);
-		
-		if(personToUpdate != null ) {
-			int  indexPosition = getListPersons().indexOf(personToUpdate);
+		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);
+		List<Person> MyList = personDAO.getPersons();
+		if(resultPersonFinded != null) {
+			int  indexPosition = MyList.indexOf(resultPersonFinded);
+			log.info("mon index dans le if de person finded" + indexPosition);
+			personDAO.delete(resultPersonFinded);
+			/**resultPersonFinded.setAddress(person.getAddress());
+			resultPersonFinded.setCity(person.getCity());
+			resultPersonFinded.setZip(person.getZip());
+			resultPersonFinded.setPhone(person.getPhone());
+			resultPersonFinded.setEmail(person.getEmail());*/
+			log.info("Service - person updated: " + resultPersonFinded.getFirstName() + " " + resultPersonFinded.getLastName());
 			
-			personToUpdate.setAddress(person.getAddress());
-			personToUpdate.setCity(person.getCity());
-			personToUpdate.setZip(person.getZip());
-			personToUpdate.setPhone(person.getPhone());
-			personToUpdate.setEmail(person.getEmail());
-			log.info("Service - person updated: " + personToUpdate.getFirstName() + " " + personToUpdate.getLastName());
-			
-			return personDAO.update(indexPosition, personToUpdate);
-			
+			return personDAO.save(indexPosition, person);
 		}
-		throw new PersonNotFoundException("Service - Person not found, and can not be updated");
+		throw new PersonNotFoundException("The person that we want update not exist : " + person.getFirstName() + " " + person.getLastName());
 	}
 
 }

@@ -39,7 +39,7 @@ public class PersonController {
 	/** @GetMapping(value= "/person")
 	public List <Person> getPersonDataJson()  {
 		log.info("Controller get list of persons");
-		return ipersonService.getListPersons();
+		return personService.getListPersons();
 	}*/
 	
 	/**

@@ -14,6 +14,5 @@ public interface IPersonDAO {
 	public Person getPerson(String firstName, String lastName);
 	public Person save(int index, Person person);
 	public String delete(Person person);
-	public Person update(int indexPosition, Person person);
 }
 

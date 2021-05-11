@@ -44,7 +44,7 @@ public class PersonTestIT {
 	@Test
 	public void testGetPersonThatNotExist_whenInputFirstNameLillyAndLastNameSaguet_shouldReturnNull() throws Exception {
 		mockMvc.perform(get("/person?firstName=Lilly&lastName=Saguet"))
-		.andExpect(status().isOk())
+		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$").doesNotExist())
 		.andDo(print());
 	}
@@ -96,17 +96,17 @@ public class PersonTestIT {
 	}
 	
 	@Test
-	public void testRequestDelete_PersonWithFirstNameJacobAndLastNameBoyd() throws Exception {
+	public void testRequestDelete_whenPersonExist_PersonWithFirstNameJacobAndLastNameBoyd() throws Exception {
 		mockMvc.perform(delete("/person?firstName=jacob&lastName=Boyd"))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$").doesNotExist())
+		.andExpect(jsonPath("$", is("SUCESS")))
 		.andDo(print());
 		
-		mockMvc.perform(get("/person?firstName=jacob&lastName=Boyd"))
-		.andExpect(status().isOk())
+		/**mockMvc.perform(get("/person?firstName=jacob&lastName=Boyd"))
+		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$.firstName").doesNotExist())
 		.andExpect(jsonPath("$.lastName").doesNotExist())
-		.andDo(print());
+		.andDo(print());*/
 	}
 	
 	@Test
@@ -160,7 +160,7 @@ public class PersonTestIT {
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$").doesNotExist())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
-			    .andExpect(result -> assertEquals("Service - Person not found, and can not be updated", result.getResolvedException().getMessage()))
+			    .andExpect(result -> assertEquals("The person that we want update not exist : " + personTest.getFirstName() + " " + personTest.getLastName(), result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 	
