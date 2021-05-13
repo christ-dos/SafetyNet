@@ -10,4 +10,10 @@ public class AlertsApplication {
 		SpringApplication.run(AlertsApplication.class, args);
 	}
 
+	/**@Bean
+	@Order(1)
+	public RunnerData getRunnner() {
+		return new RunnerData();
+	}*/
+
 }

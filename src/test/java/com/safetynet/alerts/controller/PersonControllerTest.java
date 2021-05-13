@@ -192,7 +192,8 @@ public class PersonControllerTest {
 				.andDo(print());
 	}
 	
-/**	@Test
+/**	@throws Exception 
+ * @Test
 	public void testUpdatePerson_whenAllfieldsWereModified_thenReturnPersonWithAllFieldsUpdated() throws Exception {
 		//GIVEN
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );

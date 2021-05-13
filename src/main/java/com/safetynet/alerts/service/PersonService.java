@@ -69,11 +69,10 @@ public class PersonService implements IPersonService {
 				return personDAO.delete(person);
 			}
 			return "Person Not Deleted";
-			
 	}
 	
 	@Override
-	public Person updatePerson(Person person) throws EmptyFieldsException {
+	public Person updatePerson(Person person){
 		String firstName = person.getFirstName();
 		String lastName = person.getLastName();
 		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);

@@ -1,10 +1,8 @@
 package com.safetynet.alerts.DAO;
 
-import java.util.List;
+import javax.json.JsonObject;
 
 import org.springframework.stereotype.Repository;
-
-import com.safetynet.alerts.model.Person;
 
 @Repository
 public interface IReadFileJson {
@@ -16,6 +14,6 @@ public interface IReadFileJson {
 	 * @param string 
 	 * @return 
 	 */
-	public List<Person> readJsonFile(String arrayName);
+	public JsonObject readJsonFile();
 
 }
