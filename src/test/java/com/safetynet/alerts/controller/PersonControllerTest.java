@@ -47,8 +47,8 @@ public class PersonControllerTest {
 	@MockBean
 	private List<Person> mockList;
 	
-	@Autowired
-	ObjectMapper objetMapper;
+	//@Autowired
+	//ObjectMapper objetMapper;
 	
 	
 	public String asJsonString(final Object obj) {

@@ -50,7 +50,7 @@ public class PersonService implements IPersonService {
 	
 	@Override
 	public Person addPerson(Person person){
-			List<Person> MyList = getListPersons();//personDAO.getPersons();
+			List<Person> MyList = getListPersons();
 			int index = MyList.indexOf(person);
 			int indexEnd = MyList.size();
 			if(index >=  0) {
@@ -76,7 +76,7 @@ public class PersonService implements IPersonService {
 		String firstName = person.getFirstName();
 		String lastName = person.getLastName();
 		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);
-		List<Person> MyList =getListPersons();// personDAO.getPersons();
+		List<Person> MyList = getListPersons();
 		if(resultPersonFinded != null) {
 			int  indexPosition = MyList.indexOf(resultPersonFinded);
 			personDAO.delete(resultPersonFinded);

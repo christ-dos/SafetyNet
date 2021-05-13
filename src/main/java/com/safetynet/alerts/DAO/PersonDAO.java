@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.alerts.DataJson;
 import com.safetynet.alerts.model.Person;
 
 import lombok.Data;
@@ -23,17 +21,17 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class PersonDAO implements IPersonDAO {
 	
-	@Autowired
-	private ReadFileJson reader;
+	//@Autowired
+	//private ReadFileJson reader;
 	
 	@Autowired
 	private List<Person> listPersons ;
 
-	@Autowired
-	private ObjectMapper mapper;
+	//@Autowired
+	//private ObjectMapper mapper;
 	
-	@Autowired
-	private DataJson dataJson;
+	//@Autowired
+	//private DataJson dataJson;
 	
 	
 	public List<Person> getPersons() {

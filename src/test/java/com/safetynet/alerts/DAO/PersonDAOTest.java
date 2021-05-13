@@ -20,6 +20,11 @@ public class PersonDAOTest {
 	@Autowired
 	private IPersonDAO personDAOTest;
 	
+	@Autowired
+	private PersonDAO pPersonDAOTest;
+	
+	
+	
 	
 	
 	@Test
@@ -48,7 +53,7 @@ public class PersonDAOTest {
 	@Test
 	public void testSavePersonDAO_whenPersonNotExist_resultShouldVerifyThatPersonTestIsSameThatResultExpected() {
 		//GIVEN
-		int indexEnd = personDAOTest.getPersons().size();
+		int indexEnd = pPersonDAOTest.getListPersons().size();
 		Person personTest = new Person("Tata","Zorro", "15 rue des Templiers","Relvas","6230","000-000-0000","zorrod@email.com");
 		//WHEN
 		Person resultPerson = personDAOTest.save(indexEnd, personTest);
@@ -61,11 +66,11 @@ public class PersonDAOTest {
 	public void testSavePersonDAO_whenPersonExist_shouldSavedPersonInIndex() {
 		//GIVEN
 		Person person = personDAOTest.getPerson("Lily", "Cooper");
-		int indexLillyCooper= personDAOTest.getPersons().indexOf(person);
+		int indexLillyCooper= pPersonDAOTest.getListPersons().indexOf(person);
 		Person personToSaved = new Person("Lily","Cooper", "489 Rue des Fleurs", "Croix", "59170", "841-874-9845","lily@email.com");
 		//WHEN
 		Person result = personDAOTest.save(indexLillyCooper, personToSaved);
-		int indexPersonSaved= personDAOTest.getPersons().indexOf(personToSaved);
+		int indexPersonSaved= pPersonDAOTest.getListPersons().indexOf(personToSaved);
 		//THEN
 		assertEquals(person.getFirstName(), result.getFirstName());
 		assertEquals(indexLillyCooper, indexPersonSaved);
