@@ -1,6 +1,5 @@
 package com.safetynet.alerts.exceptions;
 
-//@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class EmptyFieldsException extends Exception {
 
 	

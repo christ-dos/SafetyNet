@@ -35,7 +35,6 @@ public class PersonDAO implements IPersonDAO {
 	
 	
 	public List<Person> getPersons() {
-		System.out.println( "je suis dans get persons" + listPersons);
 		 return listPersons;
 	}
 	

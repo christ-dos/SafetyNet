@@ -8,10 +8,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonComponent;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ReadFileJson implements IReadFileJson {
 	
 	private String filePathJson = "src/main/resources/data.json";
-	
-	@Autowired
-	private ObjectMapper mapper;
 	
 
 	/**

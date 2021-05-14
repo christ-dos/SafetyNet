@@ -45,7 +45,7 @@ public class PersonTestIT {
 	public void testGetPersonThatNotExist_whenInputFirstNameLillyAndLastNameSaguet_shouldReturnNull() throws Exception {
 		mockMvc.perform(get("/person?firstName=Lilly&lastName=Saguet"))
 		.andExpect(status().isNotFound())
-		.andExpect(jsonPath("$").doesNotExist())
+		.andExpect(jsonPath("$.message", is("Person not found")))
 		.andDo(print());
 	}
 	
@@ -53,7 +53,7 @@ public class PersonTestIT {
 	public void testGetPerson_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
 		mockMvc.perform(get("/person?firstName=&lastName="))
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("$").doesNotExist())
+		.andExpect(jsonPath("$.message", is("The fields firstName and lastName can not be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
 	    .andExpect(result -> assertEquals("The fields firstName and lastName can not be empty", result.getResolvedException().getMessage()))
 		.andDo(print());
@@ -158,7 +158,7 @@ public class PersonTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$").doesNotExist())
+				.andExpect(jsonPath("$.message", is("Person not found")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 			    .andExpect(result -> assertEquals("The person that we want update not exist : " + personTest.getFirstName() + " " + personTest.getLastName(), result.getResolvedException().getMessage()))
 				.andDo(print());

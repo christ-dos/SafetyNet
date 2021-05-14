@@ -1,9 +1,12 @@
 package com.safetynet.alerts.DAO;
 
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,16 @@ public class PersonDAOTest {
 	
 	
 	
-	
+	@Test
+	public void testGetPersonsDAO_whenGetIndex0_resultShouldReturnJohnBoyd() {
+		//GIVEN
+		Person personInIndex0 = new Person("John", "Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
+		//WHEN
+		List<Person> resultExpected = pPersonDAOTest.getPersons();
+		//THEN
+		assertNotNull(resultExpected);
+		assertEquals(personInIndex0, resultExpected.get(0));
+	}
 	
 	@Test
 	public void testGetPersonDAO_whenExist_resultShouldGiven() {

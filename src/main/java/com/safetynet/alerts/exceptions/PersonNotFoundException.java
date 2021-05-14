@@ -1,6 +1,5 @@
 package com.safetynet.alerts.exceptions;
 
-//@ResponseStatus(HttpStatus.NOT_FOUND )
 public class PersonNotFoundException extends RuntimeException {
 
 	/**

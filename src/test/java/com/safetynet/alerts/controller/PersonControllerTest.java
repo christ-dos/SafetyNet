@@ -1,5 +1,6 @@
 package com.safetynet.alerts.controller;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.DAO.IPersonDAO;
@@ -32,7 +34,7 @@ import com.safetynet.alerts.service.IPersonService;
 
 
 
-@WebMvcTest(PersonController.class)
+@WebMvcTest
 public class PersonControllerTest {
 	
 	@Autowired
@@ -99,11 +101,12 @@ public class PersonControllerTest {
 		//THEN
 		mockMvc.perform(get("/person?firstName=&lastName="))
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("$").doesNotExist())
+		.andExpect(jsonPath("$.message", is("The fields firstName and lastName can not be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
 	    .andExpect(result -> assertEquals("The fields firstName and lastName can not be empty", result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
+	
 	
 	@Test
 	public void testSavePerson_whenPersonToSaveExist_thenReturnNull() throws Exception {
@@ -168,21 +171,21 @@ public class PersonControllerTest {
 	@Test
 	public void testUpdatePerson_whenfieldCityWasModified_thenReturnPersonWithFieldCityUpdated() throws Exception {
 		//GIVEN
-		Person personToUpdated = new Person("John","Boyd", "1509 Culver St","Croix","97451","841-874-6512","jaboyd@email.com");
+		Person personToUpdate = new Person("John","Boyd", "1509 Culver St","Croix","97451","841-874-6512","jaboyd@email.com");
 		Person personRecordedInArray = new Person("John","Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
 		
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		when(mockList.indexOf(any())).thenReturn(0);
 		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(personServiceMock.updatePerson(any())).thenReturn(personToUpdated);
-		when(personDAOMock.save(anyInt(), any())).thenReturn(personToUpdated);		
+		when(personServiceMock.updatePerson(any())).thenReturn(personToUpdate);
+		when(personDAOMock.save(anyInt(), any())).thenReturn(personToUpdate);		
 		//WHEN
 		
 		//THEN
 		mockMvc.perform(MockMvcRequestBuilders
 				.put("/person")
-				.content(asJsonString(personToUpdated))
+				.content(asJsonString(personToUpdate))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -241,9 +244,28 @@ public class PersonControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$").doesNotExist())
+				.andExpect(jsonPath("$.message", is("Person not found")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 			    .andExpect(result -> assertEquals("The person that we want update not exist : " + personToUpdateButNotExist.getFirstName() + " " + personToUpdateButNotExist.getLastName(), result.getResolvedException().getMessage()))
+				.andDo(print());
+	}
+	
+	@Test
+	public void testPutPerson_whenInputFieldsIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank() throws Exception {
+		//GIVEN
+		Person personToUpdate = new Person("","Boyd", "1509 Culver St","Croix","97451","841-874-6512","jaboyd@email.com");
+		//WHEN
+		
+		//THEN
+		mockMvc.perform(MockMvcRequestBuilders
+				.put("/person")
+				.content(asJsonString(personToUpdate))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+				.andExpect(jsonPath("$.errors").isArray())
+				.andExpect(jsonPath("$.errors", hasItem("must not be blank")))
 				.andDo(print());
 	}
 }

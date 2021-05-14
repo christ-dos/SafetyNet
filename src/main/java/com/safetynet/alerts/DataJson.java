@@ -40,7 +40,7 @@ public class DataJson {
 		JsonObject jsonObject = getObjectJson();
 		try {
 			JsonArray jsonPersonsArray= jsonObject.getJsonArray(ArrayName);
-			persons = mapper.readValue(jsonPersonsArray.toString(),new TypeReference<List<Person>>(){});
+			persons = mapper.readValue(jsonPersonsArray.toString(), new TypeReference<List<Person>>(){});
 		} catch (JsonProcessingException e) {
 			log.error("DataJson - Error occured during deserialization of the JsonArray persons");
 			e.printStackTrace();

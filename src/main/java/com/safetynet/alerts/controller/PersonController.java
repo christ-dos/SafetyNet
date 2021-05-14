@@ -1,7 +1,5 @@
 package com.safetynet.alerts.controller;
 
-
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import com.safetynet.alerts.service.IPersonService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 /**
  * Class that manage the requests 
  * 
@@ -30,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PersonController {
 	/**
-	 * Attribute of the class servicePerson
+	 * An instance of the IPersonService
 	 */
 	@Autowired
 	private IPersonService personService;
@@ -45,7 +42,7 @@ public class PersonController {
 	/**
 	 * Request get to obtain a person
 	 * @param firstName  - a String getted in the url request
-	 * @param lastName -a String getted in the url request
+	 * @param lastName - a String getted in the url request
 	 * @return a person object
 	 * @throws EmptyFieldsException - when the field firstName or lastName is empty in the request
 	 */
@@ -76,7 +73,6 @@ public class PersonController {
 	public String deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
 		log.info("Controller - person deleted : " + firstName + " "+ lastName);
 		return personService.deletePerson(firstName, lastName);
-		
 	}
 	
 	/**

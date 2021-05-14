@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -35,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @WebMvcTest(PersonService.class)
 @Data
-@AutoConfigureMockMvc
 @Slf4j
 public class PersonServiceTest {
 
@@ -145,7 +143,7 @@ public class PersonServiceTest {
 		verify(personDAOMock, times(1)).delete(any());
 		
 		// the field address that was been modified has been updated
-		assertSame(resultPersonUpdated.getAddress(), personToUpdate.getAddress());
+		assertEquals(resultPersonUpdated.getAddress(), personToUpdate.getAddress());
 	}
 	
 	@Test

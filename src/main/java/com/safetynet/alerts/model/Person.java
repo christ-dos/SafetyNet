@@ -1,7 +1,7 @@
 package com.safetynet.alerts.model;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,11 +14,13 @@ import lombok.Data;
 @Data
 public class Person {
 	
-	@NotNull
+	@NotBlank
+	@Size(max= 20)
 	@JsonProperty("firstName")
 	String firstName;
 	
-	@NotNull
+	@NotBlank
+	@Size(max= 20)
 	@JsonProperty("lastName")
 	String lastName;
 	
