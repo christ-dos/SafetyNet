@@ -16,47 +16,52 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-
 @ControllerAdvice
-public class ControllerAdvisor extends ResponseEntityExceptionHandler{
+public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
-	 @ExceptionHandler(PersonNotFoundException.class)
-	    public ResponseEntity<Object> handlePersonNotFoundException(
-	    		PersonNotFoundException ex, WebRequest request) {
+	@ExceptionHandler(PersonNotFoundException.class)
+	public ResponseEntity<Object> handlePersonNotFoundException(PersonNotFoundException ex, WebRequest request) {
 
-	        Map<String, Object> body = new LinkedHashMap<>();
-	        body.put("timestamp", LocalDateTime.now());
-	        body.put("message", "Person not found");
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "Person not found");
 
-	        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-	    }
-	 
-	 @ExceptionHandler(EmptyFieldsException.class)
-	    public ResponseEntity<Object> handleEmptyFieldsException(
-	    		EmptyFieldsException ex, WebRequest request) {
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
 
-	        Map<String, Object> body = new LinkedHashMap<>();
-	        body.put("timestamp", LocalDateTime.now());
-	        body.put("message", "The fields firstName and lastName can not be empty");
+	@ExceptionHandler(EmptyFieldsException.class)
+	public ResponseEntity<Object> handleEmptyFieldsException(EmptyFieldsException ex, WebRequest request) {
 
-	        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-	    }
-	
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "The fields firstName and lastName can not be empty");
+
+		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(PersonAlreadyExistException.class)
+	public ResponseEntity<Object> handlePersonAlreadyExistException(PersonAlreadyExistException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "Person aready exist");
+
+		return new ResponseEntity<>(body, HttpStatus.ALREADY_REPORTED);
+	}
+
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDate.now());
-        body.put("status", status.value());
+		body.put("timestamp", LocalDate.now());
+		body.put("status", status.value());
 
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(x -> x.getDefaultMessage())
-                .collect(Collectors.toList());
+		List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage())
+				.collect(Collectors.toList());
 
-        body.put("errors", errors);
-		
+		body.put("errors", errors);
+
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 

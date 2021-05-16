@@ -15,16 +15,16 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.safetynet.alerts.DAO.IPersonDAO;
+import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
+import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,19 +32,21 @@ import lombok.extern.slf4j.Slf4j;
  * @author Chrsitine Duarte
  *
  */
-@WebMvcTest(PersonService.class)
-@Data
+//@WebMvcTest(PersonService.class)
+@ExtendWith(MockitoExtension.class)
 @Slf4j
 public class PersonServiceTest {
 
 	
-	@Autowired
-	private IPersonService personServiceTest;
+	//@Autowired
+	private PersonService personServiceTest = new PersonService();
 	
-	@MockBean
-	private IPersonDAO personDAOMock;
+	//private PersonService personService = new PersonService();
 	
-	@MockBean
+	@Mock
+	private PersonDAO personDAOMock;
+	
+	@Mock
 	List<Person> mockList;
 	
 	
@@ -89,7 +91,7 @@ public class PersonServiceTest {
 	}
 	
 	@Test
-	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded() throws EmptyFieldsException{
+	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded() throws EmptyFieldsException, PersonAlreadyExistException{
 		//GIVEN
 		Person personToAdd = new Person("Jojo", "Dupond", "1509 rue des fleurs","Roubaix","59100","000-000-0012","jojod@email.com");
 		when(personDAOMock.getPersons()).thenReturn(mockList);
@@ -107,7 +109,7 @@ public class PersonServiceTest {
 	}
 	
 	@Test
-	public void testAddPerson_whenPersonToAddExist_thenVerifyThatSavedIsNotCalled() throws EmptyFieldsException {
+	public void testAddPerson_whenPersonToAddExist_thenVerifyThatSavedIsNotCalled() throws EmptyFieldsException, PersonAlreadyExistException {
 		//GIVEN
 		Person personToAddAreadyExist = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenz@email.com");
 		

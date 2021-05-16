@@ -20,27 +20,27 @@ import lombok.extern.slf4j.Slf4j;
 @JsonComponent
 @Slf4j
 public class DataJson {
-	
+
 	@Autowired
 	private ReadFileJson reader;
-	
+
 	@Autowired
 	private ObjectMapper mapper;
-	
+
 	private List<Person> persons;
-	
-	
+
 	private JsonObject getObjectJson() {
 		return reader.readJsonFile();
 	}
-	
+
 	@Bean
-	public List<Person> listPersons(){
+	public List<Person> listPersons() {
 		String ArrayName = "persons";
 		JsonObject jsonObject = getObjectJson();
 		try {
-			JsonArray jsonPersonsArray= jsonObject.getJsonArray(ArrayName);
-			persons = mapper.readValue(jsonPersonsArray.toString(), new TypeReference<List<Person>>(){});
+			JsonArray jsonPersonsArray = jsonObject.getJsonArray(ArrayName);
+			persons = mapper.readValue(jsonPersonsArray.toString(), new TypeReference<List<Person>>() {
+			});
 		} catch (JsonProcessingException e) {
 			log.error("DataJson - Error occured during deserialization of the JsonArray persons");
 			e.printStackTrace();
@@ -48,6 +48,4 @@ public class DataJson {
 		return persons;
 	}
 
-
-	
 }

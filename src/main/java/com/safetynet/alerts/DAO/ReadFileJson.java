@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class ReadFileJson implements IReadFileJson {
 	
-	private String filePathJson = "src/main/resources/data.json";
+	//private String filePathJson = "src/main/resources/data.json";
 	
 
 	/**
@@ -30,6 +30,7 @@ public class ReadFileJson implements IReadFileJson {
 	 */
 	@Override
 	public JsonObject readJsonFile() {
+		String filePathJson = "src/main/resources/data.json";
 		JsonObject jsonObject = null;
 		if(filePathJson!= null) {
 			try(FileInputStream fileDataJson = new FileInputStream(filePathJson)) {

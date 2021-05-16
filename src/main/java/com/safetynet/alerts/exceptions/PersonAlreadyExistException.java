@@ -1,6 +1,6 @@
 package com.safetynet.alerts.exceptions;
 
-public class EmptyFieldsException extends Exception {
+public class PersonAlreadyExistException extends Exception {
 
 	/**
 	 * Attribute that give an ID at the exception
@@ -12,7 +12,7 @@ public class EmptyFieldsException extends Exception {
 	 * 
 	 * @param message - The message that is send when an exception is throw
 	 */
-	public EmptyFieldsException(String message) {
+	public PersonAlreadyExistException(String message) {
 		super(message);
 	}
 

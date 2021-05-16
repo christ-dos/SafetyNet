@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
+import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Class that manage the requests 
+ * Class that manage the requests
  * 
  * @author Christine Duarte
  *
@@ -31,60 +32,69 @@ public class PersonController {
 	 */
 	@Autowired
 	private IPersonService personService;
-	
-	
-	/* @GetMapping(value= "/person")
-	public List <Person> getPersonDataJson()  {
-		log.info("Controller get list of persons");
-		return personService.getpersons;
-	}*/
-	
+
+	/*
+	 * @GetMapping(value= "/person") public List <Person> getPersonDataJson() {
+	 * log.info("Controller get list of persons"); return personService.getpersons;
+	 * }
+	 */
+
 	/**
 	 * Request get to obtain a person
-	 * @param firstName  - a String getted in the url request
-	 * @param lastName - a String getted in the url request
+	 * 
+	 * @param firstName - a String getted in the url request
+	 * @param lastName  - a String getted in the url request
 	 * @return a person object
-	 * @throws EmptyFieldsException - when the field firstName or lastName is empty in the request
+	 * @throws EmptyFieldsException - when the field firstName or lastName is empty
+	 *                              in the request
 	 */
-	@GetMapping(value= "/person")
-	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName) throws EmptyFieldsException  {
-		log.info("Controller - person found: " + firstName + " " + lastName );
+	@GetMapping(value = "/person")
+	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName)
+			throws EmptyFieldsException {
+		log.info("Controller - person found: " + firstName + " " + lastName);
 		return personService.getPerson(firstName, lastName);
 	}
-	
+
 	/**
 	 * Request post to add a person at the ArrayList
+	 * 
 	 * @param person - a person getted by the body of the request
 	 * @return - the person added in the ArrayList
-	 * @throws EmptyFieldsException -  when the field firstName or lastName is empty in the request
+	 * @throws EmptyFieldsException        - when the field firstName or lastName is
+	 *                                     empty in the request
+	 * @throws PersonAlreadyExistException
 	 */
-	@PostMapping(value= "/person")
-	public Person savePerson(@Valid @RequestBody Person person) throws EmptyFieldsException {
+	@PostMapping(value = "/person")
+	public Person savePerson(@Valid @RequestBody Person person)
+			throws EmptyFieldsException, PersonAlreadyExistException {
 		log.info("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
 		return personService.addPerson(person);
 	}
-	
+
 	/**
 	 * Request Delete to delete a person of the ArrayList
-	 * @param firstName  - a String getted in the url request
-	 * @param lastName -a String getted in the url request
+	 * 
+	 * @param firstName - a String getted in the url request
+	 * @param lastName  -a String getted in the url request
 	 */
-	@DeleteMapping(value= "/person")
+	@DeleteMapping(value = "/person")
 	public String deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
-		log.info("Controller - person deleted : " + firstName + " "+ lastName);
+		log.info("Controller - person deleted : " + firstName + " " + lastName);
 		return personService.deletePerson(firstName, lastName);
 	}
-	
+
 	/**
 	 * Request put to update a person of the ArrayList
+	 * 
 	 * @param person - a person getted by the body of the request
 	 * @return - the person updated in the ArrayList
-	 * @throws EmptyFieldsException -  when the field firstName or lastName is empty in the request
+	 * @throws EmptyFieldsException - when the field firstName or lastName is empty
+	 *                              in the request
 	 */
-	@PutMapping(value= "/person")
+	@PutMapping(value = "/person")
 	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) throws EmptyFieldsException {
 		log.info("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
 		return personService.updatePerson(person);
 	}
-	
+
 }
