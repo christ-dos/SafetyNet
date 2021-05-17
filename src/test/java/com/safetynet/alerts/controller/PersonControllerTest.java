@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,31 +29,53 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.alerts.DAO.IPersonDAO;
+import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
+import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.IPersonService;
+import com.safetynet.alerts.service.PersonService;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 
 @WebMvcTest
+@ExtendWith(MockitoExtension.class)
+@Slf4j
 public class PersonControllerTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private IPersonService personServiceMock;
+	private PersonService personServiceMock;
 	
 	@MockBean
-	private IPersonDAO personDAOMock;
+	private PersonDAO personDAOMock;
 	
-	@MockBean
+	@Mock
 	private List<Person> mockList;
 	
-	//@Autowired
-	//ObjectMapper objetMapper;
+	/**@BeforeEach
+	public void setUpPerTest() {
+		mockList = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
+				"lily@email.com");
+		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"tenz@email.com");
+		Person index3 = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513",
+				"drk@email.com");
+		mockList.add(index0);
+		mockList.add(index1);
+		mockList.add(index2);
+		mockList.add(index3);
+		
+		//log.info("mocklist : "  + mockList);
+		
+	}*/
 	
 	
 	public String asJsonString(final Object obj) {
@@ -109,13 +134,13 @@ public class PersonControllerTest {
 	
 	
 	@Test
-	public void testSavePerson_whenPersonToSaveExist_thenReturnNull() throws Exception {
+	public void testSavePerson_whenPersonToSaveExist_thenReturnPersonAlreadyExistException() throws Exception {
 		//GIVEN
-		List <Person> myListPersons = personDAOMock.getPersons();
+		//List <Person> mockList = mock(ArrayList.class);
 		Person personToAddExist = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenz@email.com");
-		
-		when(personDAOMock.getPersons()).thenReturn(myListPersons);
-		when(personServiceMock.addPerson(any())).thenReturn(null);
+		//when(personDAOMock.getPersons()).thenReturn(mockList);
+		//when(mockList.indexOf(personToAddExist)).thenReturn(2);
+		when(personServiceMock.addPerson(any())).thenThrow(new PersonAlreadyExistException("Service - Person Already exist"));
 		//WHEN
 		
 		//THEN
@@ -124,18 +149,19 @@ public class PersonControllerTest {
 				.content(asJsonString(personToAddExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").doesNotExist())
+				.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonAlreadyExistException))
+			    .andExpect(result -> assertEquals("Service - Person Already exist", result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 	
 	@Test
 	public void testSavePerson_whenPersonToSaveNotExist_thenCallMethodSave() throws Exception {
 		//GIVEN
-		Person personToSave = new Person("Jojo", "Dupond", "1509 rue des fleurs","Rouvbaix","59100","000-000-0012","jojod@email.com");
+		//List <Person> mockList = mock(ArrayList.class);
+		Person personToSave = new Person("Jojo", "Dupond", "1509 rue des fleurs","Roubaix","59100","000-000-0012","jojod@email.com");
 		when(personServiceMock.addPerson(any())).thenReturn(personToSave);
-		when(mockList.size()).thenReturn(23);
-		when(mockList.indexOf(any())).thenReturn(-1);
+		//when(mockList.indexOf(personToSave)).thenReturn(-1);
 		when(personDAOMock.save(anyInt(), any())).thenReturn(personToSave);
 		//WHEN
 		
@@ -175,7 +201,7 @@ public class PersonControllerTest {
 		Person personRecordedInArray = new Person("John","Boyd", "1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com");
 		
 		when(personDAOMock.getPersons()).thenReturn(mockList);
-		when(mockList.indexOf(any())).thenReturn(0);
+		//when(mockList.indexOf(any())).thenReturn(0);
 		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
 		when(personServiceMock.updatePerson(any())).thenReturn(personToUpdate);
@@ -194,38 +220,6 @@ public class PersonControllerTest {
 				.andExpect(jsonPath("$.city", is("Croix")))
 				.andDo(print());
 	}
-	
-/**	@throws Exception 
- * @Test
-	public void testUpdatePerson_whenAllfieldsWereModified_thenReturnPersonWithAllFieldsUpdated() throws Exception {
-		//GIVEN
-		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513", "drk@email.com" );
-		Person personToUpdated = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "NewYork", "97450", "841-874-0000", "mynewemail@email.com");
-		List <Person> myListPersons = personDAOMock.getPersons();
-		
-		when(personDAOMock.getPersons()).thenReturn(myListPersons);
-		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
-		when(personServiceMock.updatePerson(any())).thenReturn(personToUpdated);
-		when(personDAOMock.save(anyInt(), any())).thenReturn(personToUpdated);		
-		//WHEN
-		
-		//THEN
-		mockMvc.perform(MockMvcRequestBuilders
-				.put("/person")
-				.content(asJsonString(personToUpdated))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("Jonanathan")))
-				.andExpect(jsonPath("$.lastName", is("Marrack")))
-				.andExpect(jsonPath("$.address", is("15 NouvelleAdresse")))
-				.andExpect(jsonPath("$.city", is("NewYork")))
-				.andExpect(jsonPath("$.zip", is("97450")))
-				.andExpect(jsonPath("$.phone", is("841-874-0000")))
-				.andExpect(jsonPath("$.email", is("mynewemail@email.com")))
-				.andDo(print());
-	}*/
 	
 	@Test
 	public void testUpdatePerson_whenPersonToUpdateNotExist_thenReturnPersonNotFoundException() throws Exception{
