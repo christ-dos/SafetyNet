@@ -47,7 +47,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		body.put("timestamp", LocalDateTime.now());
 		body.put("message", "Person aready exist");
 
-		return new ResponseEntity<>(body, HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

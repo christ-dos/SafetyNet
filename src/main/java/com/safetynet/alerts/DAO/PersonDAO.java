@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository
 @Slf4j
-//@Data
 public class PersonDAO implements IPersonDAO {
 
 	@Autowired
@@ -27,10 +26,11 @@ public class PersonDAO implements IPersonDAO {
 		super();
 		this.listPersons = listPersons;
 	}
-	
+
 	public PersonDAO() {
-		
+
 	}
+
 	public List<Person> getPersons() {
 		return listPersons;
 	}

@@ -5,7 +5,7 @@ import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.model.Person;
 
 public interface IPersonService {
-	public Person getPerson(String firstName, String lastName) throws EmptyFieldsException;
+	public Person getPerson(String firstName, String lastName) throws EmptyFieldsException ;
 
 	public Person addPerson(Person person) throws PersonAlreadyExistException;
 

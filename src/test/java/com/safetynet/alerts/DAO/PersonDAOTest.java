@@ -15,7 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.alerts.model.Person;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 public class PersonDAOTest {
 
 
@@ -26,19 +29,20 @@ public class PersonDAOTest {
 
 
 	@BeforeEach
-	public void initEachTest() {
+	public void setUpPerTest()  {
 		mockList = new ArrayList<>();
+		
 		personDAOTest = new PersonDAO(mockList);
 
-		Person person0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
-		Person person1 = new Person("Lily", "Cooper", "489 Rue des Fleurs", "Croix", "59170", "841-874-9845",
-				"lily@email.com");
-		Person person2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+		Person index1 = new Person("Lily", "Cooper", "489 Manchester St","Culver", "97451","841-874-9845","lily@email.com");
+		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
-		mockList.add(person0);
-		mockList.add(person1);
-		mockList.add(person2);
+		mockList.add(index0);
+		mockList.add(index1);
+		mockList.add(index2);
+		
 	}
 
 	@Test
@@ -86,6 +90,7 @@ public class PersonDAOTest {
 		int index = mockList.indexOf(personTest);
 		// WHEN
 		Person resultPerson = personDAOTest.save(index, personTest);
+		
 		// THEN
 		assertSame(personTest, resultPerson);
 		assertEquals("Tata", resultPerson.getFirstName());
