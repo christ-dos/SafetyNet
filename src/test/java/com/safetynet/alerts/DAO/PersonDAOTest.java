@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.safetynet.alerts.DataJson;
 import com.safetynet.alerts.model.Person;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +27,14 @@ public class PersonDAOTest {
 
 	@Mock
 	private List<Person> mockList;
+	
+	@Mock
+	private DataJson dataMock;
 
 
 	@BeforeEach
 	public void setUpPerTest()  {
 		mockList = new ArrayList<>();
-		
 		personDAOTest = new PersonDAO(mockList);
 
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",

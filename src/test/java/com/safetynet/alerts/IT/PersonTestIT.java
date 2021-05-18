@@ -53,9 +53,9 @@ public class PersonTestIT {
 	public void testGetPerson_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
 		mockMvc.perform(get("/person?firstName=&lastName="))
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("$.message", is("The fields firstName and lastName can not be empty")))
+		.andExpect(jsonPath("$.message", is("The field firstName or lastName can not be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
-	    .andExpect(result -> assertEquals("The fields firstName and lastName can not be empty", result.getResolvedException().getMessage()))
+	    .andExpect(result -> assertEquals("Service - The field firstName or lastName can not be empty", result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
 	

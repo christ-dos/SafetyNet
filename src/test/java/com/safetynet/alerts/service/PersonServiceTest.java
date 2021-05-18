@@ -208,7 +208,7 @@ public class PersonServiceTest {
 		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
 		// verify that method delete was not invoked
 		verify(personDAOMock, times(0)).delete(any());
-		assertEquals("Person Not Deleted", resultMessage);
+		assertEquals("Person not Deleted", resultMessage);
 
 	}
 }

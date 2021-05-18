@@ -1,5 +1,13 @@
 package com.safetynet.alerts.exceptions;
 
+/**
+ * Class that manages the shipment of a message when a EmptyFieldsException is handle
+ * 
+ * when the field firstName or LastName is empty
+ * 
+ * @author Christine Duarte
+ *
+ */
 public class EmptyFieldsException extends Exception {
 
 	/**
@@ -15,5 +23,4 @@ public class EmptyFieldsException extends Exception {
 	public EmptyFieldsException(String message) {
 		super(message);
 	}
-
 }

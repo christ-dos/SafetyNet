@@ -1,5 +1,14 @@
 package com.safetynet.alerts.exceptions;
 
+/**
+ * Class that manages the shipment of a message when a PersonNotFoundException
+ * is handle
+ * 
+ * when the person is not found
+ * 
+ * @author Christine Duarte
+ *
+ */
 public class PersonNotFoundException extends RuntimeException {
 
 	/**
@@ -13,7 +22,6 @@ public class PersonNotFoundException extends RuntimeException {
 	 * @param message - The message that is send when an exception is throw
 	 */
 	public PersonNotFoundException(String message) {
-				super(message);
+		super(message);
 	}
-
 }

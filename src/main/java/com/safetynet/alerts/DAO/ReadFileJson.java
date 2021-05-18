@@ -8,32 +8,33 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import org.springframework.boot.jackson.JsonComponent;
+import org.springframework.stereotype.Component;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-
-@JsonComponent
+/**
+ * Class that read the file Json
+ * 
+ * @author Chrsitine Duarte
+ *
+ */
+@Component
 @Slf4j
-@Data
 public class ReadFileJson implements IReadFileJson {
-	
-	//private String filePathJson = "src/main/resources/data.json";
-	
 
 	/**
-	 * Method that read the file data.json 
-	 * and add data in a arrayList persons
-	 * @param  
-	 * @return 
+	 * Method that read the file data.json and add data in a arrayList persons
+	 * 
+	 * @param filePathJson - a String that contain the path of the file
+	 * 
+	 * @return an jsonObject that contain jsonArrays of the file
 	 */
 	@Override
 	public JsonObject readJsonFile() {
 		String filePathJson = "src/main/resources/data.json";
 		JsonObject jsonObject = null;
-		if(filePathJson!= null) {
-			try(FileInputStream fileDataJson = new FileInputStream(filePathJson)) {
+		if (filePathJson != null) {
+			try (FileInputStream fileDataJson = new FileInputStream(filePathJson)) {
 				JsonReader jsonReader = Json.createReader(fileDataJson);
 				jsonObject = jsonReader.readObject();
 				jsonReader.close();
@@ -46,6 +47,4 @@ public class ReadFileJson implements IReadFileJson {
 		}
 		return jsonObject;
 	}
-
 }
-	

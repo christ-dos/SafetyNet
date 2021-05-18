@@ -10,7 +10,7 @@ import com.safetynet.alerts.model.Person;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Class that manage the file Json with data sources
+ * Class that manage the CRUD methods and implement IPersonDAO interface
  * 
  * @author Christine Duarte
  *
@@ -19,22 +19,46 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PersonDAO implements IPersonDAO {
 
+	/**
+	 * attribute that contain the list of persons that provide from data.json
+	 */
 	@Autowired
 	private List<Person> listPersons;
 
+	/**
+	 * Constructor with the parameter listPersons
+	 * 
+	 * @param listPersons - an ArrayList with the list of persons
+	 */
 	public PersonDAO(List<Person> listPersons) {
 		super();
 		this.listPersons = listPersons;
 	}
 
+	/**
+	 * Constructor without parameters
+	 * 
+	 */
 	public PersonDAO() {
 
 	}
 
+	/**
+	 * Method that get the list of persons
+	 * 
+	 * @return an ArrayList of Persons
+	 */
 	public List<Person> getPersons() {
 		return listPersons;
 	}
 
+	/**
+	 * Method that get a person by combining keys firstName and lastName
+	 * 
+	 * @param firstName - the firstName
+	 * @param lastName  - the lastName
+	 * @return an instance of Person
+	 */
 	public Person getPerson(String firstName, String lastName) {
 		for (Person person : listPersons) {
 			if (person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName)) {
@@ -45,6 +69,12 @@ public class PersonDAO implements IPersonDAO {
 		return null;
 	}
 
+	/**
+	 * Method that save a Person in the ArrayList
+	 * 
+	 * @param index - the position where will be saved the Person
+	 * @return - object that will be saved in the arrayList
+	 */
 	public Person save(int index, Person person) {
 		if (index < 0) {
 			listPersons.add(person);
@@ -55,6 +85,12 @@ public class PersonDAO implements IPersonDAO {
 		return person;
 	}
 
+	/**
+	 * Method that delete a Person from the ArrayList
+	 * 
+	 * @param person we want deleted
+	 * @return a String to confirm the deletion
+	 */
 	public String delete(Person person) {
 		listPersons.remove(person);
 		log.info("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());

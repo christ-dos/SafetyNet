@@ -1,8 +1,5 @@
 package com.safetynet.alerts;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
@@ -29,11 +26,11 @@ public class DataJsonTest {
 	 *       resultListPersons.get(2).getFirstName()); }
 	 */
 
-	@Test
+	/**@Test
 	void testDeserialize() throws Exception {
 		String PersonJohnBoyd = "{\"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\",\"email\":\"jaboyd@email.com\" }";
 		assertThat(personJson.parse(PersonJohnBoyd)).isEqualTo(
 				new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jaboyd@email.com"));
 		assertThat(this.personJson.parseObject(PersonJohnBoyd).getFirstName()).isEqualTo("John");
-	}
+	}*/
 }

@@ -16,9 +16,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Class that manage the response at the user when an exception is handle the
+ * class extend ResponseEntityExceptionHandler
+ * 
+ * @author christine Duarte
+ *
+ */
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
-
+	/**
+	 * Method that return a message when a PersonNotFoundException is thrown when a
+	 * person is not found in the arrayList
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message :"Person not found", and the code
+	 *         HttpStatus 404
+	 */
 	@ExceptionHandler(PersonNotFoundException.class)
 	public ResponseEntity<Object> handlePersonNotFoundException(PersonNotFoundException ex, WebRequest request) {
 
@@ -29,16 +44,37 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
 
+	/**
+	 * Method that return a message when a EmptyFieldsException is thrown
+	 * 
+	 * when the field firstName or LastName is empty
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message :"The fields firstName and
+	 *         lastName can not be empty", and the code HttpStatus 400
+	 */
 	@ExceptionHandler(EmptyFieldsException.class)
 	public ResponseEntity<Object> handleEmptyFieldsException(EmptyFieldsException ex, WebRequest request) {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "The fields firstName and lastName can not be empty");
+		body.put("message", "The field firstName or lastName can not be empty");
 
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 
+	/**
+	 * Method that return a message when a PersonAlreadyExistException is thrown
+	 * 
+	 * when the person we want saved already exist
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message :"Person already exist", and the
+	 *         code HttpStatus 400
+	 * 
+	 */
 	@ExceptionHandler(PersonAlreadyExistException.class)
 	public ResponseEntity<Object> handlePersonAlreadyExistException(PersonAlreadyExistException ex,
 			WebRequest request) {
@@ -50,6 +86,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 
+	/**
+	 * Method that return a message when an argument of the request is not valid
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message : containing the error, and the
+	 *         code HttpStatus 400
+	 * 
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -64,5 +109,4 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
-
 }
