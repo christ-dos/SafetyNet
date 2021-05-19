@@ -28,6 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataJson {
 
+	
+
+	
+
 	@Autowired
 	private ReadFileJson reader;
 
@@ -37,6 +41,19 @@ public class DataJson {
 	private List<Person> persons = new ArrayList<>();
 
 	private JsonObject jsonObject;
+	
+	
+	public DataJson() {
+		super();
+	}
+
+	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, JsonObject jsonObject) {
+		super();
+		this.reader = reader;
+		this.mapper = mapper;
+		this.persons = persons;
+		this.jsonObject = jsonObject;
+	}
 
 	private JsonObject getObjectJson() {
 		return reader.readJsonFile();
