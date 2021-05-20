@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author Christine Duarte
  * 
- * @see PersonDAO
+ * @see PersonService
  *
  */
 @Service
@@ -98,7 +98,7 @@ public class PersonService implements IPersonService {
 		if (index >= 0) {
 			log.info("Service - Person can not be saved because  : " + person.getFirstName() + " "
 					+ person.getLastName() + " already exist");
-			throw new PersonAlreadyExistException("Service - Person Already exist");
+			throw new PersonAlreadyExistException("Service - Person already exist");
 		}
 		log.info("Service - Person is saved : " + person.getFirstName() + " " + person.getLastName());
 		return personDAO.save(index, person);

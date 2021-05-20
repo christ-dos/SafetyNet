@@ -16,38 +16,57 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.safetynet.alerts.DataJson;
 import com.safetynet.alerts.model.Person;
 
-import lombok.extern.slf4j.Slf4j;
-
+/**
+ * Class that test PersonDAO
+ * 
+ * @author Christine Duarte
+ *
+ */
 @ExtendWith(MockitoExtension.class)
-@Slf4j
 public class PersonDAOTest {
 
-
+	/**
+	 * An instance of {@link PersonDAO}
+	 */
 	private PersonDAO personDAOTest;
 
+	/**
+	 * A mock of a arrayList that contain {@link Person}
+	 */
 	@Mock
 	private List<Person> mockList;
-	
+
+	/**
+	 * A mock of {@link DataJson}
+	 */
 	@Mock
 	private DataJson dataMock;
 
-
+	/**
+	 * Method that created a mock of the ArrayList mockList with 3 elements
+	 * 
+	 * the mockList is injected at the method by the constructor
+	 */
 	@BeforeEach
-	public void setUpPerTest()  {
+	public void setUpPerTest() {
 		mockList = new ArrayList<>();
 		personDAOTest = new PersonDAO(mockList);
 
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
-		Person index1 = new Person("Lily", "Cooper", "489 Manchester St","Culver", "97451","841-874-9845","lily@email.com");
+		Person index1 = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
+				"lily@email.com");
 		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
 		mockList.add(index0);
 		mockList.add(index1);
 		mockList.add(index2);
-		
 	}
 
+	/**
+	 * Method that test getPersonsDAO then return a list of persons with 3 elements
+	 * and verify that John Boyd is present in the list
+	 */
 	@Test
 	public void testGetListPersonsDAO_resultShouldVerifythatListContainThreePersons() {
 		// GIVEN
@@ -60,8 +79,13 @@ public class PersonDAOTest {
 		assertEquals(3, resultListgetted.size());
 	}
 
+	/**
+	 * Method that test getPersonDAO with firstName Lily and LastName Cooper when
+	 * person exist then return Lily Cooper
+	 * 
+	 */
 	@Test
-	public void testGetPersonDAO_whenPersonExistInArray_resultShouldGivenLillyCooper() {
+	public void testGetPersonDAO_whenPersonExistInArray_resultShouldGivenLilyCooper() {
 		// GIVEN
 		String firstName = "Lily";
 		String lastName = "Cooper";
@@ -73,8 +97,13 @@ public class PersonDAOTest {
 		assertEquals(mockList.get(1), getPersonResult);
 	}
 
+	/**
+	 * Method that test getPersonDAO with firstName Toto and LastName Zero when
+	 * person not exist then return null
+	 * 
+	 */
 	@Test
-	public void testGetPersonDAO_whenNotExist_resultShouldGivenNull() {
+	public void testGetPersonDAO_whenPersonNotExist_resultShouldReturnNull() {
 		// GIVEN
 		String firstName = "Toto";
 		String lastName = "Zero";
@@ -84,47 +113,60 @@ public class PersonDAOTest {
 		assertNull(getPersonResult);
 	}
 
+	/**
+	 * Method that test savePersonDAO when person not exist then return the person
+	 * saved and the person is saved at the end of the array and verify that we are
+	 * 4 elements in the arrayList
+	 */
 	@Test
-	public void testSavePersonDAO_whenPersonNotExist_resultPersonAddedInEndOfArray() {
+	public void testSavePersonDAO_whenPersonNotExist_thenResultPersonAddedInEndOfArray() {
 		// GIVEN
-
 		Person personTest = new Person("Tata", "Zorro", "15 rue des Templiers", "Relvas", "6230", "000-000-0000",
 				"zorrod@email.com");
 		int index = mockList.indexOf(personTest);
 		// WHEN
 		Person resultPerson = personDAOTest.save(index, personTest);
-		
 		// THEN
 		assertSame(personTest, resultPerson);
 		assertEquals("Tata", resultPerson.getFirstName());
-		//verify array contain 4 persons
+		// verify array contain 4 persons
 		assertEquals(4, mockList.size());
-		//verify Person was Added at the end of Array
+		// verify Person was Added at the end of Array
 		assertEquals(3, mockList.indexOf(resultPerson));
 	}
 
+	/**
+	 * Method that test savePersonDAO when person exist in array then person Lily
+	 * Cooper is saved at the index one and verify that the address modified is
+	 * saved in arrayList
+	 */
 	@Test
-	public void testSavePersonDAO_whenPersonExist_shouldSavedPerssonInIndexOne () {
+	public void testSavePersonDAO_whenPersonExist_shouldSavedPersonInIndexOne() {
 		// GIVEN
 		Person personToSaved = new Person("Lily", "Cooper", "489 Rue des Fleurs", "Croix", "59170", "841-874-9845",
 				"lily@email.com");
 		Person person = personDAOTest.getPerson("Lily", "Cooper");
 		int indexLilyCooper = mockList.indexOf(person);
-		
+
 		// WHEN
 		Person result = personDAOTest.save(indexLilyCooper, personToSaved);
 		int indexPersonSaved = mockList.indexOf(personToSaved);
 		// THEN
 		assertEquals(person.getFirstName(), result.getFirstName());
-		//verify that the person was saved at the index of Lily Cooper
+		// verify that the person was saved at the index of Lily Cooper
 		assertEquals(indexLilyCooper, indexPersonSaved);
-		//verify that new address was saved in Object Lily Cooper
+		// verify that new address was saved in Object Lily Cooper
 		assertEquals(personToSaved.getAddress(), result.getAddress());
 
 	}
 
+	/**
+	 * Method that test deletePersonDAO when person exist in array then return a
+	 * String with "SUCCESS" when the person Tenley Boyd is deleted with success and
+	 * verify that the arrayList contain 2 elements after the deletion
+	 */
 	@Test
-	public void testDeletePersonDAO_whenrCallMethodGetWithTenleyBoyd_resultShouldReturnMessageSUCESS() {
+	public void testDeletePersonDAO_whenCallMethodGetWithTenleyBoyd_resultShouldReturnMessageSUCCESS() {
 		// GIVEN
 		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
@@ -134,9 +176,9 @@ public class PersonDAOTest {
 		String result = personDAOTest.delete(personTest);
 		Person resultCallGetPersonAfterDelete = personDAOTest.getPerson(firstName, lastName);
 		// THEN
-		//verify that person Tenley Boyd not exist in Array
+		// verify that person Tenley Boyd not exist in Array
 		assertNull(resultCallGetPersonAfterDelete);
-		assertEquals("SUCESS", result);
+		assertEquals("SUCCESS", result);
 		assertEquals(2, mockList.size());
 	}
 }

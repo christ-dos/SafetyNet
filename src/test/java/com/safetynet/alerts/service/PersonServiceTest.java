@@ -26,27 +26,37 @@ import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
- * Class service that process the request of controller
+ * Class that test the PersonService 
  * 
- * @author Chrsitine Duarte
+ * @author Christine Duarte
  *
  */
 @ExtendWith(MockitoExtension.class)
-@Slf4j
 public class PersonServiceTest {
-
+	
+	/**
+	 * an instance of {@link PersonService}
+	 */
 	private PersonService personServiceTest;
-
+	
+	/**
+	 * A mock of {@link PersonDAO}
+	 */
 	@Mock
 	private PersonDAO personDAOMock;
-
+	
+	/**
+	 * A mock of the arraysList of {@link Person}
+	 */
 	@Mock
 	private List<Person> mockList;
-
-
+	
+	
+	/**
+	 * Method that create a mock of the ArrayList mockList with 4 elements
+	 * 
+	 */
 	@BeforeEach
 	public void setUpPerTest() {
 		mockList = new ArrayList<>();
@@ -62,11 +72,16 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-
 		personDAOMock = mock(PersonDAO.class);
 		personServiceTest = new PersonService(personDAOMock);
 	}
-
+	
+	/**
+	 * Method that test getPerson with firstName John and LastName Boyd when
+	 * person exist then return John Boyd and verify that the method getPerson was called
+	 * 
+	 * throws {@link EmptyFieldsException}
+	 */
 	@Test
 	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldGetObjectPersonJohnBoyd()
 			throws EmptyFieldsException {
@@ -83,7 +98,12 @@ public class PersonServiceTest {
 		assertNotNull(resultPersonGetted);
 		assertEquals(personInput, resultPersonGetted);
 	}
-
+	
+	/**
+	 * Method that test getPerson when person not exist 
+	 * then should throw a {@link PersonNotFoundException}
+	 * 
+	 */
 	@Test
 	public void testGetPerson_whenInputPersonNotExist_resultShouldThrowPersonNotFoundException()
 			throws EmptyFieldsException {
@@ -93,24 +113,33 @@ public class PersonServiceTest {
 		// WHEN
 
 		// THEN
-		// verify that method getPerson was never called
+		// verify that method getPerson was not called
 		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
 		assertThrows(PersonNotFoundException.class, () -> personServiceTest.getPerson(firstName, lastName));
 	}
-
+	
+	/**
+	 * Method that test getPerson when field firstName or lastName is empty
+	 * then throw a {@link PersonNotFoundException}
+	 * and verify that the method getPerson was not called
+	 */
 	@Test
-	public void testGetPerson_whenFielsFirstNameOrLastNameIsNull_thenReturnNullPonterException() {
+	public void testGetPerson_whenFielsFirstNameOrLastNameIsEmpty_thenReturnEmptyFieldsException() {
 		// GIVEN
 		String firstName = "John";
 		String lastName = "";
 		// WHEN
 
 		// THEN
-		// verify that method getPerson was never called
+		// verify that method getPerson was not called
 		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
 		assertThrows(EmptyFieldsException.class, () -> personServiceTest.getPerson(firstName, lastName));
 	}
-
+	
+	/**
+	 * Method that test addPerson when person to add not exist then return the person
+	 * saved and verify if the method savePerson was called
+	 */
 	@Test
 	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded()
 			throws EmptyFieldsException, PersonAlreadyExistException {
@@ -128,7 +157,11 @@ public class PersonServiceTest {
 		assertEquals(personToAdd.getEmail(), resultAfterAddPerson.getEmail());
 		assertEquals(personToAdd.getFirstName(), resultAfterAddPerson.getFirstName());
 	}
-
+	
+	/**
+	 * Method that test addPerson when person to add exist 
+	 * then throw a {@link PersonAlreadyExistException}
+	 */
 	@Test
 	public void testAddPerson_whenPersonToAddExist_thenThrowPersonAlreadyExistException() {
 		// GIVEN
@@ -138,14 +171,20 @@ public class PersonServiceTest {
 		// WHEN
 
 		// THEN
+		//verify that the method getPerson was not called
+		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
 		assertThrows(PersonAlreadyExistException.class, () -> personServiceTest.addPerson(personToAddAlreadyExist));
 	}
-
+	
+	/**
+	 * Method that test updatePerson when person to update exist
+	 * then return person Jonanathan Marrack with the field address updated
+	 * and verify that the method save was called
+	 */
 	@Test
 	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonJonanathanMarrackWithTheFieldAdressUpdated()
 			throws EmptyFieldsException {
 		// GIVEN
-		// List<Person> mockList1 = mock(ArrayList.class);
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451",
 				"841-874-6513", "drk@email.com");
 		Person personToUpdate = new Person("Jonanathan", "Marrack", "30 rue des Ursulines", "Culver", "97451",
@@ -161,7 +200,12 @@ public class PersonServiceTest {
 		// the field address that was been modified has been updated
 		assertEquals("30 rue des Ursulines", resultPersonUpdated.getAddress());
 	}
-
+	
+	/**
+	 * Method that test updatePerson when person to update not exist
+	 * then throw a PersonNotFoundException
+	 * and verify that the method save was not called
+	 */
 	@Test
 	public void testUpdatePerson_whenPersonToUpdateNotExist_thenReturnPersonNotFoundException() {
 		// GIVEN
@@ -171,11 +215,17 @@ public class PersonServiceTest {
 		// WHEN
 
 		// THEN
+		//verify that the method save was not called
+		verify(personDAOMock, times(0)).save(anyInt(), any());
 		assertThrows(PersonNotFoundException.class, () -> personServiceTest.updatePerson(personToUpdateButNotExist));
 	}
-
+	/**
+	 * Method that test deletePerson when person to delete exist
+	 * then return a String containing "SUCCESS"
+	 * and verify that the method delete was called
+	 */
 	@Test
-	public void testDeletePerson_whenPersonExist() {
+	public void testDeletePerson_whenPersonToDeleteExist_thenReturnStringSUCCESS() {
 		// GIVEN
 		Person personToDeleted = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
 				"lily@email.com");
@@ -183,18 +233,23 @@ public class PersonServiceTest {
 		String lastName = personToDeleted.getLastName();
 
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personToDeleted);
-		when(personDAOMock.delete(personToDeleted)).thenReturn("SUCESS");
+		when(personDAOMock.delete(personToDeleted)).thenReturn("SUCCESS");
 		// WHEN
 		String result = personServiceTest.deletePerson(firstName, lastName);
 		// THEN
 		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
 		verify(personDAOMock, times(1)).delete(any());
-		assertEquals("SUCESS", result);
+		assertEquals("SUCCESS", result);
 
 	}
-
+	
+	/**
+	 * Method that test deletePerson when person to delete not exist
+	 * then return a String containing "Person not Deleted"
+	 * and verify that the method delete was not called
+	 */
 	@Test
-	public void testDeletePerson_whenPersonNotExist() {
+	public void testDeletePerson_whenPersonNotExist_thenReturnAStringPersonNotDeleted() {
 		// GIVEN
 		Person personToDeleteNotExist = new Person("Alice", "Lefevre", "1509 Culver St", "Culver", "97451",
 				"841-874-6512", "jaboyd@email.com");

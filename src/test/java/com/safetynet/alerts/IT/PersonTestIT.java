@@ -1,5 +1,6 @@
 package com.safetynet.alerts.IT;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -16,23 +17,46 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.safetynet.alerts.controller.PersonControllerTest;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
+import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
+import javassist.NotFoundException;
+
+/**
+ * Class integration tests which verify that all classes works correctly together
+ * to test the entity {@link Person}
+ * 
+ * @author Christine Duarte
+ *
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PersonTestIT {
 	
+	/**
+	 * An instance of {@link MockMvc} that permit simulate a request HTTP
+	 */
 	@Autowired
 	private MockMvc mockMvc;
 	
-	
-	
+	/**
+	 * Method that test requestGet when person exist then the status of the request isOk
+	 * and the firstName and lastName is Roger Boyd
+	 * 
+	 * @throws Exception
+	 */
 	@Test
-	public void testGetPersonThatExist_whenInputFirstNameRogerAndLastNameBoyd_shouldReturnStatusOK() throws Exception {
+	public void testRequestGetPersonExist_whenInputFirstNameRogerAndLastNameBoyd_shouldReturnStatusOK() throws Exception {
+		//GIVEN
+		
+		//WHEN
+		
+		//THEN
 		mockMvc.perform(get("/person?firstName=Roger&lastName=Boyd"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.firstName", is("Roger")))
@@ -41,16 +65,41 @@ public class PersonTestIT {
 		.andDo(print());
 	}
 	
+	/**
+	 * Method that test requestGet when person not exist 
+	 * then throw a {@link PersonNotFoundException} and the status of the request isNotFound
+	 * 
+	 * @throws Exception
+	 */
 	@Test
-	public void testGetPersonThatNotExist_whenInputFirstNameLillyAndLastNameSaguet_shouldReturnNull() throws Exception {
-		mockMvc.perform(get("/person?firstName=Lilly&lastName=Saguet"))
+	public void testRequestGetPersonNotExist_whenInputFirstNameLilyAndLastNameSaguet_shouldReturnPersonNotFoundExcepetion() throws Exception {
+		//GIVEN
+		
+		//WHEN
+		
+		//THEN
+		mockMvc.perform(get("/person?firstName=Lily&lastName=Saguet"))
 		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$.message", is("Person not found")))
+		.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
+	    .andExpect(result -> assertEquals("Service - Person not found exception", result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
 	
+	/**
+	 * Method that test requestGet when input firstName or lastName is empty 
+	 * then throw a {@link EmptyFieldsException}
+	 * and the status isBadRequest
+	 *
+	 * @throws Exception
+	 */
 	@Test
-	public void testGetPerson_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
+	public void testRequestGetPerson_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
+		//GIVEN
+		
+		//WHEN
+		
+		//THEN
 		mockMvc.perform(get("/person?firstName=&lastName="))
 		.andExpect(status().isBadRequest())
 		.andExpect(jsonPath("$.message", is("The field firstName or lastName can not be empty")))
@@ -59,29 +108,47 @@ public class PersonTestIT {
 		.andDo(print());
 	}
 	
+	/**
+	 * Method that test requestPost when person to save already exist then throw
+	 * {@link PersonAlreadyExistException}
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testRequestPost_whenPersonAlreadyExist_shouldUpdateThePerson() throws Exception {
+		//GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
-		Person personTest = new Person("John", "Boyd", "1509 New address St", "New York","97451","841-874-6512","jaboyd@email.com");
-	
+		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"tenz@email.com");
+		//WHEN
+		
+		//THEN
 		 mockMvc.perform(MockMvcRequestBuilders
 				.post("/person")
 				.content(personControllerTest.asJsonString(personTest))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("John")))
-				.andExpect(jsonPath("$.lastName", is("Boyd")))
-				.andExpect(jsonPath("$.address", is("1509 New address St")))
-				.andExpect(jsonPath("$.city", is("New York")))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message", is("Person already exist")))
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonAlreadyExistException))
+			    .andExpect(result -> assertEquals("Service - Person already exist", result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 	
+	/**
+	 * Method that test requestPost when person to save not exist then return
+	 * person saved
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testRequestPost_whenPersonNotExist_shouldSaveThePerson() throws Exception {
+		//GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Joana","Martin", "22 Croix St","TerraNova","59000","000-000-1203","jomartin@email.com");
-	
+		//WHEN
+		
+		//THEN
 		 mockMvc.perform(MockMvcRequestBuilders
 				.post("/person")
 				.content(personControllerTest.asJsonString(personTest))
@@ -95,11 +162,23 @@ public class PersonTestIT {
 				.andDo(print());
 	}
 	
+	/**
+	 * Method that test requestDelete when person to delete exist 
+	 * then return a String "SUCCESS" to confirm the deletion
+	 * 
+	 *
+	 * @throws Exception
+	 */
 	@Test
-	public void testRequestDelete_whenPersonExist_PersonWithFirstNameJacobAndLastNameBoyd_resultMessageSUCESS() throws Exception {
+	public void testRequestDelete_whenPersonExist_PersonWithFirstNameJacobAndLastNameBoyd_thenReturnMessageSUCCESS() throws Exception {
+		//GIVEN
+		
+		//WHEN
+		
+		//THEN
 		mockMvc.perform(delete("/person?firstName=jacob&lastName=Boyd"))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$", is("SUCESS")))
+		.andExpect(jsonPath("$", is("SUCCESS")))
 		.andDo(print());
 		
 		mockMvc.perform(get("/person?firstName=jacob&lastName=Boyd"))
@@ -109,11 +188,41 @@ public class PersonTestIT {
 		.andDo(print());
 	}
 	
+	/**
+	 * Method that test requestDelete when person to delete not exist 
+	 * then return a String "person not deleted" 
+	 * 
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testRequestDelete_whenPersonNotExist__thenReturnMessagePersonNotDeleted() throws Exception {
+		//GIVEN
+		
+		//WHEN
+		
+		//THEN
+		mockMvc.perform(delete("/person?firstName=Zozor&lastName=Zeros"))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$", is("Person not Deleted")))
+		.andDo(print());
+	}
+	
+	/**
+	 * Method that test requestPut when person to update exist 
+	 * then return person with the field city updated with "Croix"
+	 * 
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testRequetePut_whenOnefieldIsUpdated_thenVerifyThatFieldCityWasUpdated() throws Exception {
+		//GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("John","Boyd", "1509 Culver St","Croix","97451","841-874-6512","jaboyd@email.com");
+		//WHEN
 		
+		//THEN
 		mockMvc.perform(MockMvcRequestBuilders
 				.put("/person")
 				.content(personControllerTest.asJsonString(personTest))
@@ -126,11 +235,20 @@ public class PersonTestIT {
 				.andDo(print());
 	}
 	
-	/**@Test
+	/**
+	 * Method that test requestPut when person to update exist 
+	 * then return person with all fields updated 
+	 *
+	 * @throws Exception
+	 */
+	@Test
 	public void testRequetePut_whenAllfielsAreUpdated_thenVerifyThatPersonWasbeenUpdated() throws Exception {
+		//GIVNE
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "NewYork", "97450", "841-874-6512", "jojo@email.com");
+		//WHEN
 		
+		//THEN
 		mockMvc.perform(MockMvcRequestBuilders
 				.put("/person")
 				.content(personControllerTest.asJsonString(personTest))
@@ -145,13 +263,22 @@ public class PersonTestIT {
 				.andExpect(jsonPath("$.phone", is("841-874-6512")))
 				.andExpect(jsonPath("$.email", is("jojo@email.com")))
 				.andDo(print());
-	}*/
+	}
 	
+	/**
+	 * Method that test requestPut when person to update not exist 
+	 * then throw a {@link NotFoundException}
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testRequetePut_whenPersonToUpdateNotExist_thenVerifyIfPersonNotFoundExceptionIsThrown() throws Exception {
+		//GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Babar", "Elephant", "29 15th St", "Culver", "97451", "841-874-6513", "babar@email.com" );
+		//WHEN
 		
+		//THEN
 		mockMvc.perform(MockMvcRequestBuilders
 				.put("/person")
 				.content(personControllerTest.asJsonString(personTest))
@@ -164,6 +291,28 @@ public class PersonTestIT {
 				.andDo(print());
 	}
 	
-	
-
+	/**
+	 * Method that test requestPut when input field is not valid then throw
+	 * {@link MethodArgumentNotValidException} must not be blank and the status
+	 * isBadRequest
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testRequetePut_whenInputFieldsIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank() throws Exception {
+		//GIVEN
+		PersonControllerTest personControllerTest = new PersonControllerTest();
+		Person personToUpdate = new Person("", "Boyd", "1509 Culver St", "Croix", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		//WHEN
+		
+		//THEN
+		mockMvc.perform(MockMvcRequestBuilders.put("/person")
+				.content(personControllerTest.asJsonString(personToUpdate))
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+				.andExpect(jsonPath("$.errors").isArray()).andExpect(jsonPath("$.errors", hasItem("must not be blank")))
+				.andDo(print());
+	}
 }

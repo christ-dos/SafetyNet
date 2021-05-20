@@ -89,12 +89,12 @@ public class PersonDAO implements IPersonDAO {
 	 * Method that delete a Person from the ArrayList
 	 * 
 	 * @param person we want deleted
-	 * @return a String to confirm the deletion
+	 * @return a String to confirm the deletion "SUCCESS"
 	 */
 	public String delete(Person person) {
 		listPersons.remove(person);
 		log.info("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());
-		return "SUCESS";
+		return "SUCCESS";
 	}
 
 }

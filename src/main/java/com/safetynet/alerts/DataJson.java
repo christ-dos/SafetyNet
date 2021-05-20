@@ -1,6 +1,5 @@
 package com.safetynet.alerts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.JsonArray;
@@ -27,26 +26,45 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class DataJson {
-
-	
-
-	
-
+	/**
+	 * An instance of ReadFileJson class that read the Json file
+	 * 
+	 * @see ReadFileJson
+	 */
 	@Autowired
 	private ReadFileJson reader;
-
+	/**
+	 * An instance of ObjectMapper that provides functionality for reading and
+	 * writing JSON
+	 * 
+	 * @see ObjectMapper
+	 */
 	@Autowired
 	private ObjectMapper mapper;
 
-	private List<Person> persons = new ArrayList<>();
+	/**
+	 * An arrayList that contain the list of Persons
+	 */
+	private List<Person> persons;
 
+	/**
+	 * An instance of JsonObject that can be created from an input source using
+	 * JsonReader.readObject().
+	 * 
+	 * @see JsonObject
+	 */
 	private JsonObject jsonObject;
-	
-	
+
+	/**
+	 * Constructor without parameter
+	 */
 	public DataJson() {
 		super();
 	}
 
+	/**
+	 * Constructor with all parameters
+	 */
 	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, JsonObject jsonObject) {
 		super();
 		this.reader = reader;
@@ -55,10 +73,21 @@ public class DataJson {
 		this.jsonObject = jsonObject;
 	}
 
+	/**
+	 * Method that get the JsonObject that is read by the method readFileJson
+	 * 
+	 * @return A JsonObject of the file data.json
+	 */
 	private JsonObject getObjectJson() {
 		return reader.readJsonFile();
 	}
 
+	/**
+	 * Method that extract the JsonArray "persons" of the JsonObject and map in an
+	 * arrayList of Persons
+	 * 
+	 * @return A list of persons that was contained in the file Json
+	 */
 	@Bean
 	public List<Person> listPersons() {
 		String ArrayName = "persons";
