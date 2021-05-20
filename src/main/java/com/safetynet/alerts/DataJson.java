@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.DAO.ReadFileJson;
+import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.Person;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +44,14 @@ public class DataJson {
 	private ObjectMapper mapper;
 
 	/**
-	 * An arrayList that contain the list of Persons
+	 * An arrayList that contain the list of Person
 	 */
 	private List<Person> persons;
+	
+	/**
+	 * An arrayList that contain the list of FireStation
+	 */
+	private List<FireStation> fireStation;
 
 	/**
 	 * An instance of JsonObject that can be created from an input source using
@@ -65,13 +71,7 @@ public class DataJson {
 	/**
 	 * Constructor with all parameters
 	 */
-	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, JsonObject jsonObject) {
-		super();
-		this.reader = reader;
-		this.mapper = mapper;
-		this.persons = persons;
-		this.jsonObject = jsonObject;
-	}
+	
 
 	/**
 	 * Method that get the JsonObject that is read by the method readFileJson
@@ -80,6 +80,16 @@ public class DataJson {
 	 */
 	private JsonObject getObjectJson() {
 		return reader.readJsonFile();
+	}
+
+	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, List<FireStation> fireStation,
+			JsonObject jsonObject) {
+		super();
+		this.reader = reader;
+		this.mapper = mapper;
+		this.persons = persons;
+		this.fireStation = fireStation;
+		this.jsonObject = jsonObject;
 	}
 
 	/**
@@ -101,5 +111,27 @@ public class DataJson {
 			e.printStackTrace();
 		}
 		return persons;
+	}
+	
+	/**
+	 * Method that extract the JsonArray "firestations" of the JsonObject and map in an
+	 * arrayList of FireStations
+	 * 
+	 * @return A list of fireStation  that was contained in the file Json
+	 */
+	@Bean
+	public List<FireStation> listFireStations() {
+		String ArrayName = "firestations";
+		jsonObject = getObjectJson();
+		try {
+			JsonArray jsonPersonsArray = jsonObject.getJsonArray(ArrayName);
+			fireStation = mapper.readValue(jsonPersonsArray.toString(), new TypeReference<List<FireStation>>() {
+			});
+		} catch (JsonProcessingException e) {
+			log.error("DataJson - Error occured during deserialization of the JsonArray persons");
+			e.printStackTrace();
+		}
+		log.info("fireStation: " + fireStation);
+		return fireStation;
 	}
 }

@@ -78,7 +78,7 @@ public class PersonService implements IPersonService {
 			log.info("Service - Person found : " + person.getFirstName() + " " + person.getLastName());
 			return person;
 		}
-		log.info("Service - Person not found");
+		log.error("Service - Person not found");
 		throw new PersonNotFoundException("Service - Person not found exception");
 	}
 
@@ -96,7 +96,7 @@ public class PersonService implements IPersonService {
 		int index = myList.indexOf(person);
 		// person Already exist
 		if (index >= 0) {
-			log.info("Service - Person can not be saved because  : " + person.getFirstName() + " "
+			log.error("Service - Person can not be saved because  : " + person.getFirstName() + " "
 					+ person.getLastName() + " already exist");
 			throw new PersonAlreadyExistException("Service - Person already exist");
 		}
@@ -118,7 +118,7 @@ public class PersonService implements IPersonService {
 			log.info("Service - Person deleted : " + firstName + " " + lastName);
 			return personDAO.delete(person);
 		}
-		log.info("Service - Person cannot be deleted : " + firstName + " " + lastName + " because not exist");
+		log.error("Service - Person cannot be deleted : " + firstName + " " + lastName + " because not exist");
 		return "Person not Deleted";
 	}
 
@@ -135,7 +135,7 @@ public class PersonService implements IPersonService {
 		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);
 
 		if (resultPersonFinded == null) {
-			log.info("Service - The person that we want update not exist : " + person.getFirstName() + " "
+			log.error("Service - The person that we want update not exist : " + person.getFirstName() + " "
 					+ person.getLastName());
 			throw new PersonNotFoundException(
 					"The person that we want update not exist : " + person.getFirstName() + " " + person.getLastName());

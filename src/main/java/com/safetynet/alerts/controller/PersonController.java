@@ -35,12 +35,6 @@ public class PersonController {
 	@Autowired
 	private IPersonService personService;
 
-	/*
-	 * @GetMapping(value= "/person") public List <Person> getPersonDataJson() {
-	 * log.info("Controller get list of persons"); return personService.getpersons;
-	 * }
-	 */
-
 	/**
 	 * Request get to obtain a person
 	 * 
