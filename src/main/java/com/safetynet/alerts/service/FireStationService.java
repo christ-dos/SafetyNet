@@ -44,13 +44,13 @@ public class FireStationService implements IFireStationService {
 		String address = fireStation.getAddress();
 		if (address.isEmpty()) {
 			log.error("Service - The field address cannot be empty ");
-			throw new EmptyFieldsException("Service - The field address cannot be empty");
+			throw new EmptyFieldsException("The field address cannot be empty");
 		}
 		FireStation fireStationgetted = fireStationDAO.get(address);
 		if (fireStationgetted == null) {
 			log.error("Service - FireStation not found : address: " + fireStation.getAddress() + ", Station: "
 					+ fireStation.getStation());
-			throw new FireStationNotFoundException("Service - The FireStation not found ");
+			throw new FireStationNotFoundException("The FireStation not found");
 		}
 		log.info("Service - FireStation found :address: " + fireStation.getAddress() + ", Station: "
 				+ fireStation.getStation());
@@ -64,7 +64,7 @@ public class FireStationService implements IFireStationService {
 		if (indexPosition >= 0) {
 			log.error("Service - FireStation cannot be saved :address: " + fireStation.getAddress() + ", Station: "
 					+ fireStation.getStation() + " already exist");
-			throw new FireStationAlreadyExistException("Service - The FireStation that we try to save already Exist");
+			throw new FireStationAlreadyExistException("The FireStation that we try to save already Exist");
 		}
 		log.info("Service - FireStation saved :address: " + fireStation.getAddress() + ", Station: "
 				+ fireStation.getStation());
