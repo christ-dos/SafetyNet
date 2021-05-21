@@ -42,7 +42,7 @@ import com.safetynet.alerts.service.PersonService;
  * @author Christine Duarte
  *
  */
-@WebMvcTest
+@WebMvcTest(PersonController.class)
 @ExtendWith(MockitoExtension.class)
 public class PersonControllerTest {
 	/**
@@ -143,15 +143,15 @@ public class PersonControllerTest {
 			throws Exception {
 		// GIVEN
 		when(personServiceMock.getPerson(anyString(), anyString()))
-				.thenThrow(new EmptyFieldsException("The field firstName or lastName can not be empty"));
+				.thenThrow(new EmptyFieldsException("Field can not be empty"));
 		// WHEN
 
 		// THEN
 		mockMvc.perform(get("/person?firstName=&lastName=Boyd"))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.message", is("The field firstName or lastName can not be empty")))
+				.andExpect(jsonPath("$.message", is("Field can not be empty")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
-				.andExpect(result -> assertEquals("The field firstName or lastName can not be empty", result.getResolvedException().getMessage()))
+				.andExpect(result -> assertEquals("Field can not be empty", result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 
@@ -203,7 +203,6 @@ public class PersonControllerTest {
 				.andExpect(jsonPath("$.firstName", is("Jojo"))).andExpect(jsonPath("$.lastName", is("Dupond")))
 				.andExpect(jsonPath("$.address", is("1509 rue des fleurs"))).andExpect(jsonPath("$.zip", is("59100")))
 				.andDo(print());
-
 	}
 
 	/**

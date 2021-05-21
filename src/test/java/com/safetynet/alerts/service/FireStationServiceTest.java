@@ -65,7 +65,7 @@ public class FireStationServiceTest {
 		FireStation fireStationExist = new FireStation("3", "1509 Culver St");
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationExist);
 		// WHEN
-		FireStation resultGetFireStationExist = fireStationServiceTest.getFireStation(fireStationExist);
+		FireStation resultGetFireStationExist = fireStationServiceTest.getFireStation(fireStationExist.getAddress());
 		// THEN
 		verify(fireStationDAOMock, times(1)).get(anyString());
 		assertEquals(fireStationExist, resultGetFireStationExist);
@@ -80,7 +80,7 @@ public class FireStationServiceTest {
 		// THEN
 		// verify that the method get of fireStationDAO is not called
 		verify(fireStationDAOMock, times(0)).get(fireStationNotExist.getAddress());
-		assertThrows(EmptyFieldsException.class, () -> fireStationServiceTest.getFireStation(fireStationNotExist));
+		assertThrows(EmptyFieldsException.class, () -> fireStationServiceTest.getFireStation(fireStationNotExist.getAddress()));
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class FireStationServiceTest {
 		// verify that the method get of fireStationDAO is not called
 		verify(fireStationDAOMock, times(0)).get(fireStationNotExist.getAddress());
 		assertThrows(FireStationNotFoundException.class,
-				() -> fireStationServiceTest.getFireStation(fireStationNotExist));
+				() -> fireStationServiceTest.getFireStation(fireStationNotExist.getAddress()));
 	}
 
 	@Test

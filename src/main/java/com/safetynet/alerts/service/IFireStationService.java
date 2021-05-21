@@ -11,13 +11,15 @@ import com.safetynet.alerts.model.FireStation;
  */
 public interface IFireStationService {
 
-	public FireStation getFireStation(FireStation fireStation) throws EmptyFieldsException;
+	public FireStation getFireStation(String address) throws EmptyFieldsException;
 	
 	public FireStation addFireStation(FireStation fireStation);
 	
 	public String deleteFireStation(String address, String station);
 	
 	public FireStation updateFireStation(FireStation fireStation);
+
+	
 
 	
 

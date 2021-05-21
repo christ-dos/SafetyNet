@@ -40,20 +40,19 @@ public class FireStationService implements IFireStationService {
 	}
 
 	@Override
-	public FireStation getFireStation(FireStation fireStation) throws EmptyFieldsException {
-		String address = fireStation.getAddress();
+	public FireStation getFireStation(String address) throws EmptyFieldsException {
+		//String address = fireStation.getAddress();
 		if (address.isEmpty()) {
-			log.error("Service - The field address cannot be empty ");
-			throw new EmptyFieldsException("The field address cannot be empty");
+			log.error("Service - field can not be empty");
+			throw new EmptyFieldsException("Field can not be empty");
 		}
 		FireStation fireStationgetted = fireStationDAO.get(address);
 		if (fireStationgetted == null) {
-			log.error("Service - FireStation not found : address: " + fireStation.getAddress() + ", Station: "
-					+ fireStation.getStation());
+			log.error("Service - FireStation not found : address: " + address );
 			throw new FireStationNotFoundException("The FireStation not found");
 		}
-		log.info("Service - FireStation found :address: " + fireStation.getAddress() + ", Station: "
-				+ fireStation.getStation());
+		log.info("Service - FireStation found :address: " + fireStationgetted.getAddress() + ", Station: "
+				+ fireStationgetted.getStation());
 		return fireStationgetted;
 	}
 
@@ -100,15 +99,15 @@ public class FireStationService implements IFireStationService {
 	public FireStation updateFireStation(FireStation fireStation) {
 		List<FireStation> listFireStations = getListFireStations();
 		FireStation fireStationInArray = fireStationDAO.get(fireStation.getAddress());
-		int indexPosition = listFireStations.indexOf(fireStationInArray);
-		if (indexPosition < 0) {
+		if (fireStationInArray == null) {
 			log.error("Service - FireStation not found: address: " + fireStation.getAddress() + ", Station: "
 					+ fireStation.getStation() + " cannot be updated");
-			throw new FireStationNotFoundException("Service - FireStation not found");
+			throw new FireStationNotFoundException("FireStation not found");
 		}
+		int indexPosition = listFireStations.indexOf(fireStationInArray);
 		fireStationInArray.setStation(fireStation.getStation());
 		FireStation fireStationUpdated = fireStationDAO.save(fireStationInArray, indexPosition);
-		log.info("Service - The station number  was updated: address: " + fireStation.getAddress() + ", Station: "
+		log.info("Service - The station number was updated: address: " + fireStation.getAddress() + ", Station: "
 				+ fireStation.getStation());
 		return fireStationUpdated;
 	}
