@@ -25,11 +25,12 @@ public class FireStationDAO implements IFireStationDAO {
 		super();
 		this.listFireStations = listFireStations;
 	}
-
-	public List<FireStation> getListFireStations(){
+	
+	
+	@Override
+	public List<FireStation> getListFireStations() {
 		return listFireStations;
 	}
-
 	
 	@Override
 	public FireStation get(String address) {
@@ -56,8 +57,11 @@ public class FireStationDAO implements IFireStationDAO {
 
 	@Override
 	public String delete(FireStation fireStation) {
+		
 		listFireStations.remove(fireStation);
 		log.info("DAO - FireStation deleted with SUCCESS");
 		return "SUCCESS";
 	}
+
+	
 }

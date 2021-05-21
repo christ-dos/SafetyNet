@@ -25,7 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class PersonService implements IPersonService {
-
+	
+	/**
+	 * An instance of PersonDAO
+	 * 
+	 * @see PersonDAO
+	 */
+	@Autowired
+	private IPersonDAO personDAO;
+	
 	/**
 	 * Constructor of PersonService without parameter
 	 */
@@ -40,14 +48,7 @@ public class PersonService implements IPersonService {
 		super();
 		this.personDAO = personDAO;
 	}
-
-	/**
-	 * An instance of PersonDAO
-	 * 
-	 * @see PersonDAO
-	 */
-	@Autowired
-	private IPersonDAO personDAO;
+	
 
 	/**
 	 * Method private that get a list of persons
@@ -71,7 +72,7 @@ public class PersonService implements IPersonService {
 	public Person getPerson(String firstName, String lastName) throws EmptyFieldsException {
 		if (firstName.isEmpty() || lastName.isEmpty()) {
 			log.error("Service - The fields firstName and lastName can not be empty ");
-			throw new EmptyFieldsException("Service - The field firstName or lastName can not be empty");
+			throw new EmptyFieldsException("Service - The field firstName or lastName cannot be empty");
 		}
 		Person person = personDAO.getPerson(firstName, lastName);
 		if (person != null) {

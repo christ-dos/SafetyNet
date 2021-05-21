@@ -1,5 +1,6 @@
 package com.safetynet.alerts.service;
 
+import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.FireStation;
 
 /**
@@ -10,13 +11,26 @@ import com.safetynet.alerts.model.FireStation;
  */
 public interface IFireStationService {
 
-	public FireStation getFireStation();
+	public FireStation getFireStation(FireStation fireStation) throws EmptyFieldsException;
 	
-	public FireStation addFireStation();
+	public FireStation addFireStation(FireStation fireStation);
 	
-	public FireStation deleteFireStation();
+	public String deleteFireStation(String address, String station);
 	
-	public FireStation updateFireStation();
+	public FireStation updateFireStation(FireStation fireStation);
+
+	
+
+	
+
+	
+
+	
+
+
+	
+
+	
 	
 	
 }

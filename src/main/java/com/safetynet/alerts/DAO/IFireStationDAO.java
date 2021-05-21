@@ -1,5 +1,7 @@
 package com.safetynet.alerts.DAO;
 
+import java.util.List;
+
 import com.safetynet.alerts.model.FireStation;
 /**
  * Interface that manage methods CRUD of entity FireStation
@@ -8,6 +10,8 @@ import com.safetynet.alerts.model.FireStation;
  *
  */
 public interface IFireStationDAO {
+	
+	public List<FireStation> getListFireStations();
 	
 	public FireStation get(String address);
 	
