@@ -176,7 +176,7 @@ public class FireStationServiceTest {
 	}*/
 
 	@Test
-	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddress_thenRetunMessageSUCCESS() {
+	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressAndExist_thenRetunMessageSUCCESS() {
 		// GIVEN
 		FireStation fireStationToDeleted = new FireStation("3", "748 Townings Dr");
 		String numberStation = null;

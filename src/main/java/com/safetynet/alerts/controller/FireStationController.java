@@ -44,8 +44,7 @@ public class FireStationController {
 
 	@PutMapping(value = "/firestation")
 	public FireStation updateNumberFireStationOfOneAddress(@Valid @RequestBody FireStation fireStation) {
-		log.debug("Controller - Number of Station was updated: Station: " + fireStation.getStation() + " Address: "
-				+ fireStation.getAddress());
+		log.debug("Controller - The number of station with address: "+ fireStation.getAddress() + " was updated with number station:" + fireStation.getStation());
 		return fireStationService.updateFireStation(fireStation);
 	}
 	
