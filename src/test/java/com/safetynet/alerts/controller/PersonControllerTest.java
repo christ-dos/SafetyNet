@@ -216,13 +216,13 @@ public class PersonControllerTest {
 			throws Exception {
 		// GIVEN
 		when(personDAOMock.delete(any())).thenReturn("SUCESS");
-		when(personServiceMock.deletePerson(any(), any())).thenReturn("SUCESS");
+		when(personServiceMock.deletePerson(any(), any())).thenReturn("SUCCESS");
 
 		// WHEN
 		// THEN
 		mockMvc.perform(delete("/person?firstName=john&lastName=Boyd"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", is("SUCESS"))).andDo(print());
+				.andExpect(jsonPath("$", is("SUCCESS"))).andDo(print());
 	}
 
 	/**

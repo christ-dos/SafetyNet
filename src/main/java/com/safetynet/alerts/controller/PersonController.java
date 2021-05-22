@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class PersonController {
+		
 	/**
 	 * An instance of the IPersonService
 	 * 
@@ -72,7 +73,7 @@ public class PersonController {
 	 * @param lastName  - a String obtained from url request
 	 */
 	@DeleteMapping(value = "/person")
-	public String deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
+	public String deletePersonByFirstNameAndLastName(@Valid @RequestParam String firstName, @RequestParam String lastName) {
 		log.info("Controller - person deleted : " + firstName + " " + lastName);
 		return personService.deletePerson(firstName, lastName);
 	}

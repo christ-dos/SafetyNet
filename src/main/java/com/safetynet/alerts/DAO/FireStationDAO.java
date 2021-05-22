@@ -36,7 +36,7 @@ public class FireStationDAO implements IFireStationDAO {
 	public FireStation get(String address) {
 		for(FireStation fireStation : listFireStations) {
 			if(fireStation.getAddress().equalsIgnoreCase(address)){
-				log.info("DAO - FireStation found: address:" + fireStation.getAddress() + " ,Station :" + fireStation.getStation());
+				log.debug("DAO - FireStation found: address:" + fireStation.getAddress() + " ,Station :" + fireStation.getStation());
 				return fireStation;
 			}
 		}
@@ -51,7 +51,7 @@ public class FireStationDAO implements IFireStationDAO {
 		}else {
 			listFireStations.set(index, fireStation);
 		}
-		log.info("DAO - FireStation saved: address:" + fireStation.getAddress() +  ", Station: " + fireStation.getStation());
+		log.debug("DAO - FireStation saved: address:" + fireStation.getAddress() +  ", Station: " + fireStation.getStation());
 		return fireStation;
 	}
 

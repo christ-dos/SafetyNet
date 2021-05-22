@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -72,7 +71,7 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-		personDAOMock = mock(PersonDAO.class);
+		//personDAOMock = mock(PersonDAO.class);
 		personServiceTest = new PersonService(personDAOMock);
 	}
 	

@@ -15,9 +15,11 @@ public interface IFireStationService {
 	
 	public FireStation addFireStation(FireStation fireStation);
 	
-	public String deleteFireStation(String address, String station);
+	public String deleteFireStation(String address);
 	
 	public FireStation updateFireStation(FireStation fireStation);
+
+	
 
 	
 

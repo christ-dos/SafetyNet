@@ -1,12 +1,13 @@
 package com.safetynet.alerts.controller;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.DAO.FireStationDAO;
@@ -76,7 +78,6 @@ public class FireStationControllerTest {
 		FireStation fireStationTest = new FireStation("3", "1509 Culver St");
 
 		when(fireStationServiceMock.getFireStation(anyString())).thenReturn(fireStationTest);
-		// when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationTest);
 		// WHEN
 
@@ -142,7 +143,6 @@ public class FireStationControllerTest {
 		// GIVEN
 		FireStation fireStationToAddNotExist = new FireStation("3", "15 wall Street");
 		when(fireStationServiceMock.addFireStation(any())).thenReturn(fireStationToAddNotExist);
-		when(fireStationDAOMock.save(any(), anyInt())).thenReturn(fireStationToAddNotExist);
 		// WHEN
 
 		// THEN
@@ -151,6 +151,22 @@ public class FireStationControllerTest {
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.address", is("15 wall Street")))
 				.andExpect(jsonPath("$.station", is("3"))).andDo(print());
+	}
+
+	@Test
+	public void testUpdateFireStation_whenfieldStationWasModifiedToNumberFive_thenReturnFireStationWithFieldStationUpdated()
+			throws Exception {
+		// GIVEN
+		FireStation fireStationToUpdate = new FireStation("5", "748 Townings Dr");
+		when(fireStationServiceMock.updateFireStation(any())).thenReturn(fireStationToUpdate);
+		// WHEN
+
+		// THEN
+		mockMvcFireStation
+				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToUpdate))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.address", is("748 Townings Dr")))
+				.andExpect(jsonPath("$.station", is("5"))).andDo(print());
 	}
 
 	@Test
@@ -172,6 +188,49 @@ public class FireStationControllerTest {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(
 						result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))
+				.andDo(print());
+	}
+
+	@Test
+	public void testUpdateFireStation_whenInputFieldAddressIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank()
+			throws Exception {
+		// GIVEN
+		FireStation fireStationToUpadetaNotValid = new FireStation("3", "");
+		// WHEN
+
+		// THEN
+		mockMvcFireStation
+				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToUpadetaNotValid))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(
+						result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+				.andExpect(jsonPath("$.errors").isArray()).andExpect(jsonPath("$.errors", hasItem("must not be blank")))
+				.andDo(print());
+	}
+	
+	@Test
+	public void testDeleteFireStationWithAddress_whenFireStationExist_thenReturnStringSUCCESS() throws Exception {
+		//GIVEN
+		when(fireStationServiceMock.deleteFireStation(anyString())).thenReturn("SUCCESS");
+		//WHEN
+		
+		//THEN
+		mockMvcFireStation.perform(delete("/firestation?address=1509 Culver St"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", is("SUCCESS")))
+				.andDo(print());
+	}
+	@Test
+	public void testDeleteFireStationWithAddress_whenFireStationNotExist_thenReturnStringFireStationCannotBeDeleted() throws Exception {
+		//GIVEN
+		when(fireStationServiceMock.deleteFireStation(anyString())).thenReturn("FireStation cannot be deleted");
+		//WHEN
+		
+		//THEN
+		mockMvcFireStation.perform(delete("/firestation?address=15 New York St"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", is("FireStation cannot be deleted")))
 				.andDo(print());
 	}
 

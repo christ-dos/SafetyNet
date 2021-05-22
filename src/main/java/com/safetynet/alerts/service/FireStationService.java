@@ -51,7 +51,7 @@ public class FireStationService implements IFireStationService {
 			log.error("Service - FireStation not found : address: " + address );
 			throw new FireStationNotFoundException("The FireStation not found");
 		}
-		log.info("Service - FireStation found :address: " + fireStationgetted.getAddress() + ", Station: "
+		log.debug("Service - FireStation found :address: " + fireStationgetted.getAddress() + ", Station: "
 				+ fireStationgetted.getStation());
 		return fireStationgetted;
 	}
@@ -65,33 +65,21 @@ public class FireStationService implements IFireStationService {
 					+ fireStation.getStation() + " already exist");
 			throw new FireStationAlreadyExistException("The FireStation that we try to save already Exist");
 		}
-		log.info("Service - FireStation saved :address: " + fireStation.getAddress() + ", Station: "
+		log.debug("Service - FireStation saved :address: " + fireStation.getAddress() + ", Station: "
 				+ fireStation.getStation());
 		return fireStationDAO.save(fireStation, indexPosition);
 	}
 
 	@Override
-	public String deleteFireStation(String address, String station) {
-
-		if (station != null && address == null) {
-			List<FireStation> listFireStations = getListFireStations();
-			String resultMessage = null;
-			for (FireStation fireStation : listFireStations) {
-				if (fireStation.getStation() == station) {
-					resultMessage = fireStationDAO.delete(fireStation);
-				}
-			}
-			log.info("Service - All addresses: " + "Station: " + station + " was deleted");
-			return resultMessage;
-		}
-		FireStation fireStation = fireStationDAO.get(address);
-		if (fireStation == null) {
+	public String deleteFireStation(String address) {
+		FireStation fireStationToDelete = fireStationDAO.get(address);
+		if (fireStationToDelete == null) {
 			log.info("Service - FireStation cannot be deleted");
 			return "FireStation cannot be deleted";
 		}
-		log.info("Service - FireStation : address:" + fireStation.getAddress() + " ,Station: "
-				+ fireStation.getStation() + " was deleted");
-		return fireStationDAO.delete(fireStation);
+		log.debug("Service - FireStation : address:" + fireStationToDelete.getAddress() + " ,Station: "
+				+ fireStationToDelete.getStation() + " was deleted");
+		return fireStationDAO.delete(fireStationToDelete);
 
 	}
 
@@ -107,7 +95,7 @@ public class FireStationService implements IFireStationService {
 		int indexPosition = listFireStations.indexOf(fireStationInArray);
 		fireStationInArray.setStation(fireStation.getStation());
 		FireStation fireStationUpdated = fireStationDAO.save(fireStationInArray, indexPosition);
-		log.info("Service - The station number was updated: address: " + fireStation.getAddress() + ", Station: "
+		log.debug("Service - The station number was updated: address: " + fireStation.getAddress() + ", Station: "
 				+ fireStation.getStation());
 		return fireStationUpdated;
 	}

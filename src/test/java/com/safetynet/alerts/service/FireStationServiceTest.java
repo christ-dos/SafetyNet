@@ -158,7 +158,7 @@ public class FireStationServiceTest {
 				() -> fireStationServiceTest.updateFireStation(fireStationToUpdate));
 	}
 
-	@Test
+	/**@Test
 	public void testdeleteFireStation_whenInputStationNumberThreeAllAddressMappedInFireSationNumberThreeWasDeleted_returnMessageSUCCESS() {
 		// GIVEN
 		String numberStation = "3";
@@ -167,13 +167,13 @@ public class FireStationServiceTest {
 		when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
 		when(fireStationDAOMock.delete(any())).thenReturn("SUCCESS");
 		// WHEN
-		String resultDeleteAllElementsStationThree = fireStationServiceTest.deleteFireStation(address, numberStation);
+		String resultDeleteAllElementsStationThree = fireStationServiceTest.deleteFireStation(address);
 		// THEN
-		verify(fireStationDAOMock, times(1)).getListFireStations();
+		//verify(fireStationDAOMock, times(1)).getListFireStations();
 		// method delete was called 3 times we are 3 elements with station number 3
-		verify(fireStationDAOMock, times(3)).delete(any());
+		verify(fireStationDAOMock, times(1)).delete(any());
 		assertEquals("SUCCESS", resultDeleteAllElementsStationThree);
-	}
+	}*/
 
 	@Test
 	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddress_thenRetunMessageSUCCESS() {
@@ -185,7 +185,7 @@ public class FireStationServiceTest {
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationToDeleted);
 		when(fireStationDAOMock.delete(any())).thenReturn("SUCCESS");
 		// WHEN
-		String resultDeleteAdress = fireStationServiceTest.deleteFireStation(address, numberStation);
+		String resultDeleteAdress = fireStationServiceTest.deleteFireStation(address);
 		// THEN
 		verify(fireStationDAOMock, times(1)).get(anyString());
 		verify(fireStationDAOMock, times(1)).delete(any());
@@ -198,7 +198,7 @@ public class FireStationServiceTest {
 		String addressFireStationToDeleted = "7 Toontown St";
 		when(fireStationDAOMock.get(addressFireStationToDeleted)).thenReturn(null);
 		// WHEN
-		String resultDeleteAdress = fireStationServiceTest.deleteFireStation(addressFireStationToDeleted, null);
+		String resultDeleteAdress = fireStationServiceTest.deleteFireStation(addressFireStationToDeleted);
 		// THEN
 		verify(fireStationDAOMock, times(1)).get(anyString());
 		// Method delete not invoked because fireStation not exist
