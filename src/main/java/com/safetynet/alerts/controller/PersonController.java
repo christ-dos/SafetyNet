@@ -48,7 +48,7 @@ public class PersonController {
 	@GetMapping(value = "/person")
 	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName)
 			throws EmptyFieldsException {
-		log.info("Controller - person found: " + firstName + " " + lastName);
+		log.debug("Controller - person found: " + firstName + " " + lastName);
 		return personService.getPerson(firstName, lastName);
 	}
 
@@ -62,7 +62,7 @@ public class PersonController {
 	 */
 	@PostMapping(value = "/person")
 	public Person savePerson(@Valid @RequestBody Person person) throws PersonAlreadyExistException {
-		log.info("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
+		log.debug("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
 		return personService.addPerson(person);
 	}
 
@@ -74,7 +74,7 @@ public class PersonController {
 	 */
 	@DeleteMapping(value = "/person")
 	public String deletePersonByFirstNameAndLastName(@Valid @RequestParam String firstName, @RequestParam String lastName) {
-		log.info("Controller - person deleted : " + firstName + " " + lastName);
+		log.debug("Controller - person deleted : " + firstName + " " + lastName);
 		return personService.deletePerson(firstName, lastName);
 	}
 
@@ -86,7 +86,7 @@ public class PersonController {
 	 */
 	@PutMapping(value = "/person")
 	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) {
-		log.info("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
+		log.debug("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
 		return personService.updatePerson(person);
 	}
 

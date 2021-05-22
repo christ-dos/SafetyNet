@@ -32,26 +32,26 @@ public class FireStationController {
 
 	@GetMapping(value = "/firestation")
 	public FireStation getFireStation(@Valid @RequestParam String address) throws EmptyFieldsException {
-		log.info("Controller - fireStation found: " + address);
+		log.debug("Controller - fireStation found: " + address);
 		return fireStationService.getFireStation(address);
 	}
 
 	@PostMapping(value = "/firestation")
 	public FireStation saveFireStation(@Valid @RequestBody FireStation fireStation) {
-		log.info("Controller - fireStation saved: " + fireStation.getAddress() + " " + fireStation.getStation());
+		log.debug("Controller - fireStation saved: " + fireStation.getAddress() + " " + fireStation.getStation());
 		return fireStationService.addFireStation(fireStation);
 	}
 
 	@PutMapping(value = "/firestation")
 	public FireStation updateNumberFireStationOfOneAddress(@Valid @RequestBody FireStation fireStation) {
-		log.info("Controller - Number of Station was updated: Station: " + fireStation.getStation() + " Address: "
+		log.debug("Controller - Number of Station was updated: Station: " + fireStation.getStation() + " Address: "
 				+ fireStation.getAddress());
 		return fireStationService.updateFireStation(fireStation);
 	}
 	
 	@DeleteMapping(value = "/firestation")
 	public String deleteFireStationByAddress(@Valid @RequestParam String address) {
-		log.info("Controller - fireStation deleted: address: " + address);
+		log.debug("Controller - fireStation deleted: address: " + address);
 		return fireStationService.deleteFireStation(address);
 	}
 

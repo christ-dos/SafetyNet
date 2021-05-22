@@ -62,7 +62,7 @@ public class PersonDAO implements IPersonDAO {
 	public Person getPerson(String firstName, String lastName) {
 		for (Person person : listPersons) {
 			if (person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName)) {
-				log.info("DAO - Person found : " + firstName + " " + lastName);
+				log.debug("DAO - Person found : " + firstName + " " + lastName);
 				return person;
 			}
 		}
@@ -81,7 +81,7 @@ public class PersonDAO implements IPersonDAO {
 		} else {
 			listPersons.set(index, person);
 		}
-		log.info("DAO - Person saved: " + person.getFirstName() + " " + person.getLastName());
+		log.debug("DAO - Person saved: " + person.getFirstName() + " " + person.getLastName());
 		return person;
 	}
 
@@ -93,7 +93,7 @@ public class PersonDAO implements IPersonDAO {
 	 */
 	public String delete(Person person) {
 		listPersons.remove(person);
-		log.info("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());
+		log.debug("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());
 		return "SUCCESS";
 	}
 
