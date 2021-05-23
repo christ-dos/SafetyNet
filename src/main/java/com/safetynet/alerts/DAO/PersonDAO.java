@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.alerts.model.Person;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository
 @Slf4j
+@Builder
 public class PersonDAO implements IPersonDAO {
 
 	/**
@@ -36,14 +38,6 @@ public class PersonDAO implements IPersonDAO {
 	}
 
 	/**
-	 * Constructor without parameters
-	 * 
-	 */
-	public PersonDAO() {
-
-	}
-
-	/**
 	 * Method that get the list of persons
 	 * 
 	 * @return an ArrayList of Persons
@@ -57,12 +51,12 @@ public class PersonDAO implements IPersonDAO {
 	 * 
 	 * @param firstName - the firstName
 	 * @param lastName  - the lastName
-	 * @return an instance of Person
+	 * @return an instance of Person or null if the person not exist
 	 */
 	public Person getPerson(String firstName, String lastName) {
 		for (Person person : listPersons) {
 			if (person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName)) {
-				log.info("DAO - Person found : " + firstName + " " + lastName);
+				log.debug("DAO - Person found : " + firstName + " " + lastName);
 				return person;
 			}
 		}
@@ -72,8 +66,9 @@ public class PersonDAO implements IPersonDAO {
 	/**
 	 * Method that save a Person in the ArrayList
 	 * 
-	 * @param index - the position where will be saved the Person
-	 * @return - object that will be saved in the arrayList
+	 * @param index - An integer containing the position where will be saved the Person
+	 * @param person - an instance of Person
+	 * @return - The Person that was saved in the arrayList
 	 */
 	public Person save(int index, Person person) {
 		if (index < 0) {
@@ -81,19 +76,19 @@ public class PersonDAO implements IPersonDAO {
 		} else {
 			listPersons.set(index, person);
 		}
-		log.info("DAO - Person saved: " + person.getFirstName() + " " + person.getLastName());
+		log.debug("DAO - Person saved: " + person.getFirstName() + " " + person.getLastName());
 		return person;
 	}
 
 	/**
 	 * Method that delete a Person from the ArrayList
 	 * 
-	 * @param person we want deleted
+	 * @param person - The person we want deleted
 	 * @return a String to confirm the deletion "SUCCESS"
 	 */
 	public String delete(Person person) {
 		listPersons.remove(person);
-		log.info("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());
+		log.debug("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());
 		return "SUCCESS";
 	}
 

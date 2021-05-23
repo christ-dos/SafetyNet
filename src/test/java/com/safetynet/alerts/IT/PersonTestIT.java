@@ -25,10 +25,8 @@ import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
-import javassist.NotFoundException;
-
 /**
- * Class integration tests which verify that all classes works correctly together
+ * Class integration tests for Person entity which verify that all classes works correctly together
  * to test the entity {@link Person}
  * 
  * @author Christine Duarte
@@ -72,7 +70,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetPersonNotExist_whenInputFirstNameLilyAndLastNameSaguet_shouldReturnPersonNotFoundExcepetion() throws Exception {
+	public void testRequestGetPersonNotExist_whenInputFirstNameLilyAndLastNameSaguet_shouldReturnPersonNotFoundException() throws Exception {
 		//GIVEN
 		
 		//WHEN
@@ -102,9 +100,9 @@ public class PersonTestIT {
 		//THEN
 		mockMvc.perform(get("/person?firstName=&lastName="))
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("$.message", is("The field firstName or lastName can not be empty")))
+		.andExpect(jsonPath("$.message", is("Field cannot be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
-	    .andExpect(result -> assertEquals("Service - The field firstName or lastName can not be empty", result.getResolvedException().getMessage()))
+	    .andExpect(result -> assertEquals("Field cannot be empty", result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
 	
@@ -115,7 +113,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenPersonAlreadyExist_shouldUpdateThePerson() throws Exception {
+	public void testRequestPost_whenPersonAlreadyExist_shouldThrowPersonAlreadyExistException() throws Exception {
 		//GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
@@ -267,7 +265,7 @@ public class PersonTestIT {
 	
 	/**
 	 * Method that test requestPut when person to update not exist 
-	 * then throw a {@link NotFoundException}
+	 * then throw a {@link PersonNotFoundException}
 	 *
 	 * @throws Exception
 	 */

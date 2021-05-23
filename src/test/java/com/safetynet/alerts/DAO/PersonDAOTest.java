@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.safetynet.alerts.DataJson;
 import com.safetynet.alerts.model.Person;
 
 /**
@@ -37,20 +36,13 @@ public class PersonDAOTest {
 	private List<Person> mockList;
 
 	/**
-	 * A mock of {@link DataJson}
-	 */
-	@Mock
-	private DataJson dataMock;
-
-	/**
 	 * Method that created a mock of the ArrayList mockList with 3 elements
 	 * 
-	 * the mockList is injected at the method by the constructor
+	 * the mockList is injected at the method by a builder
 	 */
 	@BeforeEach
 	public void setUpPerTest() {
 		mockList = new ArrayList<>();
-		personDAOTest = new PersonDAO(mockList);
 
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -61,6 +53,8 @@ public class PersonDAOTest {
 		mockList.add(index0);
 		mockList.add(index1);
 		mockList.add(index2);
+
+		personDAOTest = PersonDAO.builder().listPersons(mockList).build();
 	}
 
 	/**
@@ -115,8 +109,8 @@ public class PersonDAOTest {
 
 	/**
 	 * Method that test savePersonDAO when person not exist then return the person
-	 * saved and the person is saved at the end of the array and verify that we are
-	 * 4 elements in the arrayList
+	 * saved and verify if the person is saved at the end of the array and verify
+	 * that we are 4 elements in the arrayList
 	 */
 	@Test
 	public void testSavePersonDAO_whenPersonNotExist_thenResultPersonAddedInEndOfArray() {
@@ -143,20 +137,21 @@ public class PersonDAOTest {
 	@Test
 	public void testSavePersonDAO_whenPersonExist_shouldSavedPersonInIndexOne() {
 		// GIVEN
-		Person personToSaved = new Person("Lily", "Cooper", "489 Rue des Fleurs", "Croix", "59170", "841-874-9845",
-				"lily@email.com");
-		Person person = personDAOTest.getPerson("Lily", "Cooper");
-		int indexLilyCooper = mockList.indexOf(person);
+		Person personToSaveWithAddressModified = new Person("Lily", "Cooper", "489 Rue des Fleurs", "Croix", "59170",
+				"841-874-9845", "lily@email.com");
+		Person personLilyCooperRecordedInArray = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451",
+				"841-874-9845", "lily@email.com");
+		int indexLilyCooper = mockList.indexOf(personLilyCooperRecordedInArray);
 
 		// WHEN
-		Person result = personDAOTest.save(indexLilyCooper, personToSaved);
-		int indexPersonSaved = mockList.indexOf(personToSaved);
+		Person result = personDAOTest.save(indexLilyCooper, personToSaveWithAddressModified);
+		int indexPersonSavedWithAddressModified = mockList.indexOf(personToSaveWithAddressModified);
 		// THEN
-		assertEquals(person.getFirstName(), result.getFirstName());
+		assertEquals(personLilyCooperRecordedInArray.getFirstName(), result.getFirstName());
 		// verify that the person was saved at the index of Lily Cooper
-		assertEquals(indexLilyCooper, indexPersonSaved);
+		assertEquals(indexLilyCooper, indexPersonSavedWithAddressModified);
 		// verify that new address was saved in Object Lily Cooper
-		assertEquals(personToSaved.getAddress(), result.getAddress());
+		assertEquals(personToSaveWithAddressModified.getAddress(), result.getAddress());
 
 	}
 

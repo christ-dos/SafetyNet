@@ -19,7 +19,7 @@ import com.safetynet.alerts.service.IPersonService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Class that manage the requests
+ * Class that manage the requests for Person entity
  * 
  * @author Christine Duarte
  *
@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class PersonController {
+		
 	/**
 	 * An instance of the IPersonService
 	 * 
@@ -34,12 +35,6 @@ public class PersonController {
 	 */
 	@Autowired
 	private IPersonService personService;
-
-	/*
-	 * @GetMapping(value= "/person") public List <Person> getPersonDataJson() {
-	 * log.info("Controller get list of persons"); return personService.getpersons;
-	 * }
-	 */
 
 	/**
 	 * Request get to obtain a person
@@ -53,7 +48,7 @@ public class PersonController {
 	@GetMapping(value = "/person")
 	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName)
 			throws EmptyFieldsException {
-		log.info("Controller - person found: " + firstName + " " + lastName);
+		log.debug("Controller - person found: " + firstName + " " + lastName);
 		return personService.getPerson(firstName, lastName);
 	}
 
@@ -66,8 +61,8 @@ public class PersonController {
 	 *                                     ArrayList
 	 */
 	@PostMapping(value = "/person")
-	public Person savePerson(@Valid @RequestBody Person person) throws PersonAlreadyExistException {
-		log.info("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
+	public Person savePerson(@Valid @RequestBody Person person) throws PersonAlreadyExistException{
+		log.debug("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
 		return personService.addPerson(person);
 	}
 
@@ -76,10 +71,11 @@ public class PersonController {
 	 * 
 	 * @param firstName - a String obtained from url request
 	 * @param lastName  - a String obtained from url request
+	 * @return a String with the message "SUCCESS" or "Person not deleted"
 	 */
 	@DeleteMapping(value = "/person")
-	public String deletePersonByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
-		log.info("Controller - person deleted : " + firstName + " " + lastName);
+	public String deletePersonByFirstNameAndLastName(@Valid @RequestParam String firstName, @RequestParam String lastName) {
+		log.debug("Controller - person deleted : " + firstName + " " + lastName);
 		return personService.deletePerson(firstName, lastName);
 	}
 
@@ -87,11 +83,11 @@ public class PersonController {
 	 * Request put to update a person from the ArrayList
 	 * 
 	 * @param person - a person obtained by the body of the request
-	 * @return - the person updated in the ArrayList
+	 * @return the person updated in the ArrayList
 	 */
 	@PutMapping(value = "/person")
 	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) {
-		log.info("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
+		log.debug("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
 		return personService.updatePerson(person);
 	}
 

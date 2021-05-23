@@ -4,7 +4,7 @@ package com.safetynet.alerts.exceptions;
  * Class that manages the shipment of a message when a
  * PersonAlreadyExistException is handle
  * 
- * when the person we want saved already exist
+ * when the person we want update already exist
  * 
  * @author Christine Duarte
  *

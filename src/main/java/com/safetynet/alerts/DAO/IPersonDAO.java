@@ -31,14 +31,14 @@ public interface IPersonDAO {
 	 * Method that save a Person in the ArrayList
 	 * 
 	 * @param index - the position where will be saved the Person
-	 * @return - object that will be saved in the arrayList
+	 * @return - Person that was saved in the arrayList
 	 */
 	public Person save(int index, Person person);
 
 	/**
 	 * Method that delete a Person from the ArrayList
 	 * 
-	 * @param person we want deleted
+	 * @param person - person we want deleted
 	 * @return a String to confirm the deletion
 	 */
 	public String delete(Person person);
