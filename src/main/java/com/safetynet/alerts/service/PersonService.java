@@ -146,6 +146,11 @@ public class PersonService implements IPersonService {
 		}
 		List<Person> myList = getListPersons();
 		int indexPosition = myList.indexOf(resultPersonFinded);
+		resultPersonFinded.setAddress(person.getAddress());
+		resultPersonFinded.setCity(person.getCity());
+		resultPersonFinded.setZip(person.getZip());
+		resultPersonFinded.setEmail(person.getEmail());
+		resultPersonFinded.setPhone(person.getPhone());
 		log.debug("Service - Person updated: " + resultPersonFinded.getFirstName() + " "
 				+ resultPersonFinded.getLastName());
 
