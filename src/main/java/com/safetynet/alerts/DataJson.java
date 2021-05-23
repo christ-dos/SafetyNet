@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.DAO.ReadFileJson;
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 
 import lombok.Builder;
@@ -54,6 +55,11 @@ public class DataJson {
 	 * An arrayList that contain the list of FireStation
 	 */
 	private List<FireStation> fireStations;
+	
+	/**
+	 * An arrayList that contain the list of MedicalRecord
+	 */
+	private List<MedicalRecord> medicalRecords;
 
 	/**
 	 * An instance of JsonObject that can be created from an input source using
@@ -74,14 +80,16 @@ public class DataJson {
 	 * Constructor with all parameters
 	 */
 	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, List<FireStation> fireStations,
-			JsonObject jsonObject) {
+			List<MedicalRecord> medicalRecords, JsonObject jsonObject) {
 		super();
 		this.reader = reader;
 		this.mapper = mapper;
 		this.persons = persons;
 		this.fireStations = fireStations;
+		this.medicalRecords = medicalRecords;
 		this.jsonObject = jsonObject;
 	}
+	
 
 	/**
 	 * Method that get the JsonObject that is read by the method readFileJson
@@ -110,7 +118,7 @@ public class DataJson {
 			log.error("DataJson - Error occured during deserialization of the JsonArray persons");
 			e.printStackTrace();
 		}
-		log.info("The JsonArray with name persons is deserialized");
+		log.info("DataJson - The JsonArray with name persons is deserialized");
 		return persons;
 	}
 
@@ -132,7 +140,29 @@ public class DataJson {
 			log.error("DataJson - Error occured during deserialization of the JsonArray persons");
 			e.printStackTrace();
 		}
-		log.info("The JsonArray with name firestations is deserialized");
+		log.info("DataJson - The JsonArray with name firestations is deserialized");
 		return fireStations;
+	}
+	
+	/**
+	 * Method that extract the JsonArray "medicalrecords" of the JsonObject and map in
+	 * an arrayList of MedicalRecord
+	 * 
+	 * @return A list of medicalRecord that was contained in the file Json
+	 */
+	@Bean
+	public List<MedicalRecord> listMedicalRecords() {
+		String ArrayName = "medicalrecords";
+		jsonObject = getObjectJson();
+		try {
+			JsonArray jsonPersonsArray = jsonObject.getJsonArray(ArrayName);
+			medicalRecords = mapper.readValue(jsonPersonsArray.toString(), new TypeReference<List<MedicalRecord>>() {
+			});
+		} catch (JsonProcessingException e) {
+			log.error("DataJson - Error occured during deserialization of the JsonArray persons");
+			e.printStackTrace();
+		}
+		log.info("DataJson - The JsonArray with name medicalrecords is deserialized");
+		return medicalRecords;
 	}
 }

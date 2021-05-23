@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.json.Json;
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.safetynet.alerts.DAO.ReadFileJson;
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 
 /**
@@ -72,6 +75,13 @@ public class DataJsonTest {
 	 */
 	@Mock
 	private List<FireStation> mockListFireStation;
+	
+	/**
+	 * A mock of a list of medicalRecords
+	 * 
+	 */
+	@Mock
+	private List<MedicalRecord> mockListMedicalRecords;
 
 	/**
 	 * Method that create the jsonObjectMock to use in the tests
@@ -117,13 +127,22 @@ public class DataJsonTest {
 												.add("aznol:350mg")
 												.add("hydrapermazol:100mg"))
 										.add("allergies", Json.createArrayBuilder()
-												.add("nillacilan"))))
+												.add("nillacilan")))
+								.add(Json.createObjectBuilder()
+										.add("firstName", "Jacob")
+										.add("lastName", "Boyd")
+										.add("birthdate", "03/06/1989")
+										.add("medications",
+												Json.createArrayBuilder()
+												.add("pharmacol:5000mg")
+												.add("terazine:10mg")
+												.add("noznazol:250mg"))
+										.add("allergies", Json.createArrayBuilder())))
 				.build();
-		
 	}
 
 	/**
-	 * Method that test if the jsonArray "persons" is deserilized correctly 
+	 * Method that test if the jsonArray "persons" is deserialized correctly 
 	 * we find person Tenley Boyd which is recorded in index 0 
 	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
@@ -150,7 +169,7 @@ public class DataJsonTest {
 	}
 	
 	/**
-	 * Method that test if the jsonArray "firestations" is deserilized correctly 
+	 * Method that test if the jsonArray "firestations" is deserialized correctly 
 	 * we find station "3" with address "1509 Culver St" in index 0 of the arrayList 
 	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
@@ -174,5 +193,36 @@ public class DataJsonTest {
 		//verify that in index 0 we are the station "3" address "1509 Culver St"
 		assertEquals(fireStationInIndex0, resultListFireStations.get(0));
 		assertEquals("3", resultListFireStations.get(0).getStation());
+	}
+	
+	/**
+	 * Method that test if the jsonArray "medicalrecords" is deserialized correctly 
+	 * we find firstName "John" and lastName"Boyd" and birthDate "03/06/1984" in index 0 of the arrayList 
+	 * and if we have recovered 2 elements of our jsonObjectMock
+	 */
+	@Test
+	public void listMedicalRecordsTest_testWhenGetIndex0_shouldReturnMedicalRecordsWithFirstNameJohnAndLastNameBoyd() {
+		// GIVEN
+		List<String> medications = new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg"));
+		List<String> allergies = new ArrayList<>(Arrays.asList("nillacilan"));
+		MedicalRecord medicalRecordIndex0 = new MedicalRecord("John", "Boyd", "03/06/1984", medications, allergies);
+		dataJsonTest = DataJson.builder()
+				.reader(readerMock)
+				.mapper(mapperMock)
+				.medicalRecords(mockListMedicalRecords)
+				.jsonObject(jsonObjectMock)
+				.build();
+		when(readerMock.readJsonFile()).thenReturn(jsonObjectMock);
+		// WHEN
+		List<MedicalRecord> resultListMedicalRecords = dataJsonTest.listMedicalRecords();
+		// THEN
+		assertNotNull(resultListMedicalRecords);
+		// the mapperMock contain 2 elements to deserialize
+		assertEquals(2, resultListMedicalRecords.size());
+		//verify that in index 0 we are the medicalRecord with firstName "John" and lastNane"Boyd"
+		assertEquals(medicalRecordIndex0, resultListMedicalRecords.get(0));
+		assertEquals("John", resultListMedicalRecords.get(0).getFirstName());
+		assertEquals("Boyd", resultListMedicalRecords.get(0).getLastName());
+		assertEquals("03/06/1984", resultListMedicalRecords.get(0).getBirthDate());
 	}
 }
