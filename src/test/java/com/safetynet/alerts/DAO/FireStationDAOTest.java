@@ -46,7 +46,7 @@ public class FireStationDAOTest {
 		// GIVEN
 		FireStation fireStationIndex1 = new FireStation("2", "29 15th St");
 		// WHEN
-		List<FireStation> resultListFireStations = fireStationDAOTest.getListFireStations();
+		List<FireStation> resultListFireStations = fireStationDAOTest.getFireStations();
 		// THEN
 		assertEquals(3, resultListFireStations.size());
 		// verify that the station in index 1 in the list is equal to fireStationindex1

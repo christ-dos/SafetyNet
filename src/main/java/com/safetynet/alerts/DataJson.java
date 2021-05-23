@@ -16,6 +16,7 @@ import com.safetynet.alerts.DAO.ReadFileJson;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.Person;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@Builder
 public class DataJson {
 	/**
 	 * An instance of ReadFileJson class that read the Json file
@@ -67,21 +69,10 @@ public class DataJson {
 	public DataJson() {
 		super();
 	}
-
+	
 	/**
 	 * Constructor with all parameters
 	 */
-	
-
-	/**
-	 * Method that get the JsonObject that is read by the method readFileJson
-	 * 
-	 * @return A JsonObject of the file data.json
-	 */
-	private JsonObject getObjectJson() {
-		return reader.readJsonFile();
-	}
-
 	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, List<FireStation> fireStation,
 			JsonObject jsonObject) {
 		super();
@@ -91,6 +82,16 @@ public class DataJson {
 		this.fireStation = fireStation;
 		this.jsonObject = jsonObject;
 	}
+
+	/**
+	 * Method that get the JsonObject that is read by the method readFileJson
+	 * 
+	 * @return A JsonObject of the file data.json
+	 */
+	private JsonObject getObjectJson() {
+		return reader.readJsonFile();
+	}
+	
 
 	/**
 	 * Method that extract the JsonArray "persons" of the JsonObject and map in an

@@ -26,7 +26,7 @@ import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
 
 /**
- * Class integration tests which verify that all classes works correctly together
+ * Class integration tests of FireStation entity  which verify that all classes works correctly together
  * to test the entity {@link FireStation}
  * 
  * @author Christine Duarte

@@ -7,28 +7,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * A class that models a firestation Object
+ * A class that models a fireStation Object
  * 
  * @author Christine Duarte
  *
  */
 @Data
 public class FireStation {
-
+	/**
+	 * A String that contain the address of the fireStation
+	 */
 	@NotBlank
 	@JsonProperty("address")
 	private String address;
 	
+	/**
+	 * A String that contain the station number of the fireStation
+	 */
 	@NotBlank
 	@JsonProperty("station")
 	private String station;
-
-	/**
-	 * A constructor of the class FireStation without parameter
-	 */
-	public FireStation() {
-		super();
-	}
 
 	/**
 	 * A constructor of the class FireStation with all parameters
@@ -38,5 +36,4 @@ public class FireStation {
 		this.station = station;
 		this.address = address;
 	}
-
 }

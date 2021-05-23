@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,8 +54,7 @@ public class FireStationServiceTest {
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
 
-		fireStationDAOMock = mock(FireStationDAO.class);
-		fireStationServiceTest = new FireStationService(fireStationDAOMock);
+		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock).build();
 	}
 
 	@Test
@@ -100,7 +98,7 @@ public class FireStationServiceTest {
 	public void testAddFireStation_whenFireStationToSaveExist_thenThrowFireStationAlreadyExistException() {
 		// GIVEN
 		FireStation fireStationToSaveExist = new FireStation("3", "834 Binoc Ave");
-		when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
 		// WHEN
 
 		// THEN
@@ -114,12 +112,12 @@ public class FireStationServiceTest {
 	public void testAddFireStation_whenFireStationNotExistInArray_thenFireStationIsAdded() {
 		// GIVEN
 		FireStation fireStationToAddNotExist = new FireStation("3", "834 Palacium st");
-		when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
 		when(fireStationDAOMock.save(any(), anyInt())).thenReturn(fireStationToAddNotExist);
 		// WHEN
 		FireStation resultFireStationAdded = fireStationServiceTest.addFireStation(fireStationToAddNotExist);
 		// THEN
-		verify(fireStationDAOMock, times(1)).getListFireStations();
+		verify(fireStationDAOMock, times(1)).getFireStations();
 		verify(fireStationDAOMock, times(1)).save(any(), anyInt());
 		assertEquals(fireStationToAddNotExist, resultFireStationAdded);
 		assertEquals(fireStationToAddNotExist.getAddress(), resultFireStationAdded.getAddress());
@@ -133,7 +131,7 @@ public class FireStationServiceTest {
 		FireStation fireStationRecordedInArray = new FireStation("3", "1509 Culver St");
 		FireStation fireStationToUpdate = new FireStation("2", "1509 Culver St");
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationRecordedInArray);
-		when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
 		when(fireStationDAOMock.save(any(), anyInt())).thenReturn(fireStationToUpdate);
 		// WHEN
 		FireStation resultPersonUpdated = fireStationServiceTest.updateFireStation(fireStationToUpdate);
@@ -150,30 +148,13 @@ public class FireStationServiceTest {
 		// GIVEN
 		FireStation fireStationToUpdate = new FireStation("2", "1 wall Street");
 		when(fireStationDAOMock.get(anyString())).thenReturn(null);
-		when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
 		// WHEN
 		// THEN
 		verify(fireStationDAOMock, times(0)).save(any(), anyInt());
 		assertThrows(FireStationNotFoundException.class,
 				() -> fireStationServiceTest.updateFireStation(fireStationToUpdate));
 	}
-
-	/**@Test
-	public void testdeleteFireStation_whenInputStationNumberThreeAllAddressMappedInFireSationNumberThreeWasDeleted_returnMessageSUCCESS() {
-		// GIVEN
-		String numberStation = "3";
-		String address = null;
-
-		when(fireStationDAOMock.getListFireStations()).thenReturn(mockListFireStation);
-		when(fireStationDAOMock.delete(any())).thenReturn("SUCCESS");
-		// WHEN
-		String resultDeleteAllElementsStationThree = fireStationServiceTest.deleteFireStation(address);
-		// THEN
-		//verify(fireStationDAOMock, times(1)).getListFireStations();
-		// method delete was called 3 times we are 3 elements with station number 3
-		verify(fireStationDAOMock, times(1)).delete(any());
-		assertEquals("SUCCESS", resultDeleteAllElementsStationThree);
-	}*/
 
 	@Test
 	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressAndExist_thenRetunMessageSUCCESS() {

@@ -35,6 +35,8 @@ import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.service.FireStationService;
 
+import lombok.Builder;
+
 /**
  * Class that test FireStationController
  * 
@@ -64,6 +66,7 @@ public class FireStationControllerTest {
 	 * @param obj - The object that we want send in the request
 	 * @return The value as JsonString of the object
 	 */
+	@Builder
 	public String asJsonString(final Object obj) {
 		try {
 			return new ObjectMapper().writeValueAsString(obj);

@@ -5,50 +5,76 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.IFireStationDAO;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * class service that manage the methods CRUD for FireStation entity
  * 
  * @author Christine Duarte
  *
  */
 @Service
 @Slf4j
+@Builder
 public class FireStationService implements IFireStationService {
-
+	/**
+	 * An instance of {@link FireStationDAO}
+	 * 
+	 * @see FireStationDAO
+	 */
 	@Autowired
 	private IFireStationDAO fireStationDAO;
 
+	/**
+	 * Constructor of FireStationService without parameter
+	 */
 	public FireStationService() {
 		super();
 	}
 
+	/**
+	 * Constructor of FireStationService with as parameter an instance of
+	 * {@link FireStationDAO}
+	 */
 	public FireStationService(IFireStationDAO fireStationDAO) {
 		super();
 		this.fireStationDAO = fireStationDAO;
 	}
 
+	/**
+	 * Method private that get a list of fireStations
+	 * 
+	 * @return An ArrayList of FireStation
+	 */
 	private List<FireStation> getListFireStations() {
-		return fireStationDAO.getListFireStations();
-
+		return fireStationDAO.getFireStations();
 	}
 
+	/**
+	 * Method that get a fireStation by address
+	 * 
+	 * @param address - A String containing the address of fireStation
+	 * @return an instance of fireStation getted
+	 * @throws EmptyFieldsException         when the field address is empty
+	 * @throws FireStationNotFoundException when fireStation is not found
+	 */
 	@Override
 	public FireStation getFireStation(String address) throws EmptyFieldsException {
-		//String address = fireStation.getAddress();
 		if (address.isEmpty()) {
 			log.error("Service - field can not be empty");
 			throw new EmptyFieldsException("Field can not be empty");
 		}
 		FireStation fireStationgetted = fireStationDAO.get(address);
 		if (fireStationgetted == null) {
-			log.error("Service - FireStation not found : address: " + address );
+			log.error("Service - FireStation not found : address: " + address);
 			throw new FireStationNotFoundException("The FireStation not found");
 		}
 		log.debug("Service - FireStation found :address: " + fireStationgetted.getAddress() + ", Station: "
@@ -56,6 +82,14 @@ public class FireStationService implements IFireStationService {
 		return fireStationgetted;
 	}
 
+	/**
+	 * Method that add a fireStation
+	 * 
+	 * @param fireStation - An instance of {@link FireStation}
+	 * @return the fireStation added
+	 * @throws FireStationAlreadyExistException when the fireStation that we want
+	 *                                          added already exist
+	 */
 	@Override
 	public FireStation addFireStation(FireStation fireStation) {
 		List<FireStation> listFireStations = getListFireStations();
@@ -70,6 +104,12 @@ public class FireStationService implements IFireStationService {
 		return fireStationDAO.save(fireStation, indexPosition);
 	}
 
+	/**
+	 * Method that delete a fireStation
+	 * 
+	 * @param address - A String that containing the address of fireStation
+	 * @return a String to confirm or deny the deletion
+	 */
 	@Override
 	public String deleteFireStation(String address) {
 		FireStation fireStationToDelete = fireStationDAO.get(address);
@@ -80,9 +120,16 @@ public class FireStationService implements IFireStationService {
 		log.debug("Service - FireStation : address:" + fireStationToDelete.getAddress() + " ,Station: "
 				+ fireStationToDelete.getStation() + " was deleted");
 		return fireStationDAO.delete(fireStationToDelete);
-
 	}
 
+	/**
+	 * Method that update a fireStation
+	 * 
+	 * @param fireStation - an instance of {@link FireStation}
+	 * @return the fireStation updated
+	 * @throws FireStationNotFoundException when the fireStation that we want update
+	 *                                      not exist
+	 */
 	@Override
 	public FireStation updateFireStation(FireStation fireStation) {
 		List<FireStation> listFireStations = getListFireStations();
@@ -99,5 +146,4 @@ public class FireStationService implements IFireStationService {
 				+ fireStation.getStation());
 		return fireStationUpdated;
 	}
-
 }

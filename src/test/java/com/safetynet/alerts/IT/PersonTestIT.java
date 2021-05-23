@@ -26,7 +26,7 @@ import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
 /**
- * Class integration tests which verify that all classes works correctly together
+ * Class integration tests for Person entity which verify that all classes works correctly together
  * to test the entity {@link Person}
  * 
  * @author Christine Duarte

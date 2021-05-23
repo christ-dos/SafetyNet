@@ -76,12 +76,6 @@ public class Person {
 	 */
 	// ArrayList<MedicalRecords> medicalRecords;
 
-	/**
-	 * A constructor of the class Person without parameter
-	 */
-	public Person() {
-
-	}
 
 	/**
 	 * A constructor of the class Person with all parameters of the class

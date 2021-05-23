@@ -117,6 +117,7 @@ public class DataJsonTest {
 										.add("allergies", Json.createArrayBuilder()
 												.add("nillacilan"))))
 				.build();
+		mapperMock = new JsonMapper();
 	}
 
 	/**
@@ -126,29 +127,33 @@ public class DataJsonTest {
 	@Test
 	public void listPersonsTest_testWhenGetIndex0_shouldReturnPersonTenleyBoyd() {
 		// GIVEN
+		Person personInIndex0 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"tenz@email.com");
 		mockListPersons = new ArrayList<>();
-		mapperMock = new JsonMapper();
-
+		
 		Person index0 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
 		Person index1 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
 		Person index2 = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
 				"lily@email.com");
-
 		mockListPersons.add(index0);
 		mockListPersons.add(index1);
 		mockListPersons.add(index2);
 		
-		dataJsonTest = new DataJson(readerMock, mapperMock, mockListPersons, null,jsonObjectMock);
+		dataJsonTest = DataJson.builder()
+				.reader(readerMock)
+				.mapper(mapperMock)
+				.persons(mockListPersons)
+				.jsonObject(jsonObjectMock)
+				.build();
 		when(readerMock.readJsonFile()).thenReturn(jsonObjectMock);
-		Person personInIndex0 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
-				"tenz@email.com");
 		// WHEN
 		List<Person> resultListPersons = dataJsonTest.listPersons();
 		// THEN
 		assertNotNull(resultListPersons);
-		assertEquals(2, resultListPersons.size());
+		// the list contain 3 elements
+		assertEquals(3, resultListPersons.size());
 		assertEquals(personInIndex0, resultListPersons.get(0));
 		assertEquals("Tenley", resultListPersons.get(0).getFirstName());
 	}
@@ -160,17 +165,21 @@ public class DataJsonTest {
 	@Test
 	public void listFireStationsTest_testWhenGetIndex0_shouldReturnFireStationthreeAndAdress1509CulverSt() {
 		// GIVEN
+		FireStation fireStationInIndex0 = new FireStation("3", "1509 Culver St");
 		mockListFireStation = new ArrayList<>();
-		mapperMock = new JsonMapper();
-
+		
 		FireStation index0 = new FireStation("3","1509 Culver St");
 		FireStation index1 = new FireStation("2","29 15th St");
-
 		mockListFireStation.add(index0);
 		mockListFireStation.add(index1);
 		
-		FireStation fireStationInIndex0 = new FireStation("3", "1509 Culver St");
-		dataJsonTest = new DataJson(readerMock, mapperMock, null, mockListFireStation,jsonObjectMock);
+		
+		dataJsonTest = DataJson.builder()
+				.reader(readerMock)
+				.mapper(mapperMock)
+				.fireStation(mockListFireStation)
+				.jsonObject(jsonObjectMock)
+				.build();
 		when(readerMock.readJsonFile()).thenReturn(jsonObjectMock);
 		// WHEN
 		List<FireStation> resultListFireStations = dataJsonTest.listFireStations();
@@ -181,5 +190,4 @@ public class DataJsonTest {
 		assertEquals(fireStationInIndex0, resultListFireStations.get(0));
 		assertEquals("3", resultListFireStations.get(0).getStation());
 	}
-
 }

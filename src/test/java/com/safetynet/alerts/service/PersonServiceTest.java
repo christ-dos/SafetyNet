@@ -71,8 +71,7 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-		//personDAOMock = mock(PersonDAO.class);
-		personServiceTest = new PersonService(personDAOMock);
+		personServiceTest = PersonService.builder().personDAO(personDAOMock).build();
 	}
 	
 	/**

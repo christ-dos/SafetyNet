@@ -12,10 +12,11 @@ import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * A class service that manage the methods CRUD
+ * Class service that manage the methods CRUD for Person entity
  * 
  * @author Christine Duarte
  * 
@@ -24,16 +25,17 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
+@Builder
 public class PersonService implements IPersonService {
-	
+
 	/**
-	 * An instance of PersonDAO
+	 * An instance of {@link PersonDAO}
 	 * 
 	 * @see PersonDAO
 	 */
 	@Autowired
 	private IPersonDAO personDAO;
-	
+
 	/**
 	 * Constructor of PersonService without parameter
 	 */
@@ -42,18 +44,18 @@ public class PersonService implements IPersonService {
 	}
 
 	/**
-	 * Constructor of PersonService as parameter an instance of PersonDAO
+	 * Constructor of PersonService with as parameter an instance of
+	 * {@link PersonDAO}
 	 */
 	public PersonService(IPersonDAO personDAO) {
 		super();
 		this.personDAO = personDAO;
 	}
-	
 
 	/**
 	 * Method private that get a list of persons
 	 * 
-	 * @return A ArrayList of Person
+	 * @return An ArrayList of Person
 	 */
 	private List<Person> getListPersons() {
 		return personDAO.getPersons();
@@ -64,7 +66,7 @@ public class PersonService implements IPersonService {
 	 * 
 	 * @param firstName - the firstName
 	 * @param lastName  - the lastName
-	 * @return An instance of person
+	 * @return an instance of person getted
 	 * @throws EmptyFieldsException    when the field firstName or lastName is empty
 	 * @throws PersonNotFoundException when person is not found
 	 */
@@ -84,7 +86,7 @@ public class PersonService implements IPersonService {
 	}
 
 	/**
-	 * Method that add a person
+	 * Method that add a {@link Person}
 	 * 
 	 * @param person - An instance of person
 	 * @return the person added
@@ -92,7 +94,7 @@ public class PersonService implements IPersonService {
 	 *                                     already exist
 	 */
 	@Override
-	public Person addPerson(Person person) throws PersonAlreadyExistException {
+	public Person addPerson(Person person) throws PersonAlreadyExistException{
 		List<Person> myList = getListPersons();
 		int index = myList.indexOf(person);
 		// person Already exist
@@ -128,6 +130,7 @@ public class PersonService implements IPersonService {
 	 * 
 	 * @param person - an instance of person
 	 * @return the person updated
+	 * @throws PersonNotFoundException when the person that we want update not exist
 	 */
 	@Override
 	public Person updatePerson(Person person) {
