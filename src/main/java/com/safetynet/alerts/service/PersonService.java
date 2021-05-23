@@ -74,7 +74,7 @@ public class PersonService implements IPersonService {
 	public Person getPerson(String firstName, String lastName) throws EmptyFieldsException {
 		if (firstName.isEmpty() || lastName.isEmpty()) {
 			log.error("Service - The fields firstName and lastName can not be empty ");
-			throw new EmptyFieldsException("Field can not be empty");
+			throw new EmptyFieldsException("Field cannot be empty");
 		}
 		Person person = personDAO.getPerson(firstName, lastName);
 		if (person != null) {

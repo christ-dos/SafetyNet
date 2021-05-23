@@ -20,7 +20,7 @@ public class FireStation {
 	@NotBlank
 	@JsonProperty("address")
 	private String address;
-	
+
 	/**
 	 * A String that contain the station number of the fireStation
 	 */
@@ -35,5 +35,12 @@ public class FireStation {
 		super();
 		this.station = station;
 		this.address = address;
+	}
+
+	/**
+	 * A constructor of the class FireStation without parameter
+	 */
+	public FireStation() {
+		super();
 	}
 }

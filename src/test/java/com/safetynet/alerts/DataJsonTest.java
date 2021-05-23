@@ -1,10 +1,9 @@
 package com.safetynet.alerts;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.Json;
@@ -79,13 +78,16 @@ public class DataJsonTest {
 	 */
 	@BeforeEach
 	public void setUpPerTest() {
+		mapperMock = new JsonMapper();
 		jsonObjectMock = Json.createObjectBuilder()
 				.add("persons",
 						Json.createArrayBuilder()
-								.add(Json.createObjectBuilder().add("firstName", "Tenley")
+								.add(Json.createObjectBuilder()
+										.add("firstName", "Tenley")
 										.add("lastName", "Boyd")
 										.add("address", "1509 Culver St")
-										.add("city", "Culver").add("zip", "97451")
+										.add("city", "Culver")
+										.add("zip", "97451")
 										.add("phone", "841-874-6512")
 										.add("email", "tenz@email.com"))
 								.add(Json.createObjectBuilder()
@@ -117,30 +119,19 @@ public class DataJsonTest {
 										.add("allergies", Json.createArrayBuilder()
 												.add("nillacilan"))))
 				.build();
-		mapperMock = new JsonMapper();
+		
 	}
 
 	/**
-	 * Method that test if in the list we find person Tenley Boyd which is recorded
-	 * in index 0 and if we have recovered 2 elements of our jsonObjectMock
+	 * Method that test if the jsonArray "persons" is deserilized correctly 
+	 * we find person Tenley Boyd which is recorded in index 0 
+	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
 	@Test
 	public void listPersonsTest_testWhenGetIndex0_shouldReturnPersonTenleyBoyd() {
 		// GIVEN
 		Person personInIndex0 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
-		mockListPersons = new ArrayList<>();
-		
-		Person index0 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
-				"tenz@email.com");
-		Person index1 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
-				"jaboyd@email.com");
-		Person index2 = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
-				"lily@email.com");
-		mockListPersons.add(index0);
-		mockListPersons.add(index1);
-		mockListPersons.add(index2);
-		
 		dataJsonTest = DataJson.builder()
 				.reader(readerMock)
 				.mapper(mapperMock)
@@ -152,32 +143,25 @@ public class DataJsonTest {
 		List<Person> resultListPersons = dataJsonTest.listPersons();
 		// THEN
 		assertNotNull(resultListPersons);
-		// the list contain 3 elements
-		assertEquals(3, resultListPersons.size());
+		// the mapperMock contain 2 elements to deserialize
+		assertEquals(2, resultListPersons.size());
 		assertEquals(personInIndex0, resultListPersons.get(0));
 		assertEquals("Tenley", resultListPersons.get(0).getFirstName());
 	}
 	
 	/**
-	 * Method that test if in the list we find station "3" with address "1509 Culver St"
-	 * in index 0 of the arrayList and if we have recovered 2 elements of our jsonObjectMock
+	 * Method that test if the jsonArray "firestations" is deserilized correctly 
+	 * we find station "3" with address "1509 Culver St" in index 0 of the arrayList 
+	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
 	@Test
 	public void listFireStationsTest_testWhenGetIndex0_shouldReturnFireStationthreeAndAdress1509CulverSt() {
 		// GIVEN
 		FireStation fireStationInIndex0 = new FireStation("3", "1509 Culver St");
-		mockListFireStation = new ArrayList<>();
-		
-		FireStation index0 = new FireStation("3","1509 Culver St");
-		FireStation index1 = new FireStation("2","29 15th St");
-		mockListFireStation.add(index0);
-		mockListFireStation.add(index1);
-		
-		
 		dataJsonTest = DataJson.builder()
 				.reader(readerMock)
 				.mapper(mapperMock)
-				.fireStation(mockListFireStation)
+				.fireStations(mockListFireStation)
 				.jsonObject(jsonObjectMock)
 				.build();
 		when(readerMock.readJsonFile()).thenReturn(jsonObjectMock);
@@ -185,6 +169,7 @@ public class DataJsonTest {
 		List<FireStation> resultListFireStations = dataJsonTest.listFireStations();
 		// THEN
 		assertNotNull(resultListFireStations);
+		// the mapperMock contain 2 elements to deserialize
 		assertEquals(2, resultListFireStations.size());
 		//verify that in index 0 we are the station "3" address "1509 Culver St"
 		assertEquals(fireStationInIndex0, resultListFireStations.get(0));

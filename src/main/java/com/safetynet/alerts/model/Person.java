@@ -76,7 +76,7 @@ public class Person {
 	 */
 	// ArrayList<MedicalRecords> medicalRecords;
 
-
+	
 	/**
 	 * A constructor of the class Person with all parameters of the class
 	 */
@@ -89,5 +89,12 @@ public class Person {
 		this.zip = zip;
 		this.phone = phone;
 		this.email = email;
+	}
+	
+	/**
+	 * A constructor of the class Person without parameter of the class
+	 */
+	public Person() {
+		super();
 	}
 }

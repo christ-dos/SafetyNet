@@ -32,15 +32,28 @@ import com.safetynet.alerts.model.FireStation;
  */
 @ExtendWith(MockitoExtension.class)
 public class FireStationServiceTest {
-
+	/**
+	 * an instance of {@link FireStationService}
+	 */
 	private FireStationService fireStationServiceTest;
 
+	/**
+	 * A mock of {@link FireStationDAO}
+	 */
 	@Mock
 	private FireStationDAO fireStationDAOMock;
 
+	/**
+	 * A mock of the arraysList of {@link FireStation}
+	 */
 	@Mock
 	private List<FireStation> mockListFireStation;
 
+	/**
+	 * Method that create a mock of the ArrayList mockListFireStation with 4
+	 * elements
+	 * 
+	 */
 	@BeforeEach
 	public void setUpPerTest() {
 		mockListFireStation = new ArrayList<>();
@@ -57,6 +70,12 @@ public class FireStationServiceTest {
 		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock).build();
 	}
 
+	/**
+	 * Method that test get with address "1509 Culver St" when fireStation exist
+	 * then return a fireStation and verify that the method get was called
+	 * 
+	 * throws {@link EmptyFieldsException}
+	 */
 	@Test
 	public void testGetFireStation_whenFireStationExist_thenReturnFireStation() throws EmptyFieldsException {
 		// GIVEN
@@ -69,8 +88,12 @@ public class FireStationServiceTest {
 		assertEquals(fireStationExist, resultGetFireStationExist);
 	}
 
+	/**
+	 * Method that test get when field address is empty then throw an
+	 * {@link EmptyFieldsException} and verify that the method get was not called
+	 */
 	@Test
-	public void testGetFireStation_whenFireStationNotExist_thenThrowEmptyFieldsEceptionException() {
+	public void testGetFireStation_whentheFieldAddressIsEmpty_thenThrowEmptyFieldsException() {
 		// GIVEN
 		FireStation fireStationNotExist = new FireStation("3", "");
 		// WHEN
@@ -78,11 +101,18 @@ public class FireStationServiceTest {
 		// THEN
 		// verify that the method get of fireStationDAO is not called
 		verify(fireStationDAOMock, times(0)).get(fireStationNotExist.getAddress());
-		assertThrows(EmptyFieldsException.class, () -> fireStationServiceTest.getFireStation(fireStationNotExist.getAddress()));
+		assertThrows(EmptyFieldsException.class,
+				() -> fireStationServiceTest.getFireStation(fireStationNotExist.getAddress()));
 	}
 
+	/**
+	 * Method that test get when fireStation not exist then should throw a
+	 * {@link FireStationNotFoundException} and verify that the method get was not
+	 * called
+	 * 
+	 */
 	@Test
-	public void testGetFireStation_whenFireStationFieldAddressIsEmpty_thenThrowFireStationEmptyfieldException() {
+	public void testGetFireStation_whenFireStationNotExist_thenThrowFireStationNotFoundException() {
 		// GIVEN
 		FireStation fireStationNotExist = new FireStation("3", "15 Flower St");
 		// WHEN
@@ -94,6 +124,10 @@ public class FireStationServiceTest {
 				() -> fireStationServiceTest.getFireStation(fireStationNotExist.getAddress()));
 	}
 
+	/**
+	 * Method that test addFireStation when fireStation to add exist then throw a
+	 * {@link FireStationAlreadyExistException}
+	 */
 	@Test
 	public void testAddFireStation_whenFireStationToSaveExist_thenThrowFireStationAlreadyExistException() {
 		// GIVEN
@@ -108,6 +142,10 @@ public class FireStationServiceTest {
 				() -> fireStationServiceTest.addFireStation(fireStationToSaveExist));
 	}
 
+	/**
+	 * Method that test addFireStation when fireStation to add not exist then return
+	 * the fireStation saved and verify if the method save was called
+	 */
 	@Test
 	public void testAddFireStation_whenFireStationNotExistInArray_thenFireStationIsAdded() {
 		// GIVEN
@@ -124,6 +162,11 @@ public class FireStationServiceTest {
 		assertEquals(fireStationToAddNotExist.getStation(), resultFireStationAdded.getStation());
 	}
 
+	/**
+	 * Method that test updateFireStation when fireStation to update exist then
+	 * return fireStation ("3", "1509 Culver St") with the field station updated
+	 * with sation number "2" and verify that the method save was called
+	 */
 	@Test
 	public void testUpdateFireStation_whenFireStationExistInArray_thenReturnFireStationNumberThreeWithTheFieldAdressUpdated()
 			throws EmptyFieldsException {
@@ -142,6 +185,11 @@ public class FireStationServiceTest {
 		assertEquals("2", resultPersonUpdated.getStation());
 	}
 
+	/**
+	 * Method that test updateFireStation when fireStation to update not exist then
+	 * throw a FireStationNotFoundException and verify that the method save was not
+	 * called
+	 */
 	@Test
 	public void testUpdateFireStation_whenFireStationNotExistInArray_thenThrowAFireStationNotFoundException()
 			throws EmptyFieldsException {
@@ -156,11 +204,15 @@ public class FireStationServiceTest {
 				() -> fireStationServiceTest.updateFireStation(fireStationToUpdate));
 	}
 
+	/**
+	 * Method that test deleteFireStation when fireStation to delete exist then
+	 * return a String containing "SUCCESS" and verify that the method delete was
+	 * called
+	 */
 	@Test
 	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressAndExist_thenRetunMessageSUCCESS() {
 		// GIVEN
 		FireStation fireStationToDeleted = new FireStation("3", "748 Townings Dr");
-		String numberStation = null;
 		String address = "748 Townings Dr";
 
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationToDeleted);
@@ -173,6 +225,11 @@ public class FireStationServiceTest {
 		assertEquals("SUCCESS", resultDeleteAdress);
 	}
 
+	/**
+	 * Method that test deleteFireStation when fireStation to delete not exist then
+	 * return a String containing "FireStation cannot be deleted" and verify that
+	 * the method delete was not called
+	 */
 	@Test
 	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressButNotExist_theReturnMessageFireStationCannotBeDeleted() {
 		// GIVEN
@@ -186,5 +243,4 @@ public class FireStationServiceTest {
 		verify(fireStationDAOMock, times(0)).delete(any());
 		assertEquals("FireStation cannot be deleted", resultDeleteAdress);
 	}
-
 }

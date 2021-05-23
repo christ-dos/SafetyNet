@@ -84,7 +84,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "Field can not be empty");
+		body.put("message", "Field cannot be empty");
 
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}

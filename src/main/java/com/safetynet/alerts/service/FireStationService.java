@@ -70,7 +70,7 @@ public class FireStationService implements IFireStationService {
 	public FireStation getFireStation(String address) throws EmptyFieldsException {
 		if (address.isEmpty()) {
 			log.error("Service - field can not be empty");
-			throw new EmptyFieldsException("Field can not be empty");
+			throw new EmptyFieldsException("Field cannot be empty");
 		}
 		FireStation fireStationgetted = fireStationDAO.get(address);
 		if (fireStationgetted == null) {

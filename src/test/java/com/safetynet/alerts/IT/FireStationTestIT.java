@@ -98,9 +98,9 @@ public class FireStationTestIT {
 		//THEN
 		mockMvcFireStation.perform(get("/firestation?address="))
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("$.message", is("Field can not be empty")))
+		.andExpect(jsonPath("$.message", is("Field cannot be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
-	    .andExpect(result -> assertEquals("Field can not be empty", result.getResolvedException().getMessage()))
+	    .andExpect(result -> assertEquals("Field cannot be empty", result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
 	

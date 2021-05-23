@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.alerts.model.Person;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Repository
 @Slf4j
+@Builder
 public class PersonDAO implements IPersonDAO {
 
 	/**
