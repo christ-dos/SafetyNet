@@ -95,7 +95,7 @@ public class PersonControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetPerson_whenPersonExist_thenReturnStatusOk() throws Exception {
+	public void testGetPerson_whenPersonExist_thenReturnStatusOk() throws Exception{
 		// GIVEN
 		Person personTest = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -119,13 +119,13 @@ public class PersonControllerTest {
 	public void testGetPerson_whenPersonNotexist_thenReturnPersonNotFoundException() throws Exception {
 		// GIVEN
 		when(personServiceMock.getPerson(anyString(), anyString()))
-				.thenThrow(new PersonNotFoundException("Service - Person not found exception"));
+				.thenThrow(new PersonNotFoundException("Person not found exception"));
 		// WHEN
 
 		// THEN
 		mockMvc.perform(get("/person?firstName=Lilly&lastName=Saguet")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
-				.andExpect(result -> assertEquals("Service - Person not found exception",
+				.andExpect(result -> assertEquals("Person not found exception",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
@@ -210,8 +210,8 @@ public class PersonControllerTest {
 		// GIVEN
 		when(personDAOMock.delete(any())).thenReturn("SUCESS");
 		when(personServiceMock.deletePerson(any(), any())).thenReturn("SUCCESS");
-
 		// WHEN
+		
 		// THEN
 		mockMvc.perform(delete("/person?firstName=john&lastName=Boyd")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", is("SUCCESS"))).andDo(print());
@@ -227,8 +227,8 @@ public class PersonControllerTest {
 	public void testDeletePerson_whenPersonNotExist_shouldReturnAStringWithPersonNotDeleted() throws Exception {
 		// GIVEN
 		when(personServiceMock.deletePerson(any(), any())).thenReturn("Person not deleted");
-
 		// WHEN
+		
 		// THEN
 		mockMvc.perform(delete("/person?firstName=jo&lastName=Lapin")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", is("Person not deleted"))).andDo(print());

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.alerts.exceptions.EmptyFieldsException;
-import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
 
@@ -37,32 +35,27 @@ public class PersonController {
 	private IPersonService personService;
 
 	/**
-	 * Request get to obtain a person
+	 * Request Get to obtain a person
 	 * 
 	 * @param firstName - a String obtained from url request
 	 * @param lastName  - a String obtained from url request
 	 * @return a person object
-	 * @throws EmptyFieldsException - when the field firstName or lastName is empty
-	 *                              in the request
 	 */
 	@GetMapping(value = "/person")
-	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName)
-			throws EmptyFieldsException {
-		log.debug("Controller - person found: " + firstName + " " + lastName);
+	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName) {
+		log.debug("Controller - Request to find person: " + firstName + " " + lastName);
 		return personService.getPerson(firstName, lastName);
 	}
 
 	/**
-	 * Request post to add a person at the ArrayList
+	 * Request Post to add a person at the ArrayList
 	 * 
 	 * @param person - a person obtained by the body of the request
 	 * @return the person added in the ArrayList
-	 * @throws PersonAlreadyExistException - when the person we want saved exist in
-	 *                                     ArrayList
-	 */
+	*/
 	@PostMapping(value = "/person")
-	public Person savePerson(@Valid @RequestBody Person person) throws PersonAlreadyExistException{
-		log.debug("Controller - person saved: " + person.getFirstName() + " " + person.getLastName());
+	public Person savePerson(@Valid @RequestBody Person person){
+		log.debug("Controller - Request to save person: " + person.getFirstName() + " " + person.getLastName());
 		return personService.addPerson(person);
 	}
 
@@ -75,20 +68,19 @@ public class PersonController {
 	 */
 	@DeleteMapping(value = "/person")
 	public String deletePersonByFirstNameAndLastName(@Valid @RequestParam String firstName, @RequestParam String lastName) {
-		log.debug("Controller - person deleted : " + firstName + " " + lastName);
+		log.debug("Controller - Request to delete person: " + firstName + " " + lastName);
 		return personService.deletePerson(firstName, lastName);
 	}
 
 	/**
-	 * Request put to update a person from the ArrayList
+	 * Request Put to update a person from the ArrayList
 	 * 
 	 * @param person - a person obtained by the body of the request
 	 * @return the person updated in the ArrayList
 	 */
 	@PutMapping(value = "/person")
-	public Person updatePersonByFirstNameAndLastName(@Valid @RequestBody Person person) {
-		log.debug("Controller - person updated : " + person.getFirstName() + " " + person.getLastName());
+	public Person updatePerson(@Valid @RequestBody Person person) {
+		log.debug("Controller - Request to update person: " + person.getFirstName() + " " + person.getLastName());
 		return personService.updatePerson(person);
 	}
-
 }

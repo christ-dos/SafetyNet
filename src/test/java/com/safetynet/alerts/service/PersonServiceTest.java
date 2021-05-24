@@ -69,9 +69,7 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-		personServiceTest = PersonService.builder()
-										  .personDAO(personDAOMock)
-										  .build();
+		personServiceTest = PersonService.builder().personDAO(personDAOMock).build();
 	}
 
 	/**
@@ -81,8 +79,7 @@ public class PersonServiceTest {
 	 * throws {@link EmptyFieldsException}
 	 */
 	@Test
-	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAPersonJohnBoyd()
-			 {
+	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAPersonJohnBoyd() {
 		// GIVEN
 		Person personInput = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -103,8 +100,7 @@ public class PersonServiceTest {
 	 * called
 	 */
 	@Test
-	public void testGetPerson_whenInputPersonNotExist_resultThrowPersonNotFoundException()
-		{
+	public void testGetPerson_whenInputPersonNotExist_resultThrowPersonNotFoundException() {
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";
@@ -118,8 +114,8 @@ public class PersonServiceTest {
 
 	/**
 	 * Method that test getPerson when field firstName or lastName is empty then
-	 * throw a {@link EmptyFieldsException} and verify that the method getPerson
-	 * was not called
+	 * throw a {@link EmptyFieldsException} and verify that the method getPerson was
+	 * not called
 	 */
 	@Test
 	public void testGetPerson_whenFielsFirstNameOrLastNameIsEmpty_thenReturnEmptyFieldsException() {
@@ -179,8 +175,7 @@ public class PersonServiceTest {
 	 * save was called
 	 */
 	@Test
-	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonJonanathanMarrackWithTheFieldAdressUpdated()
-			throws EmptyFieldsException {
+	public void testUpdatePerson_whenPersonExistFirstNameJonanthanLastNameMarrack_thenReturnPersonJonanathanMarrackWithTheFieldAdressUpdated() {
 		// GIVEN
 		Person personRecordedInArray = new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451",
 				"841-874-6513", "drk@email.com");

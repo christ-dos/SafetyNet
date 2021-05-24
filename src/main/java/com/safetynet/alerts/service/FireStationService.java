@@ -67,7 +67,7 @@ public class FireStationService implements IFireStationService {
 	 * @throws FireStationNotFoundException when fireStation is not found
 	 */
 	@Override
-	public FireStation getFireStation(String address) throws EmptyFieldsException {
+	public FireStation getFireStation(String address){
 		if (address.isEmpty()) {
 			log.error("Service - field can not be empty");
 			throw new EmptyFieldsException("Field cannot be empty");
