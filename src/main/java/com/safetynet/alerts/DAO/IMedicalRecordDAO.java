@@ -3,7 +3,6 @@ package com.safetynet.alerts.DAO;
 import java.util.List;
 
 import com.safetynet.alerts.model.MedicalRecord;
-import com.safetynet.alerts.model.Person;
 
 /**
  *  Interface that manage methods CRUD of entity MedicalRecord
@@ -26,7 +25,7 @@ public interface IMedicalRecordDAO {
 	 * @param lastName  - the lastName
 	 * @return an instance of MedicalRecord
 	 */
-	public Person getPerson(String firstName, String lastName);
+	public MedicalRecord get(String firstName, String lastName);
 
 	/**
 	 * Method that save a MedicalRecord in the ArrayList
@@ -34,7 +33,7 @@ public interface IMedicalRecordDAO {
 	 * @param index - the position where will be saved the medicalRecord
 	 * @return - MedicalRecord that was saved in the arrayList
 	 */
-	public Person save(int index, Person person);
+	public MedicalRecord save(int index, MedicalRecord medicalRecord);
 
 	/**
 	 * Method that delete a MedicalRecord from the ArrayList
@@ -42,6 +41,8 @@ public interface IMedicalRecordDAO {
 	 * @param medicalRecord - MedicalRecord we want deleted
 	 * @return a String to confirm the deletion
 	 */
-	public String delete(Person person);
+	public String delete(MedicalRecord medicalRecord);
+
+	
 
 }

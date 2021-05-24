@@ -130,7 +130,7 @@ public class PersonDAOTest {
 	}
 
 	/**
-	 * Method that test savePersonDAO when person exist in array then person Lily
+	 * Method that test savePersonDAO when person exist in arrayList then person Lily
 	 * Cooper is saved at the index one and verify that the address modified is
 	 * saved in arrayList
 	 */
@@ -152,16 +152,15 @@ public class PersonDAOTest {
 		assertEquals(indexLilyCooper, indexPersonSavedWithAddressModified);
 		// verify that new address was saved in Object Lily Cooper
 		assertEquals(personToSaveWithAddressModified.getAddress(), result.getAddress());
-
 	}
 
 	/**
-	 * Method that test deletePersonDAO when person exist in array then return a
+	 * Method that test deletePersonDAO when person exist in arrayList then return a
 	 * String with "SUCCESS" when the person Tenley Boyd is deleted with success and
 	 * verify that the arrayList contain 2 elements after the deletion
 	 */
 	@Test
-	public void testDeletePersonDAO_whenCallMethodGetWithTenleyBoyd_resultShouldReturnMessageSUCCESS() {
+	public void testDeletePersonDAO_whenPersonTenleyBoydExist_resultShouldReturnMessageSUCCESS() {
 		// GIVEN
 		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
@@ -171,7 +170,7 @@ public class PersonDAOTest {
 		String result = personDAOTest.delete(personTest);
 		Person resultCallGetPersonAfterDelete = personDAOTest.getPerson(firstName, lastName);
 		// THEN
-		// verify that person Tenley Boyd not exist in Array
+		// verify that person Tenley Boyd not exist in ArrayList
 		assertNull(resultCallGetPersonAfterDelete);
 		assertEquals("SUCCESS", result);
 		assertEquals(2, mockList.size());
