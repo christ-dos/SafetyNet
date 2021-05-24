@@ -4,7 +4,7 @@ package com.safetynet.alerts.exceptions;
  * Class that manages the shipment of a message when a
  * FireStationAlreadyExistException is handle
  * 
- * when the fireStation we want update already exist
+ * when the fireStation we want save already exist
  * 
  * @author Christine Duarte
  *

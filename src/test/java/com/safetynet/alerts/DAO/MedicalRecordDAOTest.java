@@ -44,13 +44,15 @@ public class MedicalRecordDAOTest {
 	@BeforeEach
 	public void setUpPerTest() {
 		mockListMedicalRecord = new ArrayList<>();
-
 		MedicalRecord index0 = new MedicalRecord("John", "Boyd", "03/06/1984",
-				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
-				new ArrayList<>(Arrays.asList("nillacilan")));
-		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", new ArrayList<>(), new ArrayList<>());
-		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012", new ArrayList<>(Arrays.asList()),
-				new ArrayList<>(Arrays.asList("peanut")));
+							   new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+							   new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994",
+							   new ArrayList<>(),
+							   new ArrayList<>());
+		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012", 
+							   new ArrayList<>(Arrays.asList()),
+							   new ArrayList<>(Arrays.asList("peanut")));
 		mockListMedicalRecord.add(index0);
 		mockListMedicalRecord.add(index1);
 		mockListMedicalRecord.add(index2);

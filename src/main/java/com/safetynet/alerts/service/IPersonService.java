@@ -44,7 +44,7 @@ public interface IPersonService {
 	/**
 	 * Method that update a person
 	 * 
-	 * @param person - an instance of person
+	 * @param person - an instance of Person
 	 * @return the person updated
 	 */
 	public Person updatePerson(Person person);

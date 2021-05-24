@@ -69,7 +69,9 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-		personServiceTest = PersonService.builder().personDAO(personDAOMock).build();
+		personServiceTest = PersonService.builder()
+										  .personDAO(personDAOMock)
+										  .build();
 	}
 
 	/**
@@ -79,8 +81,8 @@ public class PersonServiceTest {
 	 * throws {@link EmptyFieldsException}
 	 */
 	@Test
-	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldGetObjectPersonJohnBoyd()
-			throws EmptyFieldsException {
+	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAPersonJohnBoyd()
+			 {
 		// GIVEN
 		Person personInput = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -101,8 +103,8 @@ public class PersonServiceTest {
 	 * called
 	 */
 	@Test
-	public void testGetPerson_whenInputPersonNotExist_resultShouldThrowPersonNotFoundException()
-			throws EmptyFieldsException {
+	public void testGetPerson_whenInputPersonNotExist_resultThrowPersonNotFoundException()
+		{
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";
@@ -116,7 +118,7 @@ public class PersonServiceTest {
 
 	/**
 	 * Method that test getPerson when field firstName or lastName is empty then
-	 * throw a {@link PersonNotFoundException} and verify that the method getPerson
+	 * throw a {@link EmptyFieldsException} and verify that the method getPerson
 	 * was not called
 	 */
 	@Test
@@ -137,8 +139,7 @@ public class PersonServiceTest {
 	 * person saved and verify if the method savePerson was called
 	 */
 	@Test
-	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded()
-			throws EmptyFieldsException, PersonAlreadyExistException {
+	public void testAddPerson_whenPersonToAddNotExist_thenVerifyIfPersonIsAdded() {
 		// GIVEN
 		Person personToAdd = new Person("Jojo", "Dupond", "1509 rue des fleurs", "Roubaix", "59100", "000-000-0012",
 				"jojod@email.com");
@@ -187,7 +188,7 @@ public class PersonServiceTest {
 				"841-874-6513", "drk@email.com");
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personRecordedInArray);
 		when(personDAOMock.getPersons()).thenReturn(mockList);
-		when(personDAOMock.save(anyInt(), any(Person.class))).thenReturn(personToUpdate);
+		when(personDAOMock.save(anyInt(), any())).thenReturn(personToUpdate);
 		// WHEN
 		Person resultPersonUpdated = personServiceTest.updatePerson(personToUpdate);
 		// THEN
@@ -228,14 +229,13 @@ public class PersonServiceTest {
 		String lastName = personToDeleted.getLastName();
 
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personToDeleted);
-		when(personDAOMock.delete(personToDeleted)).thenReturn("SUCCESS");
+		when(personDAOMock.delete(any())).thenReturn("SUCCESS");
 		// WHEN
 		String result = personServiceTest.deletePerson(firstName, lastName);
 		// THEN
 		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
 		verify(personDAOMock, times(1)).delete(any());
 		assertEquals("SUCCESS", result);
-
 	}
 
 	/**
@@ -259,6 +259,5 @@ public class PersonServiceTest {
 		// verify that method delete was not invoked
 		verify(personDAOMock, times(0)).delete(any());
 		assertEquals("Person not Deleted", resultMessage);
-
 	}
 }

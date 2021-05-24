@@ -1,27 +1,30 @@
 package com.safetynet.alerts.exceptions;
 
+import com.safetynet.alerts.model.MedicalRecord;
+
 /**
- * Class that manages the shipment of a message when a PersonNotFoundException
+ * Class that manages the shipment of a message when a {@link MedicalRecordNotFoundException}
  * is handle
  * 
- * when the person is not found
+ * when the {@link MedicalRecord} is not found
  * 
  * @author Christine Duarte
  *
  */
-public class PersonNotFoundException extends RuntimeException {
+public class MedicalRecordNotFoundException extends RuntimeException {
 
 	/**
 	 * Attribute that give an IDat the exception
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * Constructor of the exception
 	 * 
 	 * @param message - The message that is send when an exception is throw
 	 */
-	public PersonNotFoundException(String message) {
+	public MedicalRecordNotFoundException(String message) {
 		super(message);
 	}
+	
 }

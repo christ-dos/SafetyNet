@@ -94,6 +94,7 @@ public class FireStationService implements IFireStationService {
 	public FireStation addFireStation(FireStation fireStation) {
 		List<FireStation> listFireStations = getListFireStations();
 		int indexPosition = listFireStations.indexOf(fireStation);
+		//fireStation already exist
 		if (indexPosition >= 0) {
 			log.error("Service - FireStation cannot be saved :address: " + fireStation.getAddress() + ", Station: "
 					+ fireStation.getStation() + " already exist");

@@ -153,5 +153,47 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
+	
+	/**
+	 * Method that return a message when a MedicalRecordNotFoundException is thrown when a
+	 * medicalRecord is not found in the arrayList
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message :"MedicalRecord not found, please try again!", and the code
+	 *         HttpStatus 404
+	 */
+	@ExceptionHandler(MedicalRecordNotFoundException.class)
+	public ResponseEntity<Object> handleMedicalRecordNotFoundException(MedicalRecordNotFoundException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "MedicalRecord not found, please try again!");
+
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Method that return a message when a MedicalRecordAlreadyExistException is
+	 * thrown
+	 * 
+	 * when the medicalRecord we want saved already exist
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message :"The medicalRecord that we try to save already Exist",
+	 *  and the code HttpStatus 400
+	 * 
+	 */
+	@ExceptionHandler(MedicalRecordAlreadyExistException.class)
+	public ResponseEntity<Object> handleMedicalRecordAlreadyExistException(MedicalRecordAlreadyExistException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "The medicalRecord that we try to save already exist, please proceed to an update");
+
+		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+	}
 
 }

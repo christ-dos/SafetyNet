@@ -129,7 +129,7 @@ public class PersonTestIT {
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.message", is("Person already exist")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonAlreadyExistException))
-			    .andExpect(result -> assertEquals("Service - Person already exist", result.getResolvedException().getMessage()))
+			    .andExpect(result -> assertEquals("Person already exist", result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 	

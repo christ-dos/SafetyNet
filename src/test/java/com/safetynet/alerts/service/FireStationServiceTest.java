@@ -77,7 +77,7 @@ public class FireStationServiceTest {
 	 * throws {@link EmptyFieldsException}
 	 */
 	@Test
-	public void testGetFireStation_whenFireStationExist_thenReturnFireStation() throws EmptyFieldsException {
+	public void testGetFireStation_whenFireStationExist_thenReturnFireStation() {
 		// GIVEN
 		FireStation fireStationExist = new FireStation("3", "1509 Culver St");
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationExist);
@@ -168,8 +168,7 @@ public class FireStationServiceTest {
 	 * with sation number "2" and verify that the method save was called
 	 */
 	@Test
-	public void testUpdateFireStation_whenFireStationExistInArray_thenReturnFireStationNumberThreeWithTheFieldAdressUpdated()
-			throws EmptyFieldsException {
+	public void testUpdateFireStation_whenFireStationExistInArray_thenReturnFireStationNumberThreeWithTheFieldAdressUpdated() {
 		// GIVEN
 		FireStation fireStationRecordedInArray = new FireStation("3", "1509 Culver St");
 		FireStation fireStationToUpdate = new FireStation("2", "1509 Culver St");
@@ -191,8 +190,7 @@ public class FireStationServiceTest {
 	 * called
 	 */
 	@Test
-	public void testUpdateFireStation_whenFireStationNotExistInArray_thenThrowAFireStationNotFoundException()
-			throws EmptyFieldsException {
+	public void testUpdateFireStation_whenFireStationNotExistInArray_thenThrowAFireStationNotFoundException() {
 		// GIVEN
 		FireStation fireStationToUpdate = new FireStation("2", "1 wall Street");
 		when(fireStationDAOMock.get(anyString())).thenReturn(null);

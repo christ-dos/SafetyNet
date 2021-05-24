@@ -8,7 +8,7 @@ package com.safetynet.alerts.exceptions;
  * @author Christine Duarte
  *
  */
-public class EmptyFieldsException extends Exception {
+public class EmptyFieldsException extends RuntimeException {
 
 	/**
 	 * Attribute that give an ID at the exception
