@@ -1,6 +1,5 @@
 package com.safetynet.alerts.service;
 
-import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.MedicalRecord;
 
 /**
@@ -13,20 +12,17 @@ public interface IMedicalRecordService {
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName
 	 * 
-	 * @param firstName - the firstName recorded in the medicalRecord
-	 * @param lastName  - the lastName recorded in the medicalRecord
+	 * @param firstName - The firstName recorded in the medicalRecord
+	 * @param lastName  - The lastName recorded in the medicalRecord
 	 * @return an instance of medicalRecord getted
-	 * @throws EmptyFieldsException when the field firstName or lastName is empty
 	 */
 	public MedicalRecord getMedicalRecord(String firstName, String lastName);
 
 	/**
 	 * Method that add a medicalRecord
 	 * 
-	 * @param person - an instance of MedicalRecord
-	 * @return the medicalRecord added
-	 * @throws  MedicalRecordAlreadyExist when the medicalRecord that we want added
-	 *                                     already exist
+	 * @param medicalRecord - an instance of MedicalRecord
+	 * @return The medicalRecord added
 	 */
 	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord);
 
@@ -42,8 +38,8 @@ public interface IMedicalRecordService {
 	/**
 	 * Method that update a medicalRecord
 	 * 
-	 * @param medicalRecord - an instance of MedicalRecord
-	 * @return the medicalRecord updated
+	 * @param medicalRecord - An instance of MedicalRecord
+	 * @return The medicalRecord updated
 	 */
 	public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord);
 

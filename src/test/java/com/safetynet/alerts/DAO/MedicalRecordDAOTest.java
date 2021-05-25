@@ -63,7 +63,7 @@ public class MedicalRecordDAOTest {
 	 * Method that test getMedicalRecords in DAO then return a list of
 	 * medicalRecords with 3 elements and verify that the medicalRecord of John Boyd
 	 * is present in the list in index 0 and the birthDate is "03/06/1984" and
-	 * medication saved in arrayList medications in index 1 is "hydrapermazol:100mg"
+	 * medications saved in arrayList medications in index 1 is "hydrapermazol:100mg"
 	 */
 	@Test
 	public void testGetListMedicalRecords_resultShouldVerifythatListContainThreeMedicalRecords() {
@@ -103,7 +103,7 @@ public class MedicalRecordDAOTest {
 	}
 
 	/**
-	 * Method that test getMedi calRecord inDAO with firstName Toto and LastName
+	 * Method that test getMedicalRecord in DAO with firstName Toto and LastName
 	 * Zero when medicalRecord not exist then return null
 	 * 
 	 */
@@ -134,9 +134,9 @@ public class MedicalRecordDAOTest {
 		// THEN
 		assertSame(medicalRecordNotExit, resultMedicalRecordNotExist);
 		assertEquals("Tata", resultMedicalRecordNotExist.getFirstName());
-		// verify array contain 4 persons
+		// verify array contain 4 medicalRecords
 		assertEquals(4, mockListMedicalRecord.size());
-		// verify Person was Added at the end of Array
+		// verify medicalRecord was Added at the end of Array
 		assertEquals(3, mockListMedicalRecord.indexOf(resultMedicalRecordNotExist));
 	}
 
@@ -153,7 +153,6 @@ public class MedicalRecordDAOTest {
 		MedicalRecord medicalRecordLilyCooperRecordedInArray = new MedicalRecord("Lily", "Cooper", "03/06/1994",
 				new ArrayList<>(), new ArrayList<>());
 		int indexLilyCooper = mockListMedicalRecord.indexOf(medicalRecordLilyCooperRecordedInArray);
-
 		// WHEN
 		MedicalRecord resultMedicalRecordExist = medicalRecordDAOTest.save(indexLilyCooper,
 				medicalRecordToSaveWithAllergiesModified);

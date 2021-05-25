@@ -14,7 +14,7 @@ import com.safetynet.alerts.model.MedicalRecord;
 public class MedicalRecordNotFoundException extends RuntimeException {
 
 	/**
-	 * Attribute that give an IDat the exception
+	 * Attribute that give an ID at the exception
 	 */
 	private static final long serialVersionUID = 1L;
 	

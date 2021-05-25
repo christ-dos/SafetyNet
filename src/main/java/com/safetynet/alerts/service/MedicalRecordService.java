@@ -12,6 +12,7 @@ import com.safetynet.alerts.exceptions.MedicalRecordAlreadyExistException;
 import com.safetynet.alerts.exceptions.MedicalRecordNotFoundException;
 import com.safetynet.alerts.model.MedicalRecord;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,29 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Builder
+@AllArgsConstructor
 public class MedicalRecordService implements IMedicalRecordService {
 	/**
 	 * An instance of {@link MedicalRecordDAO}
-	 * 
 	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDAO;
-	
-	/**
-	 * Constructor of MedicalRecordService with as parameter an instance of
-	 * {@link MedicalRecordDAO}
-	 */
-	public MedicalRecordService(IMedicalRecordDAO medicalRecordDAO) {
-		super();
-		this.medicalRecordDAO = medicalRecordDAO;
-	}
-	
-	/**
-	 * Constructor of MedicalRecordService without parameter
-	 */
-	public MedicalRecordService() {
-		super();
-	}
 	
 	/**
 	 * Method private that get a list of medicalRecords
@@ -85,7 +70,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 	 * Method that add a {@link MedicalRecord}
 	 * 
 	 * @param medicalRecord - An instance of MedicalRecord
-	 * @return the medicalRecord added
+	 * @return The medicalRecord added
 	 * @throws MedicalRecordAlreadyExistException when the medicalRecord that we want added
 	 *                                     already exist
 	 */

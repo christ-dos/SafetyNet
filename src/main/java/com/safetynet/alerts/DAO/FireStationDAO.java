@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.alerts.model.FireStation;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,22 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 @Builder
+@AllArgsConstructor
 public class FireStationDAO implements IFireStationDAO {
 	/**
 	 * attribute that contain the list of fireStations that provide from data.json
 	 */
 	@Autowired
 	private List<FireStation> listFireStations;
-
-	/**
-	 * Constructor with the parameter listFireStations
-	 * 
-	 * @param listFireStations - an ArrayList with the list of fireStations
-	 */
-	public FireStationDAO(List<FireStation> listFireStations) {
-		super();
-		this.listFireStations = listFireStations;
-	}
 
 	/**
 	 * Method that get the list of fireStations

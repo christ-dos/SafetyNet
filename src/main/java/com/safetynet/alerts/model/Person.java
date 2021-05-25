@@ -5,7 +5,9 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * A class that models a Person Object
@@ -14,6 +16,8 @@ import lombok.Data;
  *
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Person {
 	/**
 	 * A String that contain the firstName of the person
@@ -75,27 +79,4 @@ public class Person {
 	 * An instance of MedicalRecord that contain the medicalRecord of the person
 	 */
 	//private MedicalRecord medicalRecord;
-
-	
-	/**
-	 * A constructor of the class Person without parameter of the class
-	 */
-	public Person() {
-		super();
-	}
-	
-	/**
-	 * A constructor of the class Person with all parameters of the class
-	 */
-	public Person(@NotBlank @Size(max = 20) String firstName, @NotBlank @Size(max = 20) String lastName,
-			@NotBlank String address, @NotBlank String city, @NotBlank String zip, String phone, String email) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.city = city;
-		this.zip = zip;
-		this.phone = phone;
-		this.email = email;
-	}
 }

@@ -46,7 +46,7 @@ public class MedicalRecordTestIT {
 	private MockMvc mockMvcMedicalRecord;
 
 	/**
-	 * Method that test requestGet when MedicalRecord exist then the status of the
+	 * Method that test request Get when MedicalRecord exist then the status of the
 	 * request isOk and the firstName and lastName recorded in medicalRecord is
 	 * Roger Boyd
 	 * 
@@ -56,9 +56,7 @@ public class MedicalRecordTestIT {
 	public void testRequestGetMedicalRecordExist_whenInputMedicalRecordWithFirstNameRogerAndLastNameBoyd_shouldReturnStatusOK()
 			throws Exception {
 		// GIVEN
-
 		// WHEN
-
 		// THEN
 		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=Roger&lastName=Boyd"))
 							.andExpect(status().isOk())
@@ -67,7 +65,7 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestGet when medicalRecord not exist then throw a
+	 * Method that test request Get when medicalRecord not exist then throw a
 	 * {@link MedicalRecordNotFoundException} and the status of the request
 	 * isNotFound
 	 * 
@@ -77,9 +75,7 @@ public class MedicalRecordTestIT {
 	public void testRequestGetMedicalRecordNotExist_whenMedicalRecordFirstNameLilyAndLastNameSaguet_shouldReturnMedicalRecordNotFoundException()
 			throws Exception {
 		// GIVEN
-
 		// WHEN
-
 		// THEN
 		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=Lily&lastName=Saguet"))
 				.andExpect(status().isNotFound())
@@ -92,7 +88,7 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestGet when input firstName or lastName is empty then
+	 * Method that test request Get when input firstName or lastName is empty then
 	 * throw a {@link EmptyFieldsException} and the status isBadRequest
 	 *
 	 * @throws Exception
@@ -101,9 +97,7 @@ public class MedicalRecordTestIT {
 	public void testRequestGetMedicanRecord_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException()
 			throws Exception {
 		// GIVEN
-
 		// WHEN
-
 		// THEN
 		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=&lastName="))
 				.andExpect(status().isBadRequest())
@@ -114,7 +108,7 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestPost when MedicalRecord to save already exist then
+	 * Method that test request Post when MedicalRecord to save already exist then
 	 * throw {@link MedicalRecordAlreadyExistException}
 	 *
 	 * @throws Exception
@@ -144,7 +138,7 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestPost when MedicalRecord to save not exist then return
+	 * Method that test request Post when MedicalRecord to save not exist then return
 	 * MedicalRecord saved
 	 *
 	 * @throws Exception
@@ -172,14 +166,14 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestDelete when MedicalRecord to delete exist then return
+	 * Method that test request Delete when MedicalRecord to delete exist then return
 	 * a String "SUCCESS" to confirm the deletion
 	 * 
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestDelete_whenMedicalRecordExist_MedicalRecordWithFirstNameJacobAndLastNameBoyd_thenReturnMessageSUCCESS()
+	public void testRequestDelete_whenMedicalRecordExistWithFirstNameJacobAndLastNameBoyd_thenReturnMessageSUCCESS()
 			throws Exception {
 		// GIVEN
 		// WHEN
@@ -196,19 +190,16 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestDelete when MedicalRecord to delete not exist then
+	 * Method that test request Delete when MedicalRecord to delete not exist then
 	 * return a String "MedicalRecord cannot be Deleted"
 	 * 
-	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void testRequestDelete_whenMedicalRecordNotExist__thenReturnMessageMedicalRecordCannotBeDeleted()
 			throws Exception {
 		// GIVEN
-
 		// WHEN
-
 		// THEN
 		mockMvcMedicalRecord.perform(delete("/medicalRecord?firstName=Zozor&lastName=Zeros"))
 							.andExpect(status().isOk())
@@ -217,9 +208,8 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestPut when MedicalRecord to update exist then return
-	 * MedicalRecord with the field allergies updated with "strawberry"
-	 * 
+	 * Method that test request Put when MedicalRecord to update exist then return
+	 * MedicalRecord with the field allergies updated with "strawberry" 
 	 *
 	 * @throws Exception
 	 */
@@ -248,13 +238,13 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestPut when MedicalRecord to update exist then return
-	 * MedicalRecord with all fields updated
+	 * Method that test request Put when MedicalRecord to update exist then return
+	 * MedicalRecord with several fields updated
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequetePut_whenAllfieldsAreModified_thenVerifyThatMedicalRecordWasbeenUpdated() throws Exception {
+	public void testRequetePut_whenSeveralfieldsAreModified_thenVerifyThatMedicalRecordWasbeenUpdated() throws Exception {
 		// GIVNE
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
 		MedicalRecord medicalRecordToUpdate = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
@@ -279,7 +269,7 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestPut when MedicalRecord to update not exist then throw
+	 * Method that test request Put when MedicalRecord to update not exist then throw
 	 * a {@link MedicalRecordNotFoundException}
 	 *
 	 * @throws Exception
@@ -312,7 +302,7 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test requestPut when input field is not valid then throw
+	 * Method that test request Put when input field is not valid then throw
 	 * {@link MethodArgumentNotValidException} must not be blank and the status
 	 * isBadRequest
 	 *

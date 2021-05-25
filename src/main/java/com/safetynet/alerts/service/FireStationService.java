@@ -12,6 +12,7 @@ import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Builder
+@AllArgsConstructor
 public class FireStationService implements IFireStationService {
 	/**
 	 * An instance of {@link FireStationDAO}
@@ -33,21 +35,6 @@ public class FireStationService implements IFireStationService {
 	@Autowired
 	private IFireStationDAO fireStationDAO;
 
-	/**
-	 * Constructor of FireStationService without parameter
-	 */
-	public FireStationService() {
-		super();
-	}
-
-	/**
-	 * Constructor of FireStationService with as parameter an instance of
-	 * {@link FireStationDAO}
-	 */
-	public FireStationService(IFireStationDAO fireStationDAO) {
-		super();
-		this.fireStationDAO = fireStationDAO;
-	}
 
 	/**
 	 * Method private that get a list of fireStations

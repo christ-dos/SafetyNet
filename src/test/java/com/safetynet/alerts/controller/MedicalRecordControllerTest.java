@@ -70,7 +70,7 @@ public class MedicalRecordControllerTest {
 	private MedicalRecordDAO medicalRecordDAOMock;
 	
 	/**
-	 * A mock of a arrayList of medicalRecords
+	 * A mock of an arrayList of medicalRecords
 	 */
 	@Mock
 	private List<MedicalRecord> mockListMedicalRecord;

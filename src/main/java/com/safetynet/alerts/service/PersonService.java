@@ -12,6 +12,7 @@ import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Builder
+@AllArgsConstructor
 public class PersonService implements IPersonService {
 	/**
 	 * An instance of {@link PersonDAO}
@@ -34,21 +36,6 @@ public class PersonService implements IPersonService {
 	@Autowired
 	private IPersonDAO personDAO;
 
-	/**
-	 * Constructor of PersonService without parameter
-	 */
-	public PersonService() {
-
-	}
-
-	/**
-	 * Constructor of PersonService with as parameter an instance of
-	 * {@link PersonDAO}
-	 */
-	public PersonService(IPersonDAO personDAO) {
-		super();
-		this.personDAO = personDAO;
-	}
 
 	/**
 	 * Method private that get a list of persons

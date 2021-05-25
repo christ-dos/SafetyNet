@@ -54,7 +54,6 @@ public class MedicalRecordServiceTest {
 	/**
 	 * Method that create a mock of the ArrayList mockListMedicalRecord with 4
 	 * elements
-	 * 
 	 */
 	@BeforeEach
 	public void setUpPerTest() {
@@ -83,7 +82,6 @@ public class MedicalRecordServiceTest {
 	 * medicalRecord exist then return a medicalRecord with name John Boyd and
 	 * verify that the method getMedicalRecord was called
 	 * 
-	 * throws {@link EmptyFieldsException}
 	 */
 	@Test
 	public void testGetMedicalRecord_whenMedicalRecordExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAMedicalRecordWithNameJohnBoyd() {

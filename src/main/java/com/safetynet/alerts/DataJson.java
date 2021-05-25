@@ -17,7 +17,9 @@ import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DataJson {
 	/**
 	 * An instance of ReadFileJson class that read the Json file
@@ -69,26 +73,6 @@ public class DataJson {
 	 */
 	private JsonObject jsonObject;
 
-	/**
-	 * Constructor without parameter
-	 */
-	public DataJson() {
-		super();
-	}
-
-	/**
-	 * Constructor with all parameters
-	 */
-	public DataJson(ReadFileJson reader, ObjectMapper mapper, List<Person> persons, List<FireStation> fireStations,
-			List<MedicalRecord> medicalRecords, JsonObject jsonObject) {
-		super();
-		this.reader = reader;
-		this.mapper = mapper;
-		this.persons = persons;
-		this.fireStations = fireStations;
-		this.medicalRecords = medicalRecords;
-		this.jsonObject = jsonObject;
-	}
 	
 
 	/**

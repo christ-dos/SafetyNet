@@ -12,37 +12,34 @@ import com.safetynet.alerts.model.MedicalRecord;
  */
 public interface IMedicalRecordDAO {
 	/**
-	 * Method that get the list of MedicalRecords
+	 * Method that get the list of medicalRecords
 	 * 
-	 * @return an ArrayList of MedicalRecords
+	 * @return An ArrayList of MedicalRecords
 	 */
 	public List<MedicalRecord> getMedicalRecords();
 
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName
 	 * 
-	 * @param firstName - the firstName
-	 * @param lastName  - the lastName
-	 * @return an instance of MedicalRecord
+	 * @param firstName - the firstName recorded in the medicalRecord
+	 * @param lastName  - the lastName recorded in the medicalRecord
+	 * @return An instance of MedicalRecord
 	 */
 	public MedicalRecord get(String firstName, String lastName);
 
 	/**
-	 * Method that save a MedicalRecord in the ArrayList
+	 * Method that save a medicalRecord in the ArrayList
 	 * 
-	 * @param index - the position where will be saved the medicalRecord
-	 * @return - MedicalRecord that was saved in the arrayList
+	 * @param index - The position where will be saved the medicalRecord
+	 * @return  MedicalRecord that was saved in the arrayList
 	 */
 	public MedicalRecord save(int index, MedicalRecord medicalRecord);
 
 	/**
-	 * Method that delete a MedicalRecord from the ArrayList
+	 * Method that delete a medicalRecord from the ArrayList
 	 * 
 	 * @param medicalRecord - MedicalRecord we want deleted
-	 * @return a String to confirm the deletion
+	 * @return A String to confirm the deletion
 	 */
 	public String delete(MedicalRecord medicalRecord);
-
-	
-
 }
