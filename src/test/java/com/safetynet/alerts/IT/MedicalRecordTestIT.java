@@ -83,7 +83,7 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=Lily&lastName=Saguet"))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again!")))
+				.andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again")))
 				.andExpect(
 						result -> assertTrue(result.getResolvedException() instanceof MedicalRecordNotFoundException))
 				.andExpect(result -> assertEquals("MedicalRecord not found, please try again!",
@@ -300,7 +300,7 @@ public class MedicalRecordTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again!")))
+				.andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again")))
 				.andExpect(
 						result -> assertTrue(result.getResolvedException() instanceof MedicalRecordNotFoundException))
 				.andExpect(result -> assertEquals(

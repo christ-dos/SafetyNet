@@ -76,7 +76,7 @@ public class FireStationTestIT {
 		//THEN
 		mockMvcFireStation.perform(get("/firestation?address=95 Flower Rd"))
 		.andExpect(status().isNotFound())
-		.andExpect(jsonPath("$.message", is("The FireStation not found")))
+		.andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 	    .andExpect(result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))
 		.andDo(print());
@@ -124,7 +124,7 @@ public class FireStationTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.message", is("The FireStation that we try to save already Exist")))
+				.andExpect(jsonPath("$.message", is("The FireStation that we try to save already exist, please proceed to an update")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationAlreadyExistException))
 			    .andExpect(result -> assertEquals("The FireStation that we try to save already Exist", result.getResolvedException().getMessage()))
 				.andDo(print());
@@ -247,7 +247,7 @@ public class FireStationTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.message", is("The FireStation not found")))
+				.andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 			    .andExpect(result -> assertEquals("FireStation not found" , result.getResolvedException().getMessage()))
 				.andDo(print());

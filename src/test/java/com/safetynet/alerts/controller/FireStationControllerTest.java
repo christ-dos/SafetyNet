@@ -226,7 +226,7 @@ public class FireStationControllerTest {
 	}
 
 	/**
-	 * Method that test updatePerson when fireStaion not exist then throw
+	 * Method that test updateFireStation when fireStaion not exist then throw
 	 * {@link FireStationNotFoundException}
 	 *
 	 * @throws Exception
@@ -246,7 +246,7 @@ public class FireStationControllerTest {
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToAddNotExist))
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("The FireStation not found")))
+				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(
 						result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))

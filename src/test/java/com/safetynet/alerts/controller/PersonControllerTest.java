@@ -283,7 +283,7 @@ public class PersonControllerTest {
 		// THEN
 		mockMvc.perform(MockMvcRequestBuilders.put("/person").content(asJsonString(personToUpdateButNotExist))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("Person not found")))
+				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("Person not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 				.andExpect(
 						result -> assertEquals(

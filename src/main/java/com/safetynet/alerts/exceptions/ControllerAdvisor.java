@@ -64,7 +64,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "Person not found");
+		body.put("message", "Person not found, please try again");
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
@@ -106,7 +106,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "Person already exist");
+		body.put("message", "The Person that we try to save already exist, please proceed to an update");
 
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
@@ -129,7 +129,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "The FireStation that we try to save already Exist");
+		body.put("message", "The FireStation that we try to save already exist, please proceed to an update");
 
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
@@ -149,7 +149,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "The FireStation not found");
+		body.put("message", "The FireStation not found, please try again");
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
@@ -168,7 +168,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
-		body.put("message", "MedicalRecord not found, please try again!");
+		body.put("message", "MedicalRecord not found, please try again");
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}

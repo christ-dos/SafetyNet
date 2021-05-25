@@ -77,7 +77,7 @@ public class PersonTestIT {
 		//THEN
 		mockMvc.perform(get("/person?firstName=Lily&lastName=Saguet"))
 		.andExpect(status().isNotFound())
-		.andExpect(jsonPath("$.message", is("Person not found")))
+		.andExpect(jsonPath("$.message", is("Person not found, please try again")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 	    .andExpect(result -> assertEquals("Service - Person not found exception", result.getResolvedException().getMessage()))
 		.andDo(print());
@@ -126,7 +126,7 @@ public class PersonTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.message", is("Person already exist")))
+				.andExpect(jsonPath("$.message", is("The Person that we try to save already exist, please proceed to an update")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonAlreadyExistException))
 			    .andExpect(result -> assertEquals("Person already exist", result.getResolvedException().getMessage()))
 				.andDo(print());
@@ -282,7 +282,7 @@ public class PersonTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.message", is("Person not found")))
+				.andExpect(jsonPath("$.message", is("Person not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 			    .andExpect(result -> assertEquals("The person that we want update not exist : " + personTest.getFirstName() + " " + personTest.getLastName(), result.getResolvedException().getMessage()))
 				.andDo(print());

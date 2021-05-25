@@ -285,7 +285,7 @@ public class MedicalRecordControllerTest {
 		// THEN
 		mockMvcMedicalRecord.perform(MockMvcRequestBuilders.put("/medicalRecord").content(asJsonString(medicalRecordToUpdateButNBotExist))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again!")))
+				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof MedicalRecordNotFoundException))
 				.andExpect(
 						result -> assertEquals(
