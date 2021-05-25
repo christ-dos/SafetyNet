@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import com.safetynet.alerts.controller.PersonControllerTest;
+import com.safetynet.alerts.controller.FireStationControllerTest;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
@@ -113,14 +113,14 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestPost_whenFireStationAlreadyExist_shouldThrowFireStationAlreadyExistException() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddExist = new FireStation("2", "29 15th St");
 		//WHEN
 		
 		//THEN
 		 mockMvcFireStation.perform(MockMvcRequestBuilders
 				.post("/firestation")
-				.content(personControllerTest.asJsonString(fireStaionToAddExist))
+				.content(fireStationControllerTest.asJsonString(fireStaionToAddExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -139,14 +139,14 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestPost_whenFireStationNotExist_shouldSaveFireStation() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddNotExist = new FireStation("5", "25 Blood St");
 		//WHEN
 		
 		//THEN
 		 mockMvcFireStation.perform(MockMvcRequestBuilders
 				.post("/firestation")
-				.content(personControllerTest.asJsonString(fireStaionToAddNotExist))
+				.content(fireStationControllerTest.asJsonString(fireStaionToAddNotExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -210,7 +210,7 @@ public class FireStationTestIT {
 	@Test
 	public void testRequetePut_whenTheFireStationExistAndfieldStationIsUpdated_thenVerifyThatFieldStationUpadtedWithFive() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStationToUpdateExist = new FireStation("5","892 Downing Ct");
 		
 		//WHEN
@@ -218,7 +218,7 @@ public class FireStationTestIT {
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
 				.put("/firestation")
-				.content(personControllerTest.asJsonString(fireStationToUpdateExist))
+				.content(fireStationControllerTest.asJsonString(fireStationToUpdateExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -236,14 +236,14 @@ public class FireStationTestIT {
 	@Test
 	public void testRequetePut_whenFireStationToUpdateNotExist_thenThrowFireStationNotFoundException() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStationToUpdateNotExist = new FireStation("5","89 AltoVallee St");
 		//WHEN
 		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
 				.put("/firestation")
-				.content(personControllerTest.asJsonString(fireStationToUpdateNotExist))
+				.content(fireStationControllerTest.asJsonString(fireStationToUpdateNotExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
@@ -262,13 +262,13 @@ public class FireStationTestIT {
 	@Test
 	public void testRequetePut_whenInputFieldIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToUpdateInvalidField = new FireStation("2", "");
 		//WHEN
 		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders.put("/firestation")
-				.content(personControllerTest.asJsonString(fireStaionToUpdateInvalidField))
+				.content(fireStationControllerTest.asJsonString(fireStaionToUpdateInvalidField))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))

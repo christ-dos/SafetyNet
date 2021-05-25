@@ -79,7 +79,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 			return medicalRecord;
 		}
 		log.error("Service - MedicalRecord not found for person: " + firstName + " " + lastName);
-		throw new MedicalRecordNotFoundException("Service - MedicalRecord not found exception");
+		throw new MedicalRecordNotFoundException("MedicalRecord not found, please try again!");
 	}
 	/**
 	 * Method that add a {@link MedicalRecord}
@@ -96,7 +96,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 		// medicalRecord already exist
 		if (index >= 0) {
 			log.error("Service - medicalRecord cannot be saved because person: " + medicalRecord.getFirstName() + " "
-					+ medicalRecord.getLastName() + " already have a medicalRecord recorded");
+					+ medicalRecord.getLastName() + " already have a medicalRecord");
 			throw new MedicalRecordAlreadyExistException("MedicalRecord already exist");
 		}
 		log.debug("Service - MedicalRecord is saved for the person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());

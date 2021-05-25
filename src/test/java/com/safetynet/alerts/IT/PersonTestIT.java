@@ -26,8 +26,7 @@ import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.Person;
 
 /**
- * Class integration tests for Person entity which verify that all classes works correctly together
- * to test the entity {@link Person}
+ * Class integration test for  {@link Person} entity which verify that all classes works correctly together
  * 
  * @author Christine Duarte
  *
@@ -240,7 +239,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequetePut_whenAllfielsAreUpdated_thenVerifyThatPersonWasbeenUpdated() throws Exception {
+	public void testRequetePut_whenAllfieldsAreUpdated_thenVerifyThatPersonWasbeenUpdated() throws Exception {
 		//GIVNE
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Jonanathan", "Marrack", "15 NouvelleAdresse", "NewYork", "97450", "841-874-6512", "jojo@email.com");

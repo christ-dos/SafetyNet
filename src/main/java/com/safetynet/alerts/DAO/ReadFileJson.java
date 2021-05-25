@@ -38,7 +38,7 @@ public class ReadFileJson implements IReadFileJson {
 				JsonReader jsonReader = Json.createReader(fileDataJson);
 				jsonObject = jsonReader.readObject();
 				jsonReader.close();
-				log.info("readjsonFile - Method was called");
+				log.info("ReadFileJson - Reading data.json file");
 			} catch (FileNotFoundException e1) {
 				log.error("File not found", e1);
 			} catch (IOException e) {
