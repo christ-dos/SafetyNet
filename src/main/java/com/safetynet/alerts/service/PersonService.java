@@ -1,12 +1,14 @@
 package com.safetynet.alerts.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
@@ -140,5 +142,25 @@ public class PersonService implements IPersonService {
 				+ resultPersonFinded.getLastName());
 
 		return personDAO.save(indexPosition, person);
+	}
+	
+	/**
+	 * Method that filters the list of persons to get emails for a city input
+	 * 
+	 * @param city - The city for which we want obtained the emails
+	 * @return the list filtered containing the emails
+	 * @throws CityNotFoundException
+	 */
+	@Override
+	public List<String> getEmailResidents(String city) {
+		List<Person> personList = getListPersons();
+		List<String> listEmailResidents = personList.stream().filter(person -> person.getCity().equalsIgnoreCase(city))
+				.map(person -> person.getEmail()).collect(Collectors.toList());
+		if (listEmailResidents.isEmpty()) {
+			log.error("Service - The city requested not found: " + city);
+			throw new CityNotFoundException("The City: " + city + " not found, please try again");
+		}
+		log.info("Service - The list of emails of residents of the city: " + city + " has been requested");
+		return listEmailResidents;
 	}
 }

@@ -1,5 +1,7 @@
 package com.safetynet.alerts.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +44,21 @@ public class PersonController {
 	 * @return a person object
 	 */
 	@GetMapping(value = "/person")
-	public Person getPerson(@Valid @RequestParam String firstName, @RequestParam String lastName) {
+	public Person getPerson(@Valid @RequestParam String firstName, @Valid @RequestParam String lastName) {
 		log.debug("Controller - Request to find person: " + firstName + " " + lastName);
 		return personService.getPerson(firstName, lastName);
+	}
+	
+	/**
+	 * Request Get to obtain the list of email of residents of the city input
+	 * 
+	 * @param city - City for which we want obtained the list of email
+	 * @return A list of email for residents living in city input
+	 */
+	@GetMapping(value = "/communityEmail")
+	public List<String> getEmailResident(@Valid @RequestParam String city) {
+		log.debug("Controller - Request to get Email residents in city : "  + city );
+		return personService.getEmailResidents(city);
 	}
 
 	/**

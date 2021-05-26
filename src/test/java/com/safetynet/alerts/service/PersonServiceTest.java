@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
@@ -187,6 +188,7 @@ public class PersonServiceTest {
 		// WHEN
 		Person resultPersonUpdated = personServiceTest.updatePerson(personToUpdate);
 		// THEN
+		verify(personDAOMock, times(1)).getPersons();
 		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
 		verify(personDAOMock, times(1)).save(anyInt(), any());
 		// the field address that was been modified has been updated
@@ -254,5 +256,36 @@ public class PersonServiceTest {
 		// verify that method delete was not invoked
 		verify(personDAOMock, times(0)).delete(any());
 		assertEquals("Person not Deleted", resultMessage);
+	}
+	
+	/** Method that test getEmailResidents when city exist then return the list of email
+	 * and verify that list contained 4 elements
+	 */
+	@Test
+	public void testGetEmailResidentsCityGiven_whenCityIsCulver_thenGetAllEmailsOfResidentsCulverCity() {
+		//GIVEN
+		String city = "Culver";
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		//WHEN
+		List<String> listEmailResidentsCityCulver = personServiceTest.getEmailResidents(city);
+		//THEN
+		// the list obtained contain 4 elements
+		verify(personDAOMock, times(1)).getPersons();
+		assertEquals(4, listEmailResidentsCityCulver.size());
+		assertEquals("jaboyd@email.com", listEmailResidentsCityCulver.get(0));
+		assertEquals("drk@email.com", listEmailResidentsCityCulver.get(3));
+	}
+	
+	/**
+	 * Method that test getEmailResidents when city not exist then throw a
+	 * {@link CityNotFoundException}
+	 */
+	@Test
+	public void testGetEmailResidentsCityGiven_whenCityNotExistInArrayList_thenThrowACityNotFoundException() {
+		//GIVEN
+		String city = "Croix";
+		//WHEN
+		//THEN
+		assertThrows(CityNotFoundException.class, ()-> personServiceTest.getEmailResidents(city));
 	}
 }

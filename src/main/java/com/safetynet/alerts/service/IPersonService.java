@@ -1,5 +1,7 @@
 package com.safetynet.alerts.service;
 
+import java.util.List;
+
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.model.Person;
@@ -48,4 +50,6 @@ public interface IPersonService {
 	 * @return the person updated
 	 */
 	public Person updatePerson(Person person);
+	
+	public List<String> getEmailResidents(String city);
 }
