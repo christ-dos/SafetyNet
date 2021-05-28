@@ -1,19 +1,30 @@
 package com.safetynet.alerts.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.IFireStationDAO;
+import com.safetynet.alerts.DAO.IMedicalRecordDAO;
+import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.MedicalRecord;
+import com.safetynet.alerts.model.Person;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class FireStationService implements IFireStationService {
 	/**
 	 * An instance of {@link FireStationDAO}
@@ -34,8 +46,13 @@ public class FireStationService implements IFireStationService {
 	 */
 	@Autowired
 	private IFireStationDAO fireStationDAO;
-
-
+	
+	@Autowired
+	private IPersonDAO personDAO;
+	
+	@Autowired
+	private IMedicalRecordDAO medicalRecordDAO;
+	
 	/**
 	 * Method private that get a list of fireStations
 	 * 
@@ -67,6 +84,66 @@ public class FireStationService implements IFireStationService {
 		log.debug("Service - FireStation found :address: " + fireStationgetted.getAddress() + ", Station: "
 				+ fireStationgetted.getStation());
 		return fireStationgetted;
+	}
+	
+	/**
+	 * Method that get the list of persons covered by station number
+	 * @param station - the number of station
+	 * @return A list with persons covered by station ant the number of child and adult
+	 */
+	@Override
+	public List<Object> getAddressCoveredByFireStation(String stationNumber) {
+		List<FireStation> listFireStations = getListFireStations();
+		List<Person> listPersons = personDAO.getPersons();
+		List<MedicalRecord> listMedicalRecord = medicalRecordDAO.getMedicalRecords();
+		// find addresses covered by fireStation and map addresses in list
+		List<String> listAddressCoveredByFireStation = listFireStations.stream()
+				.filter(fireStation -> fireStation.getStation().equalsIgnoreCase(stationNumber))
+				.map(fireStation -> fireStation.getAddress()).collect(Collectors.toList());
+		// collect persons with address covered by station
+		List<Person> listPersonCoveredByStation = listPersons.stream()
+				.filter(person -> listAddressCoveredByFireStation.contains(person.getAddress()))
+				.collect(Collectors.toList());
+
+		// compare firstName and lastName of medicalRecords and persons to get birthDates
+		List<String> listMedicalRecordBirthDate = new ArrayList<>();
+		for (Person person : listPersonCoveredByStation) {
+			for (MedicalRecord medicalRecord : listMedicalRecord) {
+				if (person.getFirstName().equals(medicalRecord.getFirstName())
+						&& person.getLastName().equals(medicalRecord.getLastName())) {
+					listMedicalRecordBirthDate.add(medicalRecord.getBirthDate());
+				}
+			}
+		}
+		Integer adults = 0;
+		Integer childs = 0;
+		// calculation age with birthDate and verify if is a child or adults
+		for (String bithDate : listMedicalRecordBirthDate) {
+			Date bithDateParse;
+			try {
+				bithDateParse = new SimpleDateFormat("dd/MM/yyyy").parse(bithDate);
+				Date dateNow = new Date();
+				long age = dateNow.getYear() - bithDateParse.getYear();
+				if (age <= 18) {
+					childs++;
+				}
+			} catch (ParseException e) {
+				log.error("Error during parsing", e);
+				e.printStackTrace();
+			}
+		}
+		Integer NumberPersons = listPersonCoveredByStation.size();
+		adults = NumberPersons - childs;
+
+		List<Object> finalListPersonsCoveredByStation = new ArrayList<>();
+		for (Person person : listPersonCoveredByStation) {
+			finalListPersonsCoveredByStation.add(
+					Arrays.asList(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
+		}
+		finalListPersonsCoveredByStation.add("numberOfAdult: " + adults);
+		finalListPersonsCoveredByStation.add("numberOfChild: " + childs);
+		log.info("Service - List of persons covered by station number: " + stationNumber);
+		return finalListPersonsCoveredByStation;
 	}
 
 	/**

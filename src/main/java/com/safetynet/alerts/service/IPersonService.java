@@ -2,6 +2,7 @@ package com.safetynet.alerts.service;
 
 import java.util.List;
 
+import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.model.Person;
@@ -51,5 +52,12 @@ public interface IPersonService {
 	 */
 	public Person updatePerson(Person person);
 	
+	/**
+	 * Method that filters the list of persons to get emails for a city input
+	 * 
+	 * @param city - The city for which we want obtained the emails
+	 * @return the list filtered containing the emails
+	 * @throws CityNotFoundException
+	 */
 	public List<String> getEmailResidents(String city);
 }

@@ -1,5 +1,6 @@
 package com.safetynet.alerts.service;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +21,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.alerts.DAO.FireStationDAO;
+import com.safetynet.alerts.DAO.MedicalRecordDAO;
+import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.MedicalRecord;
+import com.safetynet.alerts.model.Person;
 
 /**
  * Class that test the FireStationService class
@@ -42,7 +48,13 @@ public class FireStationServiceTest {
 	 */
 	@Mock
 	private FireStationDAO fireStationDAOMock;
-
+	
+	@Mock
+	private PersonDAO personDAOMock;
+	
+	@Mock
+	private MedicalRecordDAO medicalRecordDAOMock;
+	
 	/**
 	 * A mock of the arraysList of {@link FireStation}
 	 */
@@ -66,8 +78,13 @@ public class FireStationServiceTest {
 		mockListFireStation.add(fireStationIndex1);
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
+		
+	
 
-		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock).build();
+		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock)
+															  .personDAO(personDAOMock)
+															  .medicalRecordDAO(medicalRecordDAOMock)
+															  .build();
 	}
 
 	/**
@@ -240,5 +257,57 @@ public class FireStationServiceTest {
 		// Method delete not invoked because fireStation not exist
 		verify(fireStationDAOMock, times(0)).delete(any());
 		assertEquals("FireStation cannot be deleted", resultDeleteAdress);
+	}
+	
+	@Test
+	public void testgetListPersonsCoveredByFireStation_whenNumberFireStationExist_thenReturnListPersonsAdultsAndChilds() throws Exception {
+		//GIVEN
+		List<Person> mockList = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
+				"lily@email.com");
+		Person index2 = new Person("Tenley", "Boyd", "834 Binoc Ave", "Culver", "97451", "841-874-6512",
+				"tenz@email.com");
+		Person index3 = new Person("Jonanathan", "Marrack", "748 Townings Dr", "Culver", "97451", "841-874-6513",
+				"drk@email.com");
+		mockList.add(index0);
+		mockList.add(index1);
+		mockList.add(index2);
+		mockList.add(index3);
+		
+		List<MedicalRecord> mockListMedicalRecord = new ArrayList<>();
+		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+							   new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+							   new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMRecord1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", 
+							   new ArrayList<>(), 
+							   new ArrayList<>());
+		MedicalRecord indexMRecord2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012", 
+							   new ArrayList<>(Arrays.asList()),
+							   new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord3 = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
+							   new ArrayList<>(Arrays.asList()), 
+							   new ArrayList<>(Arrays.asList()));
+		mockListMedicalRecord.add(indexMRecord0);
+		mockListMedicalRecord.add(indexMRecord1);
+		mockListMedicalRecord.add(indexMRecord2);
+		mockListMedicalRecord.add(indexMRecord3);
+		
+		//PersonDAO personDAOMock = mock(PersonDAO.class);
+		//PersonDAO personDAOMock = new PersonDAO(mockList);
+		String station = "3";
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		when(medicalRecordDAOMock.getMedicalRecords()).thenReturn(mockListMedicalRecord);
+		List<Object> expectedJohnBoyd = Arrays.asList("John", "Boyd", "1509 Culver St", "841-874-6512");
+		//WHEN
+		List<Object> listPersonsCovededByStationThree = fireStationServiceTest.getAddressCoveredByFireStation(station);
+		
+		//THEN
+		//verify that the list contained 3 elements of person and the one counter for child and one counter for adults
+		assertEquals(5, listPersonsCovededByStationThree.size());
+		assertSame(expectedJohnBoyd, listPersonsCovededByStationThree.get(0));
+		assertEquals("748 Townings Dr", listPersonsCovededByStationThree);
 	}
 }

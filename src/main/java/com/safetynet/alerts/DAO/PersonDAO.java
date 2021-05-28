@@ -9,6 +9,7 @@ import com.safetynet.alerts.model.Person;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class PersonDAO implements IPersonDAO {
 
 	/**

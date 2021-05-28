@@ -38,7 +38,6 @@ public class PersonService implements IPersonService {
 	@Autowired
 	private IPersonDAO personDAO;
 
-
 	/**
 	 * Method private that get a list of persons
 	 * 
