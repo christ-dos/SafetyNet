@@ -3,7 +3,6 @@ package com.safetynet.alerts.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,6 +99,11 @@ public class FireStationService implements IFireStationService {
 		List<String> listAddressCoveredByFireStation = listFireStations.stream()
 				.filter(fireStation -> fireStation.getStation().equalsIgnoreCase(stationNumber))
 				.map(fireStation -> fireStation.getAddress()).collect(Collectors.toList());
+		
+		if(listAddressCoveredByFireStation.size() == 0) {
+			log.error("Service - FireStation not found : station : " + stationNumber);
+			throw new FireStationNotFoundException("The FireStation number not found");
+		}
 		// collect persons with address covered by station
 		List<Person> listPersonCoveredByStation = listPersons.stream()
 				.filter(person -> listAddressCoveredByFireStation.contains(person.getAddress()))
@@ -115,8 +119,8 @@ public class FireStationService implements IFireStationService {
 				}
 			}
 		}
-		Integer adults = 0;
-		Integer childs = 0;
+		Integer adultCouter = 0;
+		Integer childCounter = 0;
 		// calculation age with birthDate and verify if is a child or adults
 		for (String bithDate : listMedicalRecordBirthDate) {
 			Date bithDateParse;
@@ -125,7 +129,7 @@ public class FireStationService implements IFireStationService {
 				Date dateNow = new Date();
 				long age = dateNow.getYear() - bithDateParse.getYear();
 				if (age <= 18) {
-					childs++;
+					childCounter++;
 				}
 			} catch (ParseException e) {
 				log.error("Error during parsing", e);
@@ -133,16 +137,18 @@ public class FireStationService implements IFireStationService {
 			}
 		}
 		Integer NumberPersons = listPersonCoveredByStation.size();
-		adults = NumberPersons - childs;
+		adultCouter = NumberPersons - childCounter;
 
 		List<Object> finalListPersonsCoveredByStation = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
-			finalListPersonsCoveredByStation.add(
-					Arrays.asList(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
+			finalListPersonsCoveredByStation.add(new Person(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
+			//.add(Arrays.asList(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
+			
 		}
-		finalListPersonsCoveredByStation.add("numberOfAdult: " + adults);
-		finalListPersonsCoveredByStation.add("numberOfChild: " + childs);
+		finalListPersonsCoveredByStation.add("Adults = " + adultCouter);
+		finalListPersonsCoveredByStation.add("Childs = " + childCounter);
 		log.info("Service - List of persons covered by station number: " + stationNumber);
+		System.out.println(finalListPersonsCoveredByStation);
 		return finalListPersonsCoveredByStation;
 	}
 

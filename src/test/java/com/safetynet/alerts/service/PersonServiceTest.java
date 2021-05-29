@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +20,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 
 /**
@@ -44,12 +47,18 @@ public class PersonServiceTest {
 	 */
 	@Mock
 	private PersonDAO personDAOMock;
+	
+	@Mock
+	private MedicalRecordDAO medicalRecordDAOMock;
 
 	/**
 	 * A mock of the arraysList of {@link Person}
 	 */
 	@Mock
 	private List<Person> mockList;
+	
+	@Mock
+	List<MedicalRecord> mockListMedicalRecord ;
 
 	/**
 	 * Method that create a mock of the ArrayList mockList with 4 elements
@@ -70,7 +79,29 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-		personServiceTest = PersonService.builder().personDAO(personDAOMock).build();
+		
+		mockListMedicalRecord = new ArrayList<>();
+		MedicalRecord indexMedicalRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+							   new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+							   new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMedicalRecord1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", 
+							   new ArrayList<>(), 
+							   new ArrayList<>());
+		MedicalRecord indexMedicalRecord2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012", 
+							   new ArrayList<>(Arrays.asList()),
+							   new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMedicalRecord3 = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
+							   new ArrayList<>(Arrays.asList()), 
+							   new ArrayList<>(Arrays.asList()));
+		mockListMedicalRecord.add(indexMedicalRecord0);
+		mockListMedicalRecord.add(indexMedicalRecord1);
+		mockListMedicalRecord.add(indexMedicalRecord2);
+		mockListMedicalRecord.add(indexMedicalRecord3);
+		
+		personServiceTest = PersonService.builder()
+				.personDAO(personDAOMock)
+				.medicalRecordDAO(medicalRecordDAOMock)
+				.build();
 	}
 
 	/**
@@ -130,7 +161,16 @@ public class PersonServiceTest {
 		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
 		assertThrows(EmptyFieldsException.class, () -> personServiceTest.getPerson(firstName, lastName));
 	}
-
+	
+	@Test
+	public void testGetPersonInfo_whenInputFirstNameandLastName_thenReturnListWithNameAndAddressAndEmailAndMedicalRecords() {
+		//GIVEN
+		String firstName = "John";
+		String lastName = "Boyd";
+		//WHEN
+		//List<Object> resultListInfoPerson = PersonServiceTest.getInfoPerson(firstName, lastName);
+		//THEN
+	}
 	/**
 	 * Method that test addPerson when person to add not exist then return the
 	 * person saved and verify if the method savePerson was called

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.CityNotFoundException;
@@ -37,6 +38,10 @@ public class PersonService implements IPersonService {
 	 */
 	@Autowired
 	private IPersonDAO personDAO;
+	
+	
+	@Autowired
+	private IMedicalRecordDAO medicalRecordDAO;
 
 	/**
 	 * Method private that get a list of persons

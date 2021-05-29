@@ -1,11 +1,11 @@
 package com.safetynet.alerts.service;
 
-import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,8 +79,6 @@ public class FireStationServiceTest {
 		mockListFireStation.add(fireStationIndex1);
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
-		
-	
 
 		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock)
 															  .personDAO(personDAOMock)
@@ -294,20 +293,34 @@ public class FireStationServiceTest {
 		mockListMedicalRecord.add(indexMRecord2);
 		mockListMedicalRecord.add(indexMRecord3);
 		
-		//PersonDAO personDAOMock = mock(PersonDAO.class);
-		//PersonDAO personDAOMock = new PersonDAO(mockList);
 		String station = "3";
 		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		when(medicalRecordDAOMock.getMedicalRecords()).thenReturn(mockListMedicalRecord);
-		List<Object> expectedJohnBoyd = Arrays.asList("John", "Boyd", "1509 Culver St", "841-874-6512");
+		Person expectedJohnBoyd = new Person ("John", "Boyd", "1509 Culver St", "841-874-6512");
+		Person expectedJonanathanMarrack = new Person ("Jonanathan", "Marrack", "748 Townings Dr", "841-874-6513");
 		//WHEN
 		List<Object> listPersonsCovededByStationThree = fireStationServiceTest.getAddressCoveredByFireStation(station);
-		
 		//THEN
 		//verify that the list contained 3 elements of person and the one counter for child and one counter for adults
 		assertEquals(5, listPersonsCovededByStationThree.size());
-		assertSame(expectedJohnBoyd, listPersonsCovededByStationThree.get(0));
-		assertEquals("748 Townings Dr", listPersonsCovededByStationThree);
+		assertEquals(expectedJohnBoyd, listPersonsCovededByStationThree.get(0));
+		assertEquals(expectedJonanathanMarrack, listPersonsCovededByStationThree.get(2));
+	}
+	
+	@Test
+	public void testgetListPersonsCoveredByFireStation_whenStationNumberNotExist_thenThrowFireStationNotFoundException() {
+		//GIVEN
+		FireStation fireStationNotExist = new FireStation("5", "1509 Culver St");
+		List<String> listAddressCoveredByFireStationMock  = mock(ArrayList.class);
+		when(mockListFireStation.stream()
+				.filter(fireStation -> fireStation.getStation().equalsIgnoreCase(fireStationNotExist.getStation()))
+				.map(fireStation -> fireStation.getAddress())
+				.collect(Collectors.toList())).thenReturn(listAddressCoveredByFireStationMock);
+		when(listAddressCoveredByFireStationMock.size()).thenReturn(0);
+		//WHEN
+		//THEN
+		assertThrows(FireStationNotFoundException.class,
+				() -> fireStationServiceTest.getAddressCoveredByFireStation(fireStationNotExist.getStation()));
 	}
 }
