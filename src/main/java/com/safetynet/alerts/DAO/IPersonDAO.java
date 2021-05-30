@@ -26,6 +26,14 @@ public interface IPersonDAO {
 	 * @return an instance of Person
 	 */
 	public Person getPerson(String firstName, String lastName);
+	
+	/**
+	 * Method that get a person by address
+	 * 
+	 * @param address - A string containing address of person
+	 * @return A Person
+	 */
+	public Person getPersonByAddress(String address);
 
 	/**
 	 * Method that save a Person in the ArrayList

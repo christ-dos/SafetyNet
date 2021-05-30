@@ -1,5 +1,6 @@
 package com.safetynet.alerts.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,23 @@ public class FireStationDAO implements IFireStationDAO {
 	public List<FireStation> getFireStations() {
 		return listFireStations;
 	}
+	
+	/**
+	 * Method that get the list of addresses covered by Station number input
+	 * 
+	 * @return an ArrayList of String containing addresses covered by station
+	 */
+	@Override
+	public List<String> getAddressesCoveredByStationNumber(String station) {
+		List<String> listAddressesCoveredByStation = new ArrayList<>();
+		for (FireStation fireStation : listFireStations) {
+			if(fireStation.getStation().equals(station)) {
+				listAddressesCoveredByStation.add(fireStation.getAddress());
+			}
+		}
+		log.debug("DAO - FireStation found with station number: " + station);
+		return listAddressesCoveredByStation;
+	}
 
 	/**
 	 * Method that get a fireStation by address
@@ -57,7 +75,7 @@ public class FireStationDAO implements IFireStationDAO {
 		log.error("DAO FireStation not found with address: " + address);
 		return null;
 	}
-
+	
 	/**
 	 * Method that save a FireStation in the ArrayList
 	 * 

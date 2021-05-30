@@ -92,13 +92,14 @@ public class FireStationService implements IFireStationService {
 	 */
 	@Override
 	public List<Object> getAddressCoveredByFireStation(String stationNumber) {
-		List<FireStation> listFireStations = getListFireStations();
+		//List<FireStation> listFireStations = getListFireStations();
 		List<Person> listPersons = personDAO.getPersons();
 		List<MedicalRecord> listMedicalRecord = medicalRecordDAO.getMedicalRecords();
-		// find addresses covered by fireStation and map addresses in list
-		List<String> listAddressCoveredByFireStation = listFireStations.stream()
+		// get addresses covered by fireStation
+		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(stationNumber);
+				/**listFireStations.stream()
 				.filter(fireStation -> fireStation.getStation().equalsIgnoreCase(stationNumber))
-				.map(fireStation -> fireStation.getAddress()).collect(Collectors.toList());
+				.map(fireStation -> fireStation.getAddress()).collect(Collectors.toList());*/
 		
 		if(listAddressCoveredByFireStation.size() == 0) {
 			log.error("Service - FireStation not found : station : " + stationNumber);
@@ -108,6 +109,10 @@ public class FireStationService implements IFireStationService {
 		List<Person> listPersonCoveredByStation = listPersons.stream()
 				.filter(person -> listAddressCoveredByFireStation.contains(person.getAddress()))
 				.collect(Collectors.toList());
+		
+		// Parcourir la liste des personnes et faire recuperer le medicalrecord pour chaque personne
+		// Appeler la methode isAdult en passant la date de naissance pris du medical record
+		// Incrementer les compteurs enfants et aldutes.
 
 		// compare firstName and lastName of medicalRecords and persons to get birthDates
 		List<String> listMedicalRecordBirthDate = new ArrayList<>();
@@ -123,7 +128,7 @@ public class FireStationService implements IFireStationService {
 		Integer childCounter = 0;
 		// calculation age with birthDate and verify if is a child or adults
 		for (String bithDate : listMedicalRecordBirthDate) {
-			Date bithDateParse;
+			Date bithDateParse = null;
 			try {
 				bithDateParse = new SimpleDateFormat("dd/MM/yyyy").parse(bithDate);
 				Date dateNow = new Date();
@@ -138,12 +143,11 @@ public class FireStationService implements IFireStationService {
 		}
 		Integer NumberPersons = listPersonCoveredByStation.size();
 		adultCouter = NumberPersons - childCounter;
-
+		//displaying list result
 		List<Object> finalListPersonsCoveredByStation = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
-			finalListPersonsCoveredByStation.add(new Person(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
-			//.add(Arrays.asList(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
-			
+			finalListPersonsCoveredByStation
+					.add(new Person(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
 		}
 		finalListPersonsCoveredByStation.add("Adults = " + adultCouter);
 		finalListPersonsCoveredByStation.add("Childs = " + childCounter);
@@ -216,5 +220,14 @@ public class FireStationService implements IFireStationService {
 		log.debug("Service - The station number was updated: address: " + fireStation.getAddress() + ", Station: "
 				+ fireStation.getStation());
 		return fireStationUpdated;
+	}
+	
+	private boolean isAdult(String birthDate) {
+		int age = 0;
+		// Faire le calcul de l'age 
+		if(age > 18) {
+			return true;
+		}
+		return false;
 	}
 }

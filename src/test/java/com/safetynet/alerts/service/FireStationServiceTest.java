@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,10 +79,11 @@ public class FireStationServiceTest {
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
 
-		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock)
-															  .personDAO(personDAOMock)
-															  .medicalRecordDAO(medicalRecordDAOMock)
-															  .build();
+		fireStationServiceTest = FireStationService.builder()
+				.fireStationDAO(fireStationDAOMock)
+			    .personDAO(personDAOMock)
+			    .medicalRecordDAO(medicalRecordDAOMock)
+			    .build();
 	}
 
 	/**
@@ -294,7 +294,11 @@ public class FireStationServiceTest {
 		mockListMedicalRecord.add(indexMRecord3);
 		
 		String station = "3";
-		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
+		List<String> mockListAddresses = new ArrayList<>();
+		mockListAddresses.add("1509 Culver St");
+		mockListAddresses.add("834 Binoc Ave");
+		mockListAddresses.add("748 Townings Dr");
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber(station)).thenReturn(mockListAddresses);
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		when(medicalRecordDAOMock.getMedicalRecords()).thenReturn(mockListMedicalRecord);
 		Person expectedJohnBoyd = new Person ("John", "Boyd", "1509 Culver St", "841-874-6512");
@@ -313,11 +317,11 @@ public class FireStationServiceTest {
 		//GIVEN
 		FireStation fireStationNotExist = new FireStation("5", "1509 Culver St");
 		List<String> listAddressCoveredByFireStationMock  = mock(ArrayList.class);
-		when(mockListFireStation.stream()
+		/*when(mockListFireStation.stream()
 				.filter(fireStation -> fireStation.getStation().equalsIgnoreCase(fireStationNotExist.getStation()))
 				.map(fireStation -> fireStation.getAddress())
-				.collect(Collectors.toList())).thenReturn(listAddressCoveredByFireStationMock);
-		when(listAddressCoveredByFireStationMock.size()).thenReturn(0);
+				.collect(Collectors.toList())).thenReturn(listAddressCoveredByFireStationMock);*/
+		//when(listAddressCoveredByFireStationMock.size()).thenReturn(0);
 		//WHEN
 		//THEN
 		assertThrows(FireStationNotFoundException.class,

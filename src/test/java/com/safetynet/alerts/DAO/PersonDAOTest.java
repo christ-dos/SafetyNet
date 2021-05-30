@@ -90,6 +90,7 @@ public class PersonDAOTest {
 		assertEquals("Cooper", getPersonResult.getLastName());
 		assertEquals(mockList.get(1), getPersonResult);
 	}
+	
 
 	/**
 	 * Method that test getPersonDAO with firstName Toto and LastName Zero when
@@ -103,6 +104,38 @@ public class PersonDAOTest {
 		String lastName = "Zero";
 		// WHEN
 		Person getPersonResult = personDAOTest.getPerson(firstName, lastName);
+		// THEN
+		assertNull(getPersonResult);
+	}
+	
+	/**
+	 * Method that test getPersonDAO with address "489 Manchester St"
+	 * when address exist then return Lily Cooper
+	 * 
+	 */
+	@Test
+	public void testGetPersonDAOByAddress_whenAdressExistInArray_resultShouldReturnLilyCooper() {
+		// GIVEN
+		String address = "489 Manchester St";
+		// WHEN
+		Person getPersonResult = personDAOTest.getPersonByAddress(address);
+		// THEN
+		assertEquals("Lily", getPersonResult.getFirstName());
+		assertEquals("Cooper", getPersonResult.getLastName());
+		assertEquals(mockList.get(1), getPersonResult);
+	}
+	
+	/**
+	 * Method that test getPersonDAOByAddress with address "25 wall St" when
+	 * address not exist then return null
+	 * 
+	 */
+	@Test
+	public void testGetPersonDAOByAddress_whenAddressNotExist_resultShouldReturnNull() {
+		// GIVEN
+		String address = "25 wall St";
+		// WHEN
+		Person getPersonResult = personDAOTest.getPersonByAddress(address);
 		// THEN
 		assertNull(getPersonResult);
 	}

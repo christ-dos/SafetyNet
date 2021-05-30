@@ -43,7 +43,7 @@ public class FireStationController {
 	 * @throws EmptyFieldsException - when the field address is empty in the request
 	 */
 	
-	/**  @GetMapping(value = "/firestation")
+	/**@GetMapping(value = "/firestation")
 	public FireStation getFireStation(@Valid @RequestParam String address){
 		log.debug("Controller - fireStation found: " + address);
 		return fireStationService.getFireStation(address);

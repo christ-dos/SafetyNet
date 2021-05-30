@@ -54,6 +54,25 @@ public class PersonDAO implements IPersonDAO {
 				return person;
 			}
 		}
+		log.debug("DAO - Person not found: "  + firstName  + " " + lastName);
+		return null;
+	}
+	
+	/**
+	 * Method that get person by address
+	 * 
+	 * @param address - A string containing address of person
+	 * @return An instance of Person if exist else return null
+	 */
+	@Override
+	public Person getPersonByAddress(String address) {
+		for (Person person : listPersons) {
+			if (person.getAddress().equalsIgnoreCase(address)) {
+				log.debug("DAO - Person found with address : " + address);
+				return person;
+			}
+		}
+		log.debug("DAO - The address not found: "  + address);
 		return null;
 	}
 
