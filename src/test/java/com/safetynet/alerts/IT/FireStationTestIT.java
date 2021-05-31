@@ -54,7 +54,7 @@ public class FireStationTestIT {
 		//WHEN
 		
 		//THEN
-		mockMvcFireStation.perform(get("/firestation?address=951 LoneTree Rd"))
+		mockMvcFireStation.perform(get("/firestation/address?address=951 LoneTree Rd"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.address", is("951 LoneTree Rd")))
 		.andExpect(jsonPath("$.station", is("2")))
@@ -74,7 +74,7 @@ public class FireStationTestIT {
 		//WHEN
 		
 		//THEN
-		mockMvcFireStation.perform(get("/firestation?address=95 Flower Rd"))
+		mockMvcFireStation.perform(get("/firestation/address?address=95 Flower Rd"))
 		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
@@ -96,7 +96,7 @@ public class FireStationTestIT {
 		//WHEN
 		
 		//THEN
-		mockMvcFireStation.perform(get("/firestation?address="))
+		mockMvcFireStation.perform(get("/firestation/address?address="))
 		.andExpect(status().isBadRequest())
 		.andExpect(jsonPath("$.message", is("Field cannot be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
@@ -173,7 +173,7 @@ public class FireStationTestIT {
 		.andExpect(jsonPath("$", is("SUCCESS")))
 		.andDo(print());
 		
-		mockMvcFireStation.perform(get("/firestation?address=947 E. Rose Dr"))
+		mockMvcFireStation.perform(get("/firestationAddress?address=947 E. Rose Dr"))
 		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$.address").doesNotExist())
 		.andExpect(jsonPath("$.station").doesNotExist())

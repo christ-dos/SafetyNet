@@ -1,7 +1,5 @@
 package com.safetynet.alerts.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.service.IFireStationService;
 
@@ -34,6 +33,7 @@ public class FireStationController {
 	 */
 	@Autowired
 	IFireStationService fireStationService;
+	
 
 	/**
 	 * Request get to obtain a FireStation
@@ -43,17 +43,12 @@ public class FireStationController {
 	 * @throws EmptyFieldsException - when the field address is empty in the request
 	 */
 	
-	/**@GetMapping(value = "/firestation")
+	@GetMapping(value = "/firestation/address")
 	public FireStation getFireStation(@Valid @RequestParam String address){
 		log.debug("Controller - fireStation found: " + address);
 		return fireStationService.getFireStation(address);
-	}*/
-	
-	@GetMapping(value = "/firestation")
-	public List<Object> getListPersonsCoveredByOneStation(@Valid @RequestParam String stationNumber) {
-		log.debug("Controller - Request list person covered by station: "+ stationNumber);
-		return fireStationService.getAddressCoveredByFireStation(stationNumber);
 	}
+	
 	/**
 	 * Request post to add a fireStation at the ArrayList
 	 * 

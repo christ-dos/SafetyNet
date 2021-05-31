@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.alerts.model.MedicalRecord;
+import com.safetynet.alerts.model.Person;
 
 /**
  * Class that test MedicalRecordDAO
@@ -34,6 +35,8 @@ public class MedicalRecordDAOTest {
 	 */
 	@Mock
 	private List<MedicalRecord> mockListMedicalRecord;
+	
+	
 
 	/**
 	 * Method that created a mock of the ArrayList mockListMedicalRecord with 3
@@ -58,6 +61,8 @@ public class MedicalRecordDAOTest {
 		mockListMedicalRecord.add(index2);
 		medicalRecordDAOTest = MedicalRecordDAO.builder().listMedicalRecords(mockListMedicalRecord).build();
 	}
+	
+	
 
 	/**
 	 * Method that test getMedicalRecords in DAO then return a list of
@@ -78,6 +83,38 @@ public class MedicalRecordDAOTest {
 		assertEquals("03/06/1984", resultListgetted.get(0).getBirthDate());
 		assertEquals("hydrapermazol:100mg", resultListgetted.get(0).getMedications().get(1));
 		assertEquals(3, resultListgetted.size());
+	}
+	
+	@Test
+	public void testGetListMedicalRecordForAListOfPerson_whenListContainThreeElements_ShouldReturTheeMedicalRecord() {
+		//GIVEN
+		List< MedicalRecord> mockListMedicalRecord = new ArrayList<>();
+		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMRecord1 = new MedicalRecord("Tessa", "Carman", "02/18/2012", new ArrayList<>(),
+				new ArrayList<>());
+		MedicalRecord indexMRecord2 = new MedicalRecord("Foster", "Shepard", "01/08/1980",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>());
+		mockListMedicalRecord.add(indexMRecord0);
+		mockListMedicalRecord.add(indexMRecord1);
+		mockListMedicalRecord.add(indexMRecord2);
+		List<Person> listPersons = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Tessa", "Carman","834 Binoc Ave","Culver","97451", "841-874-6512", "tenz@email.com");
+		Person index3 = new Person("Foster", "Shepard", "748 Townings Dr", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com");
+		listPersons.add(index0);
+		listPersons.add(index1);
+		listPersons.add(index3);
+		medicalRecordDAOTest = MedicalRecordDAO.builder().listMedicalRecords(mockListMedicalRecord).build();
+		//WHEN
+		List<MedicalRecord> medicalRecordResult  = medicalRecordDAOTest.getListMedicalRecordForAListOfPerson(listPersons);
+		//THEN
+		assertEquals(3, medicalRecordResult.size());
+		assertEquals(indexMRecord0, medicalRecordResult.get(0));
+		assertEquals("03/06/1984", medicalRecordResult.get(0).getBirthDate());
 	}
 
 	/**

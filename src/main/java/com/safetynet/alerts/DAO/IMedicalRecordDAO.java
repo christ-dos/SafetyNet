@@ -3,6 +3,7 @@ package com.safetynet.alerts.DAO;
 import java.util.List;
 
 import com.safetynet.alerts.model.MedicalRecord;
+import com.safetynet.alerts.model.Person;
 
 /**
  *  Interface that manage methods CRUD of entity MedicalRecord
@@ -17,6 +18,14 @@ public interface IMedicalRecordDAO {
 	 * @return An ArrayList of MedicalRecords
 	 */
 	public List<MedicalRecord> getMedicalRecords();
+	
+	/**
+	 * Method that get the list of medicalRecords by list of Persons in parameter
+	 * 
+	 * @param listPerson - A list of persons
+	 * @return The  ArrayList of MedicalRecords with the persons input in parameter
+	 */
+	public List<MedicalRecord> getListMedicalRecordForAListOfPerson(List<Person> listPerson);
 
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName

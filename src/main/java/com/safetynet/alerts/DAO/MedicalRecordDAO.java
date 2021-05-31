@@ -1,11 +1,13 @@
 package com.safetynet.alerts.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.alerts.model.MedicalRecord;
+import com.safetynet.alerts.model.Person;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +40,23 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 	public List<MedicalRecord> getMedicalRecords() {
 		return listMedicalRecords;
 	}
+	
+	@Override
+	public List<MedicalRecord> getListMedicalRecordForAListOfPerson(List<Person> listPerson) {
+		List<MedicalRecord> listMedicalRecordsByListPersons = new ArrayList<>();
+		for (MedicalRecord medicalRecord : listMedicalRecords) {
+			for (Person person : listPerson) {
+				if (person.getFirstName().equalsIgnoreCase(medicalRecord.getFirstName())
+						&& person.getLastName().equalsIgnoreCase(medicalRecord.getLastName())) {
+					listMedicalRecordsByListPersons.add(medicalRecord);
+					log.debug("DAO - MedicalRecord found for person: " + person.getFirstName() + " "
+							+ person.getLastName());
+				}
+			}
+		}
+		log.info("DAO - ListMedicalRecord obtained with : " + listMedicalRecordsByListPersons.size() + " elements");
+		return listMedicalRecordsByListPersons;
+	}
 
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName
@@ -56,6 +75,8 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 		}
 		return null;
 	}
+	
+	
 	
 	/**
 	 * Method that save a medicalRecord in the ArrayList
@@ -86,5 +107,9 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 		listMedicalRecords.remove(medicalRecord);
 		log.debug("DAO - MedicalRecord deleted for person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
 		return "SUCCESS";
+	}
+
+	public MedicalRecordDAO() {
+		// TODO Auto-generated constructor stub
 	}
 }

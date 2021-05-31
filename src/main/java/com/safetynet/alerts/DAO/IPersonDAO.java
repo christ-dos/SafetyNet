@@ -17,6 +17,13 @@ public interface IPersonDAO {
 	 * @return an ArrayList of Persons
 	 */
 	public List<Person> getPersons();
+	
+	/**
+	 * Method that get the list of person by a list of addresses 
+	 * 
+	 * @return An ArrayList of Persons with address provided in parameter
+	 */
+	public List<Person> getPersonsByListAdresses(List<String> listAddress);
 
 	/**
 	 * Method that get a person by combining keys firstName and lastName

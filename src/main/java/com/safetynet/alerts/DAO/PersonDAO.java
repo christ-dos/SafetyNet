@@ -1,6 +1,7 @@
 package com.safetynet.alerts.DAO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -38,6 +39,19 @@ public class PersonDAO implements IPersonDAO {
 	 */
 	public List<Person> getPersons() {
 		return listPersons;
+	}
+	
+	/**
+	 * Method that get the list of person by a list of addresses 
+	 * 
+	 * @return An ArrayList of Persons with address provided in parameter
+	 */
+	public List<Person> getPersonsByListAdresses(List<String> listAddress){
+		List<Person> listPersonGetByListAddress = listPersons.stream()
+		.filter(person -> listAddress.contains(person.getAddress()))
+		.map(person-> person)
+		.collect(Collectors.toList());
+		return listPersonGetByListAddress;
 	}
 
 	/**

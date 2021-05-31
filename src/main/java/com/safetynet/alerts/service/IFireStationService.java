@@ -1,7 +1,5 @@
 package com.safetynet.alerts.service;
 
-import java.util.List;
-
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.FireStation;
 
@@ -47,10 +45,5 @@ public interface IFireStationService {
 	 */
 	public FireStation updateFireStation(FireStation fireStation);
 	
-	/**
-	 * Method that get the list of persons covered by station number
-	 * @param station - the number of station
-	 * @return A list with persons covered by station ant the number of child and adult
-	 */
-	public List<Object> getAddressCoveredByFireStation(String stationNumber);
+	
 }

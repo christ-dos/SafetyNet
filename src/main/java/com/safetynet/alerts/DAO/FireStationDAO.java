@@ -10,6 +10,7 @@ import com.safetynet.alerts.model.FireStation;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class FireStationDAO implements IFireStationDAO {
 	/**
 	 * attribute that contain the list of fireStations that provide from data.json
