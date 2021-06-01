@@ -49,6 +49,4 @@ public class PersonDTO {
 	@JsonProperty("phone")
 	@JsonInclude(Include.NON_NULL)
 	private String phone;
-
-
 }

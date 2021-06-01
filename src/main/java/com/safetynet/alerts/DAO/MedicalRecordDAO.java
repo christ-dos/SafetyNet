@@ -40,9 +40,15 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 	public List<MedicalRecord> getMedicalRecords() {
 		return listMedicalRecords;
 	}
-	
+	/**
+	 * Method that get the list of medicalRecords by a list of persons in parameter
+	 * 
+	 * @param listPerson - A list of person that we want obtained medicalRecords
+	 * 
+	 * @return A list of MedicalRecord
+	 */
 	@Override
-	public List<MedicalRecord> getListMedicalRecordForAListOfPerson(List<Person> listPerson) {
+	public List<MedicalRecord> getListMedicalRecordByListOfPerson(List<Person> listPerson) {
 		List<MedicalRecord> listMedicalRecordsByListPersons = new ArrayList<>();
 		for (MedicalRecord medicalRecord : listMedicalRecords) {
 			for (Person person : listPerson) {
@@ -75,8 +81,6 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 		}
 		return null;
 	}
-	
-	
 	
 	/**
 	 * Method that save a medicalRecord in the ArrayList

@@ -25,7 +25,7 @@ public interface IMedicalRecordDAO {
 	 * @param listPerson - A list of persons
 	 * @return The  ArrayList of MedicalRecords with the persons input in parameter
 	 */
-	public List<MedicalRecord> getListMedicalRecordForAListOfPerson(List<Person> listPerson);
+	public List<MedicalRecord> getListMedicalRecordByListOfPerson(List<Person> listPerson);
 
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName

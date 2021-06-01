@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.service.IFireStationService;
 
@@ -40,9 +39,7 @@ public class FireStationController {
 	 * 
 	 * @param address - a String obtained from url request
 	 * @return a fireStation object
-	 * @throws EmptyFieldsException - when the field address is empty in the request
 	 */
-	
 	@GetMapping(value = "/firestation/address")
 	public FireStation getFireStation(@Valid @RequestParam String address){
 		log.debug("Controller - fireStation found: " + address);

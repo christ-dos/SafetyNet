@@ -36,7 +36,6 @@ public class MedicalRecordDAOTest {
 	@Mock
 	private List<MedicalRecord> mockListMedicalRecord;
 	
-	
 
 	/**
 	 * Method that created a mock of the ArrayList mockListMedicalRecord with 3
@@ -61,8 +60,6 @@ public class MedicalRecordDAOTest {
 		mockListMedicalRecord.add(index2);
 		medicalRecordDAOTest = MedicalRecordDAO.builder().listMedicalRecords(mockListMedicalRecord).build();
 	}
-	
-	
 
 	/**
 	 * Method that test getMedicalRecords in DAO then return a list of
@@ -84,9 +81,13 @@ public class MedicalRecordDAOTest {
 		assertEquals("hydrapermazol:100mg", resultListgetted.get(0).getMedications().get(1));
 		assertEquals(3, resultListgetted.size());
 	}
-	
+	/**
+	 * Method that testGetListMedicalRecordForAlistOfPerson
+	 * when the list of person contain 3 persons
+	 * then return a list with three medicalRecords
+	 */
 	@Test
-	public void testGetListMedicalRecordForAListOfPerson_whenListContainThreeElements_ShouldReturTheeMedicalRecord() {
+	public void testGetListMedicalRecordForAListOfPerson_whenListContainThreeElements_ShouldReturnTheeMedicalRecords() {
 		//GIVEN
 		List< MedicalRecord> mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
@@ -110,7 +111,7 @@ public class MedicalRecordDAOTest {
 		listPersons.add(index3);
 		medicalRecordDAOTest = MedicalRecordDAO.builder().listMedicalRecords(mockListMedicalRecord).build();
 		//WHEN
-		List<MedicalRecord> medicalRecordResult  = medicalRecordDAOTest.getListMedicalRecordForAListOfPerson(listPersons);
+		List<MedicalRecord> medicalRecordResult  = medicalRecordDAOTest.getListMedicalRecordByListOfPerson(listPersons);
 		//THEN
 		assertEquals(3, medicalRecordResult.size());
 		assertEquals(indexMRecord0, medicalRecordResult.get(0));

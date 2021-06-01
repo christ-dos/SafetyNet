@@ -1,6 +1,8 @@
 package com.safetynet.alerts.service;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
@@ -114,12 +117,9 @@ public class PersonByStationNumberDTOServiceTest {
 				new ArrayList<>());
 		MedicalRecord indexMRecord2 = new MedicalRecord("Foster", "Shepard", "01/08/1980",
 				new ArrayList<>(Arrays.asList()), new ArrayList<>());
-		//MedicalRecord indexMRecord3 = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
-				//new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList()));
 		mockListMedicalRecord.add(indexMRecord0);
 		mockListMedicalRecord.add(indexMRecord1);
 		mockListMedicalRecord.add(indexMRecord2);
-		//mockListMedicalRecord.add(indexMRecord3);
 
 		personDTOByStationNumberService = PersonByStationNumberDTOService.builder()
 				.fireStationDAO(fireStationDAOmock)
@@ -127,18 +127,21 @@ public class PersonByStationNumberDTOServiceTest {
 				.medicalRecordDAO(medicalRecordDAOMock)
 				.build();
 	}
-
+	/**
+	 * Method that test getListPersonsCoveredByFireStation
+	 * when fireStation exits then return a list of address covered by fireSation number
+	 */
 	@Test
-	public void testgetListPersonsCoveredByFireStation_whenNumberFireStationExist_thenReturnListPersonsAdultsAndChilds()
-			throws Exception {
+	public void testgetListPersonsCoveredByFireStation_whenNumberFireStationExist_thenReturnListPersonsAdultsAndChilds() {
 		// GIVEN
+		
 		String stationNumber = "3";
 		PersonDTO expectedJohnBoyd = new PersonDTO("John", "Boyd", "1509 Culver St", "841-874-6512");
 		PersonDTO expectedFoster = new PersonDTO("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOmock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
-		when(medicalRecordDAOMock.getListMedicalRecordForAListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
-
+		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
+		when(personDAOMock.getAge(anyString())).thenReturn(37, 9, 41);
 		// WHEN
 		PersonResultEndPointByStationNumberDTO PersonsCovededByStationThree = personDTOByStationNumberService
 				.getAddressCoveredByFireStation(stationNumber);
@@ -151,24 +154,20 @@ public class PersonByStationNumberDTOServiceTest {
 		assertEquals(2, PersonsCovededByStationThree.getAdultsCounter());
 		assertEquals(1, PersonsCovededByStationThree.getChildsCounter());
 	}
-
+	/**
+	 * Method that test getListPersonsCoveredByFireStation
+	 * when station number is five and not exist
+	 * then throw a FireStationNotFoundException
+	 */
 	@Test
 	public void testgetListPersonsCoveredByFireStation_whenStationNumberNotExist_thenThrowFireStationNotFoundException() {
 		// GIVEN
-		FireStation fireStationNotExist = new FireStation("5", "1509 Culver St");
-		//List<String> listAddressCoveredByFireStationMock = mock(ArrayList.class);
-		/*
-		 * when(mockListFireStation.stream() .filter(fireStation ->
-		 * fireStation.getStation().equalsIgnoreCase(fireStationNotExist.getStation()))
-		 * .map(fireStation -> fireStation.getAddress())
-		 * .collect(Collectors.toList())).thenReturn(listAddressCoveredByFireStationMock
-		 * );
-		 */
-		// when(listAddressCoveredByFireStationMock.size()).thenReturn(0);
+		String station = "5";
+		List<String> listAddress = null;
+		when(fireStationDAOmock.getAddressesCoveredByStationNumber(station)).thenReturn(null);
 		// WHEN
 		// THEN
-		//assertThrows(FireStationNotFoundException.class,
-				//() -> personDTOByStationNumberService.getAddressCoveredByFireStation(fireStationNotExist.getStation()));
+		assertThrows(FireStationNotFoundException.class,
+				() -> personDTOByStationNumberService.getAddressCoveredByFireStation(station));
 	}
-
 }

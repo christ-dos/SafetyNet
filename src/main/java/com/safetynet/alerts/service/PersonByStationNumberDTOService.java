@@ -1,17 +1,16 @@
 package com.safetynet.alerts.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.IFireStationDAO;
 import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
+import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
@@ -22,20 +21,33 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+/**
+ * Class that manage the url firestation?staionNumber
+ * 
+ * @author Christine Duarte
+ *
+ */
 @Service
 @Slf4j
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonByStationNumberDTOService implements IPersonDTOByStationService {
-
+	/**
+	 * An instance of  {@link personDAO}
+	 */
 	@Autowired
 	private IPersonDAO personDAO;
-
+	
+	/**
+	 * An instance of  {@link MedicalRecordDAO}
+	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDAO;
-
+	
+	/**
+	 * An instance of {@link FireStationDAO}
+	 */
 	@Autowired
 	private IFireStationDAO fireStationDAO;
 
@@ -49,11 +61,11 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 	 */
 	@Override
 	public PersonResultEndPointByStationNumberDTO getAddressCoveredByFireStation(String station) {
-		Integer adultCouter = 0;
-		Integer childCounter = 0;
+		int adultCouter = 0;
+		int childCounter = 0;
 		// get addresses covered by fireStation
 		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(station);
-		if (listAddressCoveredByFireStation.size() == 0) {
+		if (listAddressCoveredByFireStation == null) {
 			log.error("Service - FireStation not found with station number : " + station);
 			throw new FireStationNotFoundException("The FireStation number not found");
 		}
@@ -67,16 +79,13 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 		// Incrementer les compteurs enfants et aldutes.
 
 		List<MedicalRecord> listMedicalRecordCoveredByStation = medicalRecordDAO
-				.getListMedicalRecordForAListOfPerson(listPersonCoveredByStation);
-		System.out.println("listMedicalRecordCoveredByStation:"  +  listMedicalRecordCoveredByStation);
+				.getListMedicalRecordByListOfPerson(listPersonCoveredByStation);
 		for (MedicalRecord medicalRecord : listMedicalRecordCoveredByStation) {
-			if (isAdult(medicalRecord.getBirthDate())) {
-				
+			if (isAdult(personDAO.getAge(medicalRecord.getBirthDate()))) {
 				adultCouter++;
 			} else {
 				childCounter++;
 			}
-			System.out.println(medicalRecord.getBirthDate());
 		}
 		List<PersonDTO> listPersonDTO = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
@@ -90,18 +99,12 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 		System.out.println("displayingListPersonsCoveredByStation: " + displayingListPersonsCoveredByStation);
 		return displayingListPersonsCoveredByStation;
 	}
-
-	private boolean isAdult(String birthDate) {
-		long age = 0;
-		Date bithDateParse = null;
-		try {
-			bithDateParse = new SimpleDateFormat("dd/MM/yyyy").parse(birthDate);
-			Date dateNow = new Date();
-			age = dateNow.getYear() - bithDateParse.getYear();
-		} catch (ParseException e) {
-			log.error("Error during parsing", e);
-			e.printStackTrace();
-		}
+	/**
+	 * Method private that determines if person is adult or is child
+	 * @param age - A int with age of person
+	 * @return true if is adult and false if is child
+	 */
+	private boolean isAdult(int age) {
 		if (age > 18) {
 			return true;
 		}
