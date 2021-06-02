@@ -48,7 +48,7 @@ public class PersonByStationNumberDTOControllerTest {
 	 * An instance of {@link MockMvc} that permit simulate a request HTTP
 	 */
 	@Autowired
-	private MockMvc mockMvcPersonByStationNumber;
+	private MockMvc mockMvcPersonByStationNumberDTO;
 	
 	/**
 	 * An instance of {@link PersonByStationNumberDTOService}
@@ -161,7 +161,7 @@ public class PersonByStationNumberDTOControllerTest {
 	/**
 	 * Method that test getAddressCoveredByFireStation when station exist the status of the request is OK
 	 * and the listPersonDTO in index 0 contain a personDTO firstName and lastName is John Boyd, address is "1509 Culver St"
-	 * and a counterAdults with 2 adults
+	 * and a adultsCounter with 2 adults
 	 * 
 	 * @throws Exception
 	 */
@@ -177,7 +177,7 @@ public class PersonByStationNumberDTOControllerTest {
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
 		// WHEN
 		// THEN
-		mockMvcPersonByStationNumber.perform(get("/firestation?station=3")).andExpect(status().isOk())
+		mockMvcPersonByStationNumberDTO.perform(get("/firestation?station=3")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.listPersonDTO[0].firstName", is("John"))).andExpect(jsonPath("$.listPersonDTO[0].lastName", is("Boyd")))
 				.andExpect(jsonPath("$.listPersonDTO[0].address", is("1509 Culver St"))).andExpect(jsonPath("$.listPersonDTO[0].phone", is("841-874-6512")))
 				.andExpect(jsonPath("$.adultsCounter", is(2)))
@@ -185,7 +185,7 @@ public class PersonByStationNumberDTOControllerTest {
 	}
 	
 	/**
-	 * Method that test getAddressCoveredByFireStation the listAddressCoveredByFireStation is null then throw
+	 * Method that test getAddressCoveredByFireStation when the listAddressCoveredByFireStation is null then throw
 	 * {@link FireStationNotFoundException}
 	 * 
 	 * @throws Exception
@@ -199,11 +199,10 @@ public class PersonByStationNumberDTOControllerTest {
 		// WHEN
 
 		// THEN
-		mockMvcPersonByStationNumber.perform(get("/firestation?station=5")).andExpect(status().isNotFound())
+		mockMvcPersonByStationNumberDTO.perform(get("/firestation?station=5")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(result -> assertEquals("The FireStation number not found",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
-
 }

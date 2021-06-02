@@ -42,17 +42,15 @@ public class FireStationTestIT {
 	private MockMvc mockMvcFireStation;
 	
 	/**
-	 * Method that test requestGet when fireStation exist then the status of the request isOk
+	 * Method that test request Get when fireStation exist then the status of the request isOk
 	 * and the address of the fireStation :"951 LoneTree Rd"
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetFireStationExist_whenInputAddress951LoneTreeRd_shouldReturnStatusIsOK() throws Exception {
+	public void testRequestGetFireStationExist_whenInputAddress951LoneTreeRd_thenReturnStatusIsOK() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(get("/firestation/address?address=951 LoneTree Rd"))
 		.andExpect(status().isOk())
@@ -68,11 +66,9 @@ public class FireStationTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetFireStationNotExist_whenInputaddress95FlowerRd_shouldReturnFireStationNotFoundException() throws Exception {
+	public void testRequestGetFireStationNotExist_whenInputaddress95FlowerRd_thenThrowFireStationNotFoundException() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(get("/firestation/address?address=95 Flower Rd"))
 		.andExpect(status().isNotFound())
@@ -92,9 +88,7 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestGetFireStation_whenInputAddressIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(get("/firestation/address?address="))
 		.andExpect(status().isBadRequest())
@@ -116,7 +110,6 @@ public class FireStationTestIT {
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddExist = new FireStation("2", "29 15th St");
 		//WHEN
-		
 		//THEN
 		 mockMvcFireStation.perform(MockMvcRequestBuilders
 				.post("/firestation")
@@ -142,7 +135,6 @@ public class FireStationTestIT {
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddNotExist = new FireStation("5", "25 Blood St");
 		//WHEN
-		
 		//THEN
 		 mockMvcFireStation.perform(MockMvcRequestBuilders
 				.post("/firestation")
@@ -166,7 +158,6 @@ public class FireStationTestIT {
 	public void testRequestDelete_whenFireStationExistWithAddress947ERoseDr_thenReturnMessageSUCCESS() throws Exception {
 		//GIVEN
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(delete("/firestation?address=947 E. Rose Dr"))
 		.andExpect(status().isOk())
@@ -190,9 +181,7 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestDelete_whenFireStationNotExist__thenReturnMessageFireStationCannotBeDeleted() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(delete("/firestation?address=5 Portugal Rd"))
 		.andExpect(status().isOk())
@@ -212,9 +201,7 @@ public class FireStationTestIT {
 		//GIVEN
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStationToUpdateExist = new FireStation("5","892 Downing Ct");
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
 				.put("/firestation")
@@ -239,7 +226,6 @@ public class FireStationTestIT {
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStationToUpdateNotExist = new FireStation("5","89 AltoVallee St");
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
 				.put("/firestation")
@@ -265,7 +251,6 @@ public class FireStationTestIT {
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToUpdateInvalidField = new FireStation("2", "");
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders.put("/firestation")
 				.content(fireStationControllerTest.asJsonString(fireStaionToUpdateInvalidField))

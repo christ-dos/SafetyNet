@@ -100,6 +100,7 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 		return displayingListPersonsCoveredByStation;
 		
 	}
+	
 	/**
 	 * Method private that determines if person is adult or is child
 	 * @param age - A int with age of person
