@@ -55,6 +55,10 @@ public class FireStationDAO implements IFireStationDAO {
 				listAddressesCoveredByStation.add(fireStation.getAddress());
 			}
 		}
+		if(listAddressesCoveredByStation.isEmpty()) {
+			log.debug("DAO - FireStation not found with station number: " + station);
+			return null;
+		}
 		log.debug("DAO - FireStation found with station number: " + station);
 		return listAddressesCoveredByStation;
 	}

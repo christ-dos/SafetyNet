@@ -34,7 +34,7 @@ public class PersonByStationNumberDTOController {
 	 * @return A list of PersonDTO and a counter of adults and childs
 	 */
 	@GetMapping(value = "/firestation")
-	public PersonResultEndPointByStationNumberDTO getListPersonsCoveredByOneStation(@Valid @RequestParam  String station) {
+	public PersonResultEndPointByStationNumberDTO getListPersonsCoveredByStation(@Valid @RequestParam  String station) {
 		log.debug("Controller - Request list person covered by station: " + station);
 		return personDTOByStationService.getAddressCoveredByFireStation(station);
 	}

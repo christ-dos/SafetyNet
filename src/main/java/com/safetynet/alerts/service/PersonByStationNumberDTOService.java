@@ -65,7 +65,7 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 		int childCounter = 0;
 		// get addresses covered by fireStation
 		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(station);
-		if (listAddressCoveredByFireStation == null) {
+		if(listAddressCoveredByFireStation == null) {
 			log.error("Service - FireStation not found with station number : " + station);
 			throw new FireStationNotFoundException("The FireStation number not found");
 		}
@@ -96,8 +96,9 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 		PersonResultEndPointByStationNumberDTO displayingListPersonsCoveredByStation = new PersonResultEndPointByStationNumberDTO(
 				listPersonDTO, adultCouter, childCounter);
 		log.info("Service - List of persons covered by station number: " + station);
-		System.out.println("displayingListPersonsCoveredByStation: " + displayingListPersonsCoveredByStation);
+		
 		return displayingListPersonsCoveredByStation;
+		
 	}
 	/**
 	 * Method private that determines if person is adult or is child

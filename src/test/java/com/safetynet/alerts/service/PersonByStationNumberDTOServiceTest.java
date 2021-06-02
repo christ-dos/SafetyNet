@@ -75,11 +75,12 @@ public class PersonByStationNumberDTOServiceTest {
 	/**
 	 * A mock of the arraysList of String containing Addresses of person covered by Station number
 	 */
+	@Mock
 	private List<String> mockListAddress;
 
 	/**
-	 * Method that create a mocks of the ArrayLists mockListFireStation, mockList,
-	 * mockListMedicalRecord with 4 elements
+	 * Method that create a mocks of the ArrayLists mockListAddress, mockListFireStation, mockList,
+	 * mockListMedicalRecord 
 	 * 
 	 */
 	@BeforeEach
@@ -132,7 +133,7 @@ public class PersonByStationNumberDTOServiceTest {
 	 * when fireStation exits then return a list of address covered by fireSation number
 	 */
 	@Test
-	public void testgetListPersonsCoveredByFireStation_whenNumberFireStationExist_thenReturnListPersonsAdultsAndChilds() {
+	public void testgetListPersonsCoveredByFireStation_whenStationNumberFireStationExist_thenReturnListPersonsAdultsAndChilds() {
 		// GIVEN
 		
 		String stationNumber = "3";
@@ -163,8 +164,7 @@ public class PersonByStationNumberDTOServiceTest {
 	public void testgetListPersonsCoveredByFireStation_whenStationNumberNotExist_thenThrowFireStationNotFoundException() {
 		// GIVEN
 		String station = "5";
-		List<String> listAddress = null;
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber(station)).thenReturn(null);
+		when(fireStationDAOmock.getAddressesCoveredByStationNumber(anyString())).thenReturn(null);
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class,
