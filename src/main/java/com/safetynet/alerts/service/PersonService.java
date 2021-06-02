@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 
 import lombok.AllArgsConstructor;
@@ -40,8 +40,8 @@ public class PersonService implements IPersonService {
 	private IPersonDAO personDAO;
 	
 	
-	@Autowired
-	private IMedicalRecordDAO medicalRecordDAO;
+	//@Autowired
+	//private IMedicalRecordDAO medicalRecordDAO;
 
 	/**
 	 * Method private that get a list of persons
@@ -156,15 +156,16 @@ public class PersonService implements IPersonService {
 	 * @throws CityNotFoundException
 	 */
 	@Override
-	public List<String> getEmailResidents(String city) {
+	public CommunityEmailDTO getEmailResidents(String city) {
 		List<Person> personList = getListPersons();
 		List<String> listEmailResidents = personList.stream().filter(person -> person.getCity().equalsIgnoreCase(city))
 				.map(person -> person.getEmail()).collect(Collectors.toList());
 		if (listEmailResidents.isEmpty()) {
 			log.error("Service - The city requested not found: " + city);
-			throw new CityNotFoundException("The City: " + city + " not found, please try again");
+			throw new CityNotFoundException("The City not found, please try again");
 		}
 		log.info("Service - The list of emails of residents of the city: " + city + " has been requested");
-		return listEmailResidents;
+		CommunityEmailDTO listEmailDTO = new CommunityEmailDTO(listEmailResidents);
+		return listEmailDTO;
 	}
 }

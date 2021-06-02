@@ -1,10 +1,9 @@
 package com.safetynet.alerts.service;
 
-import java.util.List;
-
 import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
+import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 
 /**
@@ -59,5 +58,5 @@ public interface IPersonService {
 	 * @return the list filtered containing the emails
 	 * @throws CityNotFoundException
 	 */
-	public List<String> getEmailResidents(String city);
+	public CommunityEmailDTO getEmailResidents(String city);
 }

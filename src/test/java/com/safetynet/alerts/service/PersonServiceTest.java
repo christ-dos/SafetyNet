@@ -26,6 +26,7 @@ import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 
@@ -100,7 +101,6 @@ public class PersonServiceTest {
 		
 		personServiceTest = PersonService.builder()
 				.personDAO(personDAOMock)
-				.medicalRecordDAO(medicalRecordDAOMock)
 				.build();
 	}
 
@@ -307,13 +307,13 @@ public class PersonServiceTest {
 		String city = "Culver";
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		//WHEN
-		List<String> listEmailResidentsCityCulver = personServiceTest.getEmailResidents(city);
+		CommunityEmailDTO listEmailResidentsCityCulver = personServiceTest.getEmailResidents(city);
 		//THEN
 		// the list obtained contain 4 elements
 		verify(personDAOMock, times(1)).getPersons();
-		assertEquals(4, listEmailResidentsCityCulver.size());
-		assertEquals("jaboyd@email.com", listEmailResidentsCityCulver.get(0));
-		assertEquals("drk@email.com", listEmailResidentsCityCulver.get(3));
+		assertEquals(4, listEmailResidentsCityCulver.getListEmail().size());
+		assertEquals("jaboyd@email.com", listEmailResidentsCityCulver.getListEmail().get(0));
+		assertEquals("drk@email.com", listEmailResidentsCityCulver.getListEmail().get(3));
 	}
 	
 	/**

@@ -1,5 +1,4 @@
 package com.safetynet.alerts.controller;
-
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -30,9 +30,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.PersonService;
 
@@ -315,6 +317,47 @@ public class PersonControllerTest {
 				.andExpect(
 						result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
 				.andExpect(jsonPath("$.errors").isArray()).andExpect(jsonPath("$.errors", hasItem("must not be blank")))
+				.andDo(print());
+	}
+	
+	/**
+	 * Method that test getEmailResident when city input is Culver and  city exist
+	 * then return a list of email
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetEmailResident_whenCityIsCulverAndExist__thenReturnListOfEmails() throws Exception{
+		// GIVEN
+		CommunityEmailDTO listEmail = new CommunityEmailDTO(Arrays.asList("jaboyd@email.com","tenz@email.com", "zarc@email.com"));
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		when(personServiceMock.getEmailResidents(any())).thenReturn(listEmail);
+		// WHEN
+
+		// THEN
+		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.listEmail[0]", is("jaboyd@email.com"))).andExpect(jsonPath("$.listEmail[2]", is("zarc@email.com")))
+				.andDo(print());
+	}
+	
+	/**
+	 * Method that test getEmailResident when city input is Boston and not exist
+	 * throw a {@link CityNotFoundException}
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetEmailResident_whenCityNotExistIsBoston_thenReturnACityNotFoundException()
+			throws Exception {
+		// GIVEN
+		when(personServiceMock.getEmailResidents(anyString()))
+				.thenThrow(new CityNotFoundException("The city not found, please try again"));
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/communityEmail?city=Boston")).andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.message", is("The city not found, please try again")))
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof CityNotFoundException))
+				.andExpect(result -> assertEquals("The city not found, please try again", result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 }
