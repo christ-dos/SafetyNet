@@ -162,15 +162,6 @@ public class PersonServiceTest {
 		assertThrows(EmptyFieldsException.class, () -> personServiceTest.getPerson(firstName, lastName));
 	}
 	
-	@Test
-	public void testGetPersonInfo_whenInputFirstNameandLastName_thenReturnListWithNameAndAddressAndEmailAndMedicalRecords() {
-		//GIVEN
-		String firstName = "John";
-		String lastName = "Boyd";
-		//WHEN
-		//List<Object> resultListInfoPerson = PersonServiceTest.getInfoPerson(firstName, lastName);
-		//THEN
-	}
 	/**
 	 * Method that test addPerson when person to add not exist then return the
 	 * person saved and verify if the method savePerson was called

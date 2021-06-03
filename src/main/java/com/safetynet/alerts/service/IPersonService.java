@@ -59,4 +59,5 @@ public interface IPersonService {
 	 * @throws CityNotFoundException
 	 */
 	public CommunityEmailDTO getEmailResidents(String city);
+	
 }

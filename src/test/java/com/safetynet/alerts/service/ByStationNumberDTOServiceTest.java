@@ -20,10 +20,11 @@ import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.ListPersonByStationNumberDTO;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.model.PersonDTO;
-import com.safetynet.alerts.model.PersonResultEndPointByStationNumberDTO;
+import com.safetynet.alerts.model.PhoneAlertDTO;
 
 /**
  * Class that test the PersonDTOByStationNumberServiceTest class
@@ -32,9 +33,9 @@ import com.safetynet.alerts.model.PersonResultEndPointByStationNumberDTO;
  *
  */
 @ExtendWith(MockitoExtension.class)
-public class PersonByStationNumberDTOServiceTest {
+public class ByStationNumberDTOServiceTest {
 
-	private PersonByStationNumberDTOService personDTOByStationNumberService;
+	private ByStationNumberDTOService byStationNumberDTOService;
 
 	/**
 	 * A mock of {@link PersonDAO}
@@ -122,7 +123,7 @@ public class PersonByStationNumberDTOServiceTest {
 		mockListMedicalRecord.add(indexMRecord1);
 		mockListMedicalRecord.add(indexMRecord2);
 
-		personDTOByStationNumberService = PersonByStationNumberDTOService.builder()
+		byStationNumberDTOService = ByStationNumberDTOService.builder()
 				.fireStationDAO(fireStationDAOmock)
 				.personDAO(personDAOMock)
 				.medicalRecordDAO(medicalRecordDAOMock)
@@ -144,7 +145,7 @@ public class PersonByStationNumberDTOServiceTest {
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
 		when(personDAOMock.getAge(anyString())).thenReturn(37, 9, 41);
 		// WHEN
-		PersonResultEndPointByStationNumberDTO PersonsCovededByStationThree = personDTOByStationNumberService
+		ListPersonByStationNumberDTO PersonsCovededByStationThree = byStationNumberDTOService
 				.getAddressCoveredByFireStation(stationNumber);
 		// THEN
 		// verify that the list contained 3 elements of personDTO
@@ -168,6 +169,45 @@ public class PersonByStationNumberDTOServiceTest {
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class,
-				() -> personDTOByStationNumberService.getAddressCoveredByFireStation(station));
+				() -> byStationNumberDTOService.getAddressCoveredByFireStation(station));
+	}
+	
+	/**
+	 * Method that test getPhoneAlertResidentsCoveredByStation
+	 * when fireStation exits then return a list of address covered by fireSation number
+	 */
+	@Test
+	public void testgetPhoneAlertResidentsCoveredByStation_whenStationNumberFireStationExist_thenReturnListOfPhoneOfPersonCoveredByStation() {
+		// GIVEN
+		
+		String fireStation = "3";
+		PersonDTO expectedJohnBoyd = new PersonDTO("John", "Boyd", "1509 Culver St", "841-874-6512");
+		PersonDTO expectedFoster = new PersonDTO("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		when(fireStationDAOmock.getAddressesCoveredByStationNumber(fireStation)).thenReturn(mockListAddress);
+		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
+		// WHEN
+		PhoneAlertDTO phoneAlertPersonCovededByStationThree = byStationNumberDTOService
+				.getPhoneAlertResidentsCoveredByStation(fireStation);
+		// THEN
+		// verify that the list contained 3 elements of personDTO
+		assertEquals(3, phoneAlertPersonCovededByStationThree.getListPhoneAlert().size());
+		//verify the list contain in index 0 John Boyd
+		assertEquals(expectedJohnBoyd.getPhone(), phoneAlertPersonCovededByStationThree.getListPhoneAlert().get(0));
+		assertEquals(expectedFoster.getPhone(), phoneAlertPersonCovededByStationThree.getListPhoneAlert().get(2));
+	}
+	/**
+	 * Method that test getPhoneAlertResidentsCoveredByStation
+	 * when station number is five and not exist
+	 * then throw a FireStationNotFoundException
+	 */
+	@Test
+	public void testgetPhoneAlertResidentsCoveredByStation_whenStationNumberNotExist_thenThrowFireStationNotFoundException() {
+		// GIVEN
+		String fireStation = "5";
+		when(fireStationDAOmock.getAddressesCoveredByStationNumber(anyString())).thenReturn(null);
+		// WHEN
+		// THEN
+		assertThrows(FireStationNotFoundException.class,
+				() -> byStationNumberDTOService.getPhoneAlertResidentsCoveredByStation(fireStation));
 	}
 }

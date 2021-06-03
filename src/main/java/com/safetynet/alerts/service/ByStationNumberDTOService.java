@@ -2,6 +2,7 @@ package com.safetynet.alerts.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,11 @@ import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
+import com.safetynet.alerts.model.ListPersonByStationNumberDTO;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.model.PersonDTO;
-import com.safetynet.alerts.model.PersonResultEndPointByStationNumberDTO;
+import com.safetynet.alerts.model.PhoneAlertDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonByStationNumberDTOService implements IPersonDTOByStationService {
+public class ByStationNumberDTOService implements IByStationNumberDTOService {
 	/**
 	 * An instance of  {@link personDAO}
 	 */
@@ -51,6 +53,28 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 	@Autowired
 	private IFireStationDAO fireStationDAO;
 
+	
+	/**
+	 * Method that filters the list of persons to get phone number covered by a station number
+	 * 
+	 * @param station - The station for which we want obtained the phones
+	 * @return the list filtered containing the phones
+	 */
+	@Override
+	public PhoneAlertDTO getPhoneAlertResidentsCoveredByStation(String fireStation) {
+		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(fireStation);
+		if(listAddressCoveredByFireStation == null) {
+			log.error("Service - FireStation not found with station number : " + fireStation);
+			throw new FireStationNotFoundException("The FireStation number not found");
+		}
+		// collect persons by the list of addresses covered by station
+		List<Person> listPersonCoveredByStation = personDAO.getPersonsByListAdresses(listAddressCoveredByFireStation);
+		List<String> listPhoneResidents = listPersonCoveredByStation.stream()
+				.map(person -> person.getPhone()).collect(Collectors.toList());
+		log.info("Service - The list of phone of residents by the station number : " + fireStation + " has been requested");
+		PhoneAlertDTO listPhoneDTO = new PhoneAlertDTO(listPhoneResidents);
+		return listPhoneDTO;
+	}
 	/**
 	 * Method that get the list of persons covered by station number and displaying
 	 * a counter for adults and for childs
@@ -60,7 +84,7 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 	 *         adult
 	 */
 	@Override
-	public PersonResultEndPointByStationNumberDTO getAddressCoveredByFireStation(String station) {
+	public ListPersonByStationNumberDTO getAddressCoveredByFireStation(String station) {
 		int adultCouter = 0;
 		int childCounter = 0;
 		// get addresses covered by fireStation
@@ -93,10 +117,9 @@ public class PersonByStationNumberDTOService implements IPersonDTOByStationServi
 					person.getPhone());
 			listPersonDTO.add(personDTO);
 		}
-		PersonResultEndPointByStationNumberDTO displayingListPersonsCoveredByStation = new PersonResultEndPointByStationNumberDTO(
+		ListPersonByStationNumberDTO displayingListPersonsCoveredByStation = new ListPersonByStationNumberDTO(
 				listPersonDTO, adultCouter, childCounter);
 		log.info("Service - List of persons covered by station number: " + station);
-		
 		return displayingListPersonsCoveredByStation;
 		
 	}
