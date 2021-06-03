@@ -107,7 +107,7 @@ public class FireStationControllerTest {
 		// WHEN
 
 		// THEN
-		mockMvcFireStation.perform(get("/firestation?address=1509 Culver St")).andExpect(status().isOk())
+		mockMvcFireStation.perform(get("/firestation/address?address=1509 Culver St")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.address", is("1509 Culver St"))).andExpect(jsonPath("$.station", is("3")))
 				.andDo(print());
 	}
@@ -126,7 +126,7 @@ public class FireStationControllerTest {
 		// WHEN
 
 		// THEN
-		mockMvcFireStation.perform(get("/firestation?address=15 Flower St")).andExpect(status().isNotFound())
+		mockMvcFireStation.perform(get("/firestation/address?address=15 Flower St")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(
 						result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))
@@ -147,7 +147,7 @@ public class FireStationControllerTest {
 		// WHEN
 
 		// THEN
-		mockMvcFireStation.perform(get("/firestation?address=")).andExpect(status().isBadRequest())
+		mockMvcFireStation.perform(get("/firestation/address?address=")).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.message", is("Field cannot be empty")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
 				.andExpect(result -> assertEquals("Field cannot be empty", result.getResolvedException().getMessage()))
@@ -226,7 +226,7 @@ public class FireStationControllerTest {
 	}
 
 	/**
-	 * Method that test updatePerson when fireStaion not exist then throw
+	 * Method that test updateFireStation when fireStaion not exist then throw
 	 * {@link FireStationNotFoundException}
 	 *
 	 * @throws Exception
@@ -246,7 +246,7 @@ public class FireStationControllerTest {
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToAddNotExist))
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("The FireStation not found")))
+				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(
 						result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))

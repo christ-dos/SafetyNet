@@ -4,7 +4,9 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * A class that models a fireStation Object
@@ -13,13 +15,9 @@ import lombok.Data;
  *
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FireStation {
-	/**
-	 * A String that contain the address of the fireStation
-	 */
-	@NotBlank
-	@JsonProperty("address")
-	private String address;
 
 	/**
 	 * A String that contain the station number of the fireStation
@@ -27,20 +25,11 @@ public class FireStation {
 	@NotBlank
 	@JsonProperty("station")
 	private String station;
-
+	
 	/**
-	 * A constructor of the class FireStation with all parameters
+	 * A String that contain the address of the fireStation
 	 */
-	public FireStation(@NotBlank String station, @NotBlank String address) {
-		super();
-		this.station = station;
-		this.address = address;
-	}
-
-	/**
-	 * A constructor of the class FireStation without parameter
-	 */
-	public FireStation() {
-		super();
-	}
+	@NotBlank
+	@JsonProperty("address")
+	private String address;
 }

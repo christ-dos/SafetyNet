@@ -3,6 +3,7 @@ package com.safetynet.alerts.DAO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,47 @@ public class PersonDAOTest {
 		assertEquals(personJohnBoyd, resultListgetted.get(0));
 		assertEquals(3, resultListgetted.size());
 	}
-
+	
+	/**
+	 * Method that test getAge for a birthdate 09/17/1974 
+	 * then return 46 years
+	 */
+	@Test
+	public void testGetAge_whenbithDateIsAString_thenReturnAge() {
+		//GIVEN
+		String birthDate = "09/17/1974";
+		//WHEN
+		int resultAge = personDAOTest.getAge(birthDate);
+		//THEN
+		assertEquals(46, resultAge);
+	}
+	
+	/**
+	 * Method that test getAge when the birthdate is empty
+	 * then throw an IllegalArgumentException
+	 */
+	@Test
+	public void testGetAge_whenbithDateIsEmpty_thenThrowAnIllegalArgumentException() {
+		//GIVEN
+		String birthDate = "";
+		//WHEN
+		//THEN
+		assertThrows(IllegalArgumentException.class, ()-> personDAOTest.getAge(birthDate));
+	}
+	/**
+	 * Method that test getAge when the birthdate is after date actual
+	 * then return -1
+	 */
+	@Test
+	public void testGetAge_whenBirthDateIsAfterDateActual_thenReturnZero() {
+		//GIVEN
+		String birthDate = "01/25/2050";
+		//WHEN
+		int resultAge = personDAOTest.getAge(birthDate);
+		//THEN
+		assertEquals(-1, resultAge);
+	}
+	
 	/**
 	 * Method that test getPersonDAO with firstName Lily and LastName Cooper when
 	 * person exist then return Lily Cooper
@@ -90,6 +131,7 @@ public class PersonDAOTest {
 		assertEquals("Cooper", getPersonResult.getLastName());
 		assertEquals(mockList.get(1), getPersonResult);
 	}
+	
 
 	/**
 	 * Method that test getPersonDAO with firstName Toto and LastName Zero when
@@ -103,6 +145,38 @@ public class PersonDAOTest {
 		String lastName = "Zero";
 		// WHEN
 		Person getPersonResult = personDAOTest.getPerson(firstName, lastName);
+		// THEN
+		assertNull(getPersonResult);
+	}
+	
+	/**
+	 * Method that test getPersonDAO with address "489 Manchester St"
+	 * when address exist then return Lily Cooper
+	 * 
+	 */
+	@Test
+	public void testGetPersonDAOByAddress_whenAdressExistInArray_resultShouldReturnLilyCooper() {
+		// GIVEN
+		String address = "489 Manchester St";
+		// WHEN
+		Person getPersonResult = personDAOTest.getPersonByAddress(address);
+		// THEN
+		assertEquals("Lily", getPersonResult.getFirstName());
+		assertEquals("Cooper", getPersonResult.getLastName());
+		assertEquals(mockList.get(1), getPersonResult);
+	}
+	
+	/**
+	 * Method that test getPersonDAOByAddress with address "25 wall St" when
+	 * address not exist then return null
+	 * 
+	 */
+	@Test
+	public void testGetPersonDAOByAddress_whenAddressNotExist_resultShouldReturnNull() {
+		// GIVEN
+		String address = "25 wall St";
+		// WHEN
+		Person getPersonResult = personDAOTest.getPersonByAddress(address);
 		// THEN
 		assertNull(getPersonResult);
 	}
@@ -130,7 +204,7 @@ public class PersonDAOTest {
 	}
 
 	/**
-	 * Method that test savePersonDAO when person exist in array then person Lily
+	 * Method that test savePersonDAO when person exist in arrayList then person Lily
 	 * Cooper is saved at the index one and verify that the address modified is
 	 * saved in arrayList
 	 */
@@ -152,16 +226,15 @@ public class PersonDAOTest {
 		assertEquals(indexLilyCooper, indexPersonSavedWithAddressModified);
 		// verify that new address was saved in Object Lily Cooper
 		assertEquals(personToSaveWithAddressModified.getAddress(), result.getAddress());
-
 	}
 
 	/**
-	 * Method that test deletePersonDAO when person exist in array then return a
+	 * Method that test deletePersonDAO when person exist in arrayList then return a
 	 * String with "SUCCESS" when the person Tenley Boyd is deleted with success and
 	 * verify that the arrayList contain 2 elements after the deletion
 	 */
 	@Test
-	public void testDeletePersonDAO_whenCallMethodGetWithTenleyBoyd_resultShouldReturnMessageSUCCESS() {
+	public void testDeletePersonDAO_whenPersonTenleyBoydExist_resultShouldReturnMessageSUCCESS() {
 		// GIVEN
 		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
@@ -171,7 +244,7 @@ public class PersonDAOTest {
 		String result = personDAOTest.delete(personTest);
 		Person resultCallGetPersonAfterDelete = personDAOTest.getPerson(firstName, lastName);
 		// THEN
-		// verify that person Tenley Boyd not exist in Array
+		// verify that person Tenley Boyd not exist in ArrayList
 		assertNull(resultCallGetPersonAfterDelete);
 		assertEquals("SUCCESS", result);
 		assertEquals(2, mockList.size());

@@ -1,5 +1,6 @@
 package com.safetynet.alerts.DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.alerts.model.FireStation;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -20,22 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class FireStationDAO implements IFireStationDAO {
 	/**
 	 * attribute that contain the list of fireStations that provide from data.json
 	 */
 	@Autowired
 	private List<FireStation> listFireStations;
-
-	/**
-	 * Constructor with the parameter listFireStations
-	 * 
-	 * @param listFireStations - an ArrayList with the list of fireStations
-	 */
-	public FireStationDAO(List<FireStation> listFireStations) {
-		super();
-		this.listFireStations = listFireStations;
-	}
 
 	/**
 	 * Method that get the list of fireStations
@@ -45,6 +40,27 @@ public class FireStationDAO implements IFireStationDAO {
 	@Override
 	public List<FireStation> getFireStations() {
 		return listFireStations;
+	}
+	
+	/**
+	 * Method that get the list of addresses covered by Station number input
+	 * 
+	 * @return an ArrayList of String containing addresses covered by station
+	 */
+	@Override
+	public List<String> getAddressesCoveredByStationNumber(String station) {
+		List<String> listAddressesCoveredByStation = new ArrayList<>();
+		for (FireStation fireStation : listFireStations) {
+			if(fireStation.getStation().equals(station)) {
+				listAddressesCoveredByStation.add(fireStation.getAddress());
+			}
+		}
+		if(listAddressesCoveredByStation.isEmpty()) {
+			log.debug("DAO - FireStation not found with station number: " + station);
+			return null;
+		}
+		log.debug("DAO - FireStation found with station number: " + station);
+		return listAddressesCoveredByStation;
 	}
 
 	/**
@@ -65,7 +81,7 @@ public class FireStationDAO implements IFireStationDAO {
 		log.error("DAO FireStation not found with address: " + address);
 		return null;
 	}
-
+	
 	/**
 	 * Method that save a FireStation in the ArrayList
 	 * 

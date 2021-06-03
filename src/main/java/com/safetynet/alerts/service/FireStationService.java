@@ -12,7 +12,9 @@ import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class FireStationService implements IFireStationService {
 	/**
 	 * An instance of {@link FireStationDAO}
@@ -32,23 +36,8 @@ public class FireStationService implements IFireStationService {
 	 */
 	@Autowired
 	private IFireStationDAO fireStationDAO;
-
-	/**
-	 * Constructor of FireStationService without parameter
-	 */
-	public FireStationService() {
-		super();
-	}
-
-	/**
-	 * Constructor of FireStationService with as parameter an instance of
-	 * {@link FireStationDAO}
-	 */
-	public FireStationService(IFireStationDAO fireStationDAO) {
-		super();
-		this.fireStationDAO = fireStationDAO;
-	}
-
+	
+	
 	/**
 	 * Method private that get a list of fireStations
 	 * 
@@ -67,7 +56,7 @@ public class FireStationService implements IFireStationService {
 	 * @throws FireStationNotFoundException when fireStation is not found
 	 */
 	@Override
-	public FireStation getFireStation(String address) throws EmptyFieldsException {
+	public FireStation getFireStation(String address){
 		if (address.isEmpty()) {
 			log.error("Service - field can not be empty");
 			throw new EmptyFieldsException("Field cannot be empty");
@@ -81,7 +70,8 @@ public class FireStationService implements IFireStationService {
 				+ fireStationgetted.getStation());
 		return fireStationgetted;
 	}
-
+	
+	
 	/**
 	 * Method that add a fireStation
 	 * 
@@ -94,6 +84,7 @@ public class FireStationService implements IFireStationService {
 	public FireStation addFireStation(FireStation fireStation) {
 		List<FireStation> listFireStations = getListFireStations();
 		int indexPosition = listFireStations.indexOf(fireStation);
+		//fireStation already exist
 		if (indexPosition >= 0) {
 			log.error("Service - FireStation cannot be saved :address: " + fireStation.getAddress() + ", Station: "
 					+ fireStation.getStation() + " already exist");

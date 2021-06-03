@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import com.safetynet.alerts.controller.PersonControllerTest;
+import com.safetynet.alerts.controller.FireStationControllerTest;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.FireStationAlreadyExistException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
@@ -42,19 +42,17 @@ public class FireStationTestIT {
 	private MockMvc mockMvcFireStation;
 	
 	/**
-	 * Method that test requestGet when fireStation exist then the status of the request isOk
+	 * Method that test request Get when fireStation exist then the status of the request isOk
 	 * and the address of the fireStation :"951 LoneTree Rd"
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetFireStationExist_whenInputAddress951LoneTreeRd_shouldReturnStatusIsOK() throws Exception {
+	public void testRequestGetFireStationExist_whenInputAddress951LoneTreeRd_thenReturnStatusIsOK() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
-		mockMvcFireStation.perform(get("/firestation?address=951 LoneTree Rd"))
+		mockMvcFireStation.perform(get("/firestation/address?address=951 LoneTree Rd"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.address", is("951 LoneTree Rd")))
 		.andExpect(jsonPath("$.station", is("2")))
@@ -68,15 +66,13 @@ public class FireStationTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetFireStationNotExist_whenInputaddress95FlowerRd_shouldReturnFireStationNotFoundException() throws Exception {
+	public void testRequestGetFireStationNotExist_whenInputaddress95FlowerRd_thenThrowFireStationNotFoundException() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
-		mockMvcFireStation.perform(get("/firestation?address=95 Flower Rd"))
+		mockMvcFireStation.perform(get("/firestation/address?address=95 Flower Rd"))
 		.andExpect(status().isNotFound())
-		.andExpect(jsonPath("$.message", is("The FireStation not found")))
+		.andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 	    .andExpect(result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))
 		.andDo(print());
@@ -92,11 +88,9 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestGetFireStation_whenInputAddressIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
-		mockMvcFireStation.perform(get("/firestation?address="))
+		mockMvcFireStation.perform(get("/firestation/address?address="))
 		.andExpect(status().isBadRequest())
 		.andExpect(jsonPath("$.message", is("Field cannot be empty")))
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
@@ -113,18 +107,17 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestPost_whenFireStationAlreadyExist_shouldThrowFireStationAlreadyExistException() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddExist = new FireStation("2", "29 15th St");
 		//WHEN
-		
 		//THEN
 		 mockMvcFireStation.perform(MockMvcRequestBuilders
 				.post("/firestation")
-				.content(personControllerTest.asJsonString(fireStaionToAddExist))
+				.content(fireStationControllerTest.asJsonString(fireStaionToAddExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.message", is("The FireStation that we try to save already Exist")))
+				.andExpect(jsonPath("$.message", is("The FireStation that we try to save already exist, please proceed to an update")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationAlreadyExistException))
 			    .andExpect(result -> assertEquals("The FireStation that we try to save already Exist", result.getResolvedException().getMessage()))
 				.andDo(print());
@@ -139,14 +132,13 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestPost_whenFireStationNotExist_shouldSaveFireStation() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddNotExist = new FireStation("5", "25 Blood St");
 		//WHEN
-		
 		//THEN
 		 mockMvcFireStation.perform(MockMvcRequestBuilders
 				.post("/firestation")
-				.content(personControllerTest.asJsonString(fireStaionToAddNotExist))
+				.content(fireStationControllerTest.asJsonString(fireStaionToAddNotExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -166,14 +158,13 @@ public class FireStationTestIT {
 	public void testRequestDelete_whenFireStationExistWithAddress947ERoseDr_thenReturnMessageSUCCESS() throws Exception {
 		//GIVEN
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(delete("/firestation?address=947 E. Rose Dr"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$", is("SUCCESS")))
 		.andDo(print());
 		
-		mockMvcFireStation.perform(get("/firestation?address=947 E. Rose Dr"))
+		mockMvcFireStation.perform(get("/firestationAddress?address=947 E. Rose Dr"))
 		.andExpect(status().isNotFound())
 		.andExpect(jsonPath("$.address").doesNotExist())
 		.andExpect(jsonPath("$.station").doesNotExist())
@@ -190,9 +181,7 @@ public class FireStationTestIT {
 	@Test
 	public void testRequestDelete_whenFireStationNotExist__thenReturnMessageFireStationCannotBeDeleted() throws Exception {
 		//GIVEN
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(delete("/firestation?address=5 Portugal Rd"))
 		.andExpect(status().isOk())
@@ -210,15 +199,13 @@ public class FireStationTestIT {
 	@Test
 	public void testRequetePut_whenTheFireStationExistAndfieldStationIsUpdated_thenVerifyThatFieldStationUpadtedWithFive() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStationToUpdateExist = new FireStation("5","892 Downing Ct");
-		
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
 				.put("/firestation")
-				.content(personControllerTest.asJsonString(fireStationToUpdateExist))
+				.content(fireStationControllerTest.asJsonString(fireStationToUpdateExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -236,18 +223,17 @@ public class FireStationTestIT {
 	@Test
 	public void testRequetePut_whenFireStationToUpdateNotExist_thenThrowFireStationNotFoundException() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStationToUpdateNotExist = new FireStation("5","89 AltoVallee St");
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
 				.put("/firestation")
-				.content(personControllerTest.asJsonString(fireStationToUpdateNotExist))
+				.content(fireStationControllerTest.asJsonString(fireStationToUpdateNotExist))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.message", is("The FireStation not found")))
+				.andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 			    .andExpect(result -> assertEquals("FireStation not found" , result.getResolvedException().getMessage()))
 				.andDo(print());
@@ -262,13 +248,12 @@ public class FireStationTestIT {
 	@Test
 	public void testRequetePut_whenInputFieldIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank() throws Exception {
 		//GIVEN
-		PersonControllerTest personControllerTest = new PersonControllerTest();
+		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToUpdateInvalidField = new FireStation("2", "");
 		//WHEN
-		
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders.put("/firestation")
-				.content(personControllerTest.asJsonString(fireStaionToUpdateInvalidField))
+				.content(fireStationControllerTest.asJsonString(fireStaionToUpdateInvalidField))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))

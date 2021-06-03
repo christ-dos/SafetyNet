@@ -1,5 +1,4 @@
 package com.safetynet.alerts.controller;
-
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -30,9 +30,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.PersonService;
 
@@ -95,7 +97,7 @@ public class PersonControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetPerson_whenPersonExist_thenReturnStatusOk() throws Exception {
+	public void testGetPerson_whenPersonExist_thenReturnStatusOk() throws Exception{
 		// GIVEN
 		Person personTest = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -119,13 +121,13 @@ public class PersonControllerTest {
 	public void testGetPerson_whenPersonNotexist_thenReturnPersonNotFoundException() throws Exception {
 		// GIVEN
 		when(personServiceMock.getPerson(anyString(), anyString()))
-				.thenThrow(new PersonNotFoundException("Service - Person not found exception"));
+				.thenThrow(new PersonNotFoundException("Person not found exception"));
 		// WHEN
 
 		// THEN
 		mockMvc.perform(get("/person?firstName=Lilly&lastName=Saguet")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
-				.andExpect(result -> assertEquals("Service - Person not found exception",
+				.andExpect(result -> assertEquals("Person not found exception",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
@@ -210,8 +212,8 @@ public class PersonControllerTest {
 		// GIVEN
 		when(personDAOMock.delete(any())).thenReturn("SUCESS");
 		when(personServiceMock.deletePerson(any(), any())).thenReturn("SUCCESS");
-
 		// WHEN
+		
 		// THEN
 		mockMvc.perform(delete("/person?firstName=john&lastName=Boyd")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", is("SUCCESS"))).andDo(print());
@@ -227,8 +229,8 @@ public class PersonControllerTest {
 	public void testDeletePerson_whenPersonNotExist_shouldReturnAStringWithPersonNotDeleted() throws Exception {
 		// GIVEN
 		when(personServiceMock.deletePerson(any(), any())).thenReturn("Person not deleted");
-
 		// WHEN
+		
 		// THEN
 		mockMvc.perform(delete("/person?firstName=jo&lastName=Lapin")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", is("Person not deleted"))).andDo(print());
@@ -283,7 +285,7 @@ public class PersonControllerTest {
 		// THEN
 		mockMvc.perform(MockMvcRequestBuilders.put("/person").content(asJsonString(personToUpdateButNotExist))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("Person not found")))
+				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("Person not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 				.andExpect(
 						result -> assertEquals(
@@ -315,6 +317,47 @@ public class PersonControllerTest {
 				.andExpect(
 						result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
 				.andExpect(jsonPath("$.errors").isArray()).andExpect(jsonPath("$.errors", hasItem("must not be blank")))
+				.andDo(print());
+	}
+	
+	/**
+	 * Method that test getEmailResident when city input is Culver and  city exist
+	 * then return a list of email
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetEmailResident_whenCityIsCulverAndExist__thenReturnListOfEmails() throws Exception{
+		// GIVEN
+		CommunityEmailDTO listEmail = new CommunityEmailDTO(Arrays.asList("jaboyd@email.com","tenz@email.com", "zarc@email.com"));
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		when(personServiceMock.getEmailResidents(any())).thenReturn(listEmail);
+		// WHEN
+
+		// THEN
+		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.listEmail[0]", is("jaboyd@email.com"))).andExpect(jsonPath("$.listEmail[2]", is("zarc@email.com")))
+				.andDo(print());
+	}
+	
+	/**
+	 * Method that test getEmailResident when city input is Boston and not exist
+	 * throw a {@link CityNotFoundException}
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetEmailResident_whenCityNotExistIsBoston_thenReturnACityNotFoundException()
+			throws Exception {
+		// GIVEN
+		when(personServiceMock.getEmailResidents(anyString()))
+				.thenThrow(new CityNotFoundException("The city not found, please try again"));
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/communityEmail?city=Boston")).andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.message", is("The city not found, please try again")))
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof CityNotFoundException))
+				.andExpect(result -> assertEquals("The city not found, please try again", result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
 }

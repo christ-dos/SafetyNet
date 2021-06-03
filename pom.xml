@@ -48,7 +48,13 @@
 		    <version>2.0.0</version>
 		    <scope>test</scope>
 		</dependency>
-		<!-- dependency  powerMockito  -->
+		<!--*************** Dependency of Joda-time********************* -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10</version>
+		</dependency>
+		<!--****************** Dependency  powerMockito **************** -->
 		<dependency>
 		    <groupId>org.powermock</groupId>
 		    <artifactId>powermock-api-mockito2</artifactId>

@@ -17,6 +17,13 @@ public interface IPersonDAO {
 	 * @return an ArrayList of Persons
 	 */
 	public List<Person> getPersons();
+	
+	/**
+	 * Method that get the list of person by a list of addresses 
+	 * 
+	 * @return An ArrayList of Persons with address provided in parameter
+	 */
+	public List<Person> getPersonsByListAdresses(List<String> listAddress);
 
 	/**
 	 * Method that get a person by combining keys firstName and lastName
@@ -26,6 +33,22 @@ public interface IPersonDAO {
 	 * @return an instance of Person
 	 */
 	public Person getPerson(String firstName, String lastName);
+	
+	/**
+	 * Method that get a person by address
+	 * 
+	 * @param address - A string containing address of person
+	 * @return A Person
+	 */
+	public Person getPersonByAddress(String address);
+	
+	/**
+	 * Method that get age by birthDate 
+	 * 
+	 * @param birthDate - A string containing the birthDate
+	 * @return The value of age
+	 */
+	public int getAge(String birthDate);
 
 	/**
 	 * Method that save a Person in the ArrayList

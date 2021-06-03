@@ -47,9 +47,11 @@ public class FireStationDAOTest {
 		FireStation fireStationIndex0 = new FireStation("3", "1509 Culver St");
 		FireStation fireStationIndex1 = new FireStation("2", "29 15th St");
 		FireStation fireStationIndex2 = new FireStation("3", "834 Binoc Ave");
+		FireStation fireStationIndex3 = new FireStation("3", "748 Townings Dr");
 		mockListFireStation.add(fireStationIndex0);
 		mockListFireStation.add(fireStationIndex1);
 		mockListFireStation.add(fireStationIndex2);
+		mockListFireStation.add(fireStationIndex3);
 
 		fireStationDAOTest = FireStationDAO.builder().listFireStations(mockListFireStation).build();
 	}
@@ -62,14 +64,26 @@ public class FireStationDAOTest {
 	@Test
 	public void testGetDAOListFireStations_thenReturnListWithThreeElements() {
 		// GIVEN
-		FireStation fireStationIndex1 = new FireStation("2", "29 15th St");
+		FireStation fireStationTest = new FireStation("2", "29 15th St");
 		// WHEN
 		List<FireStation> resultListFireStations = fireStationDAOTest.getFireStations();
 		// THEN
-		assertEquals(3, resultListFireStations.size());
+		assertEquals(4, resultListFireStations.size());
 		// verify that the station in index 1 in the list is equal to fireStationindex1
-		assertEquals(fireStationIndex1, resultListFireStations.get(1));
+		assertEquals(fireStationTest, resultListFireStations.get(1));
 
+	}
+	
+	@Test
+	public void testGetListAddressesCoveredByStationDAO_thenReturnListWithAddresseswithThreeElements() {
+		// GIVEN
+		String fireStationNumber = "3";
+		// WHEN
+		List<String> resultListAddressesFireStations = fireStationDAOTest.getAddressesCoveredByStationNumber(fireStationNumber);
+		// THEN
+		assertEquals(3, resultListAddressesFireStations.size());
+		// verify that the station in index 1 in the list is equal to resultListAddressesFireStations index 1
+		assertEquals("1509 Culver St", resultListAddressesFireStations.get(0));
 	}
 
 	/**
@@ -78,7 +92,7 @@ public class FireStationDAOTest {
 	 * 
 	 */
 	@Test
-	public void testGetDAOFireStation_whenStationExistInArray_thenReturnTheStation() {
+	public void testGetDAOFireStation_whenAddressExistInArray_thenReturnTheStation() {
 		// GIVEN
 		String address = "1509 Culver St";
 		// WHEN
@@ -96,7 +110,7 @@ public class FireStationDAOTest {
 	 * 
 	 */
 	@Test
-	public void testGetDAOFireStation_whenStationNotExistInArray_thenReturnNull() {
+	public void testGetDAOFireStation_whenAddressNotExistInArray_thenReturnNull() {
 		// GIVEN
 		String address = "1509 rue des Ursulines";
 		// WHEN
@@ -123,8 +137,8 @@ public class FireStationDAOTest {
 				indexFireStationToSave);
 		// THEN
 		assertEquals(fireStationToSaveWithStationModified, resultFireStationSavedThatExist);
-		// after saved the list contain already 3 elements
-		assertEquals(3, mockListFireStation.size());
+		// after saved the list contain already 4 elements
+		assertEquals(4, mockListFireStation.size());
 		assertEquals("5", resultFireStationSavedThatExist.getStation());
 		// the fireStation that already exist was saved at the index one
 		assertEquals(1, mockListFireStation.indexOf(resultFireStationSavedThatExist));
@@ -146,11 +160,11 @@ public class FireStationDAOTest {
 				indexFireStation);
 		// THEN
 		assertEquals(fireStationToSaveNotExist, resultFireStationSavedNotExist);
-		// verify that the list of fireStations contain 4 elements after called of the
+		// verify that the list of fireStations contain 5 elements after called of the
 		// method save
-		assertEquals(4, mockListFireStation.size());
+		assertEquals(5, mockListFireStation.size());
 		// verify that the fireStation was saved at the end of the Array
-		assertEquals(3, mockListFireStation.indexOf(resultFireStationSavedNotExist));
+		assertEquals(4, mockListFireStation.indexOf(resultFireStationSavedNotExist));
 	}
 
 	/**
@@ -168,7 +182,7 @@ public class FireStationDAOTest {
 		// THEN
 		assertEquals("SUCCESS", resultMessageAfterDeletion);
 		// verify that after deletion the list contain 2 elements
-		assertEquals(2, mockListFireStation.size());
+		assertEquals(3, mockListFireStation.size());
 	}
 
 }

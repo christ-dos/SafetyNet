@@ -44,5 +44,6 @@ public interface IFireStationService {
 	 * @return the fireStation updated
 	 */
 	public FireStation updateFireStation(FireStation fireStation);
-
+	
+	
 }
