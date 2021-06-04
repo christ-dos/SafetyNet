@@ -71,7 +71,6 @@ public class FireStationService implements IFireStationService {
 		return fireStationgetted;
 	}
 	
-	
 	/**
 	 * Method that add a fireStation
 	 * 

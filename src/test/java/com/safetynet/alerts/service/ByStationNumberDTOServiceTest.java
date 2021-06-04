@@ -131,6 +131,7 @@ public class ByStationNumberDTOServiceTest {
 				.medicalRecordDAO(medicalRecordDAOMock)
 				.build();
 	}
+	
 	/**
 	 * Method that test getListPersonsCoveredByFireStation
 	 * when fireStation exits then return a list of address covered by fireSation number
