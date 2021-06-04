@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
-import com.safetynet.alerts.DAO.MedicalRecordDAO;
+import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.model.PersonInfoDTO;
@@ -29,18 +28,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonInfoDTOService implements IPersonInfoDTOService {
-	
 	/**
-	 * An instance of  {@link personDAO}
+	 * An instance of  {@link PersonDAO}
 	 */
 	@Autowired
 	private IPersonDAO personDAO;
 	
 	/**
-	 * An instance of  {@link MedicalRecordDAO}
+	 * An instance of  {@link PersonService}
 	 */
 	@Autowired
-	private IMedicalRecordDAO medicalRecordDAO;
+	private IPersonService personService;
+	
+	/**
+	 * An instance of  {@link MedicalRecordService}
+	 */
+	@Autowired
+	private IMedicalRecordService medicalRecordService;
 	
 	/**
 	 * Method that get person informations and medicalRecord with the firstName and lastName
@@ -51,8 +55,8 @@ public class PersonInfoDTOService implements IPersonInfoDTOService {
 	 */
 	@Override
 	public PersonInfoDTO getPersonInformationDTO(String firstName, String lastName) {
-		Person personInfo = personDAO.getPerson(firstName, lastName);
-		MedicalRecord medicalRecordPerson = medicalRecordDAO.get(firstName, lastName);
+		Person personInfo = personService.getPerson(firstName, lastName);
+		MedicalRecord medicalRecordPerson = medicalRecordService.getMedicalRecord(firstName, lastName);
 		Integer agePerson = personDAO.getAge(medicalRecordPerson.getBirthDate());
 		
 		PersonInfoDTO personInfoDTO = 

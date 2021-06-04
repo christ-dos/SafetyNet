@@ -48,7 +48,7 @@ public class PersonInfoDTO {
 	/**
 	 * An ArrayList of String with medications of person
 	 */
-	private List<String> medications;
+	private List<String> medication;
 
 	/**
 	 * An ArrayList of String with allergies of person

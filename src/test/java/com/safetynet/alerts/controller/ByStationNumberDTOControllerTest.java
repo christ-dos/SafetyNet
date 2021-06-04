@@ -170,8 +170,6 @@ public class ByStationNumberDTOControllerTest {
 	public void testGetListPersonsCoveredByStation_whenFireStationNumberExist_thenReturnAListPersonDTOCoveredByFireStation() throws Exception{
 		// GIVEN
 		String station = "3";
-		
-		
 		when(byStationDTOServiceMock.getAddressCoveredByFireStation(station)).thenReturn(mockPersonResultByStationNumberDTO);
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(station)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);

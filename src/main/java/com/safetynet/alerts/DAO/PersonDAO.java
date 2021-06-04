@@ -82,12 +82,11 @@ public class PersonDAO implements IPersonDAO {
 	 * @return The value of age
 	 */
 	public int getAge(String birthDate) {
-		Years age = null;
 		if (birthDate != null) {
 			LocalDateTime bithDateParse = LocalDateTime.parse(birthDate, DateTimeFormat.forPattern("MM/dd/yyyy"));
 			LocalDateTime currentDate = LocalDateTime.now();
 			if (currentDate.isAfter(bithDateParse)) {
-				age = Years.yearsBetween(bithDateParse, currentDate);
+				Years age = Years.yearsBetween(bithDateParse, currentDate);
 				log.info("DAO - Age calculate for bithDate: " + birthDate);
 				return age.getYears();
 			}
