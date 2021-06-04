@@ -117,7 +117,11 @@ public class PersonInfoDTOControllerTest {
 		
 		
 	}
-	
+	/**
+	 * Method that test GetPersonInfo when person exist fistName John and lastName Boyd
+	 * then return informations of person: "John", "Boyd", "1509 Culver St", 37,"jaboyd@email.com" and medical history of person
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetPersonInfo_whenPersonIsJohnBoydAndExist_thenReturnPersonInfoDTOJohnBoyd() throws Exception {
 		// GIVEN
@@ -142,6 +146,11 @@ public class PersonInfoDTOControllerTest {
 				.andDo(print());
 	}
 	
+	/**
+	 * Method that test GetPersonInfo when person  not exist fistName Lily and lastName Sacha
+	 * then throw a PersonNotFoundException
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetPersonInfo_whenPersonNotExist_thenThrowPersonNotFoundException() throws Exception {
 		// GIVEN
@@ -154,5 +163,4 @@ public class PersonInfoDTOControllerTest {
 				result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
-
 }

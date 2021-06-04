@@ -73,7 +73,7 @@ public class PersonService implements IPersonService {
 			return person;
 		}
 		log.error("Service - Person not found: " + firstName +  " " + lastName);
-		throw new PersonNotFoundException("Service - Person not found exception");
+		throw new PersonNotFoundException("Person not found exception");
 	}
 
 	/**

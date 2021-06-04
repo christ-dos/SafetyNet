@@ -3,7 +3,6 @@ package com.safetynet.alerts.model;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 /**
  * A class which models the results of the endpoint 
@@ -13,7 +12,6 @@ import lombok.Data;
  *
  */
 @AllArgsConstructor
-@Data
 public class PersonInfoDTO {
 	
 	/**
@@ -54,4 +52,60 @@ public class PersonInfoDTO {
 	 * An ArrayList of String with allergies of person
 	 */
 	private List<String> allergies;
+	
+	/**
+	 * getter for firstName
+	 * @return A String with the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	/**
+	 * getter for lastName
+	 * @return A String with the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
+	
+	/**
+	 * getter for address
+	 * @return A String with the address
+	 */
+	public String getAddress() {
+		return address;
+	}
+	
+	/**
+	 * getter for age
+	 * @return An Integer with the age 
+	 */
+	public Integer getAge() {
+		return age;
+	}
+	
+	/**
+	 * getter for email
+	 * @return A String with the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+	
+	/**
+	 * getter for medication
+	 * @return An arrayList containing the medication
+	 */
+	public List<String> getMedication() {
+		return medication;
+	}
+	
+	/**
+	 * getter for allergies
+	 * @return An arrayList containing the allergies
+	 */
+	public List<String> getAllergies() {
+		return allergies;
+	}
 }

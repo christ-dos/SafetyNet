@@ -79,7 +79,7 @@ public class PersonTestIT {
 		mockMvc.perform(get("/person?firstName=Lily&lastName=Saguet")).andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.message", is("Person not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
-				.andExpect(result -> assertEquals("Service - Person not found exception",
+				.andExpect(result -> assertEquals("Person not found exception",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
 	}

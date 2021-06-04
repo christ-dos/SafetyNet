@@ -3,7 +3,6 @@ package com.safetynet.alerts.model;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 /**
  * A class which models the results of the endpoint 
  * fireStation?stationNumber=<station_number>
@@ -11,7 +10,7 @@ import lombok.Data;
  * @author Christine Duarte 
  *
  */
-@Data
+
 @AllArgsConstructor
 public class ListPersonByStationNumberDTO {
 	/**
@@ -21,13 +20,37 @@ public class ListPersonByStationNumberDTO {
 	private List<PersonDTO> listPersonDTO;
 	
 	/** 
-	 *a counter that counts adults
+	 *A counter that counts adults
 	 */
 	private Integer adultsCounter ;
 	
 	/** 
-	 *a counter that counts childs
+	 *A counter that counts childs
 	 */
 	private Integer childsCounter;
 	
+	/**
+	 * getter for listPersonDTO
+	 * @return a list with field firstName, 
+	 * lastName, address and phone of person
+	 */
+	public List<PersonDTO> getListPersonDTO() {
+		return listPersonDTO;
+	}
+	
+	/**
+	 * getter for adultsCounter
+	 * @return an Integer which counts the number of adults
+	 */
+	public Integer getAdultsCounter() {
+		return adultsCounter;
+	}
+
+	/**
+	 * getter for childsCounter
+	 * @return an Integer which counts the number of childs
+	 */
+	public Integer getChildsCounter() {
+		return childsCounter;
+	}
 }
