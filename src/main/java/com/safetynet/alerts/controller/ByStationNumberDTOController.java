@@ -36,7 +36,7 @@ public class ByStationNumberDTOController {
 	 */
 	@GetMapping(value = "/firestation")
 	public ListPersonByStationNumberDTO getListPersonsCoveredByStation(@Valid @RequestParam  String station) {
-		log.debug("Controller - Request list person covered by station: " + station);
+		log.debug("ByStationController - Request list person covered by station: " + station);
 		return byStationNumberDTOService.getAddressCoveredByFireStation(station);
 	}
 	
@@ -48,7 +48,7 @@ public class ByStationNumberDTOController {
 	 */
 	@GetMapping(value = "/phoneAlert")
 	public PhoneAlertDTO getPhoneAlertResidentsCoveredByStation(@Valid @RequestParam  String station) {
-		log.debug("Controller - Request list of phones of persons covered by station: " + station);
+		log.debug("ByStationController  - Request list of phones of persons covered by station: " + station);
 		return byStationNumberDTOService.getPhoneAlertResidentsCoveredByStation(station);
 	}
 }

@@ -27,14 +27,16 @@ import com.safetynet.alerts.model.PersonDTO;
 import com.safetynet.alerts.model.PhoneAlertDTO;
 
 /**
- * Class that test the PersonDTOByStationNumberServiceTest class
+ * Class that test the ByStationNumberDTOService class
  * 
  * @author Chrsitine Duarte
  *
  */
 @ExtendWith(MockitoExtension.class)
 public class ByStationNumberDTOServiceTest {
-
+	/**
+	 * An instance of {@link ByStationNumberDTOService}
+	 */
 	private ByStationNumberDTOService byStationNumberDTOService;
 
 	/**
