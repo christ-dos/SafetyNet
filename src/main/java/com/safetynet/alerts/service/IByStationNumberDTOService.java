@@ -2,7 +2,12 @@ package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.model.ListPersonByStationNumberDTO;
 import com.safetynet.alerts.model.PhoneAlertDTO;
-
+/**
+ * An interface which get informations for persons when input a number of a fiseStation
+ * 
+ * @author Christine Duarte
+ *
+ */
 public interface IByStationNumberDTOService {
 
 	/**
