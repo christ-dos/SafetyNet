@@ -303,8 +303,8 @@ public class PersonTestIT {
 		// WHEN
 		// THEN
 		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.listEmail").isArray()).andExpect(jsonPath("$.listEmail[0]", is("drk@email.com")))
-				.andExpect(jsonPath("$.listEmail[2]", is("jaboyd@email.com"))).andDo(print());
+				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$.[0]", is("drk@email.com")))
+				.andExpect(jsonPath("$.[2]", is("jaboyd@email.com"))).andDo(print());
 	}
 
 	/**

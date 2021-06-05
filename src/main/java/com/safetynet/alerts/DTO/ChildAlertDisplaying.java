@@ -1,4 +1,4 @@
-package com.safetynet.alerts.model;
+package com.safetynet.alerts.DTO;
 
 import java.util.List;
 
@@ -11,22 +11,22 @@ import lombok.AllArgsConstructor;
  *
  */
 @AllArgsConstructor
-public class ChildAlertDTO {
+public class ChildAlertDisplaying {
 	/**
-	 * An list of {@link PersonChildAlertDTO} containing childs living in address
+	 * An list of {@link PersonChildAlert} containing childs living in address
 	 */
-	private List<PersonChildAlertDTO> listChild;
+	private List<PersonChildAlert> listChild;
 	
 	/**
-	 * An list of {@link PersonChildAlertDTO} containing other persons living in address
+	 * An list of {@link PersonChildAlert} containing other persons living in address
 	 */
-	private List<PersonChildAlertDTO> listOtherPersonInHouse;
+	private List<PersonChildAlert> listOtherPersonInHouse;
 	
 	/**
 	 * getter for listChild
 	 * @return A list containing childs living at an address
 	 */
-	public List<PersonChildAlertDTO> getListChild() {
+	public List<PersonChildAlert> getListChild() {
 		return listChild;
 	}
 	
@@ -34,7 +34,7 @@ public class ChildAlertDTO {
 	 * getter for listOtherPersonInHouse
 	 * @return A list containing other person living in the same address of childs
 	 */
-	public List<PersonChildAlertDTO> getListOtherPersonInHouse() {
+	public List<PersonChildAlert> getListOtherPersonInHouse() {
 		return listOtherPersonInHouse;
 	}
 }

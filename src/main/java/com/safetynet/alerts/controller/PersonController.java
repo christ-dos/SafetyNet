@@ -1,5 +1,7 @@
 package com.safetynet.alerts.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IPersonService;
 
@@ -55,7 +56,7 @@ public class PersonController {
 	 * @return A list of email for residents living in city input
 	 */
 	@GetMapping(value = "/communityEmail")
-	public CommunityEmailDTO getEmailResident(@Valid @RequestParam String city) {
+	public List<String> getEmailResident(@Valid @RequestParam String city) {
 		log.debug("Controller - Request to get Email residents in city : "  + city );
 		return personService.getEmailResidents(city);
 	}

@@ -3,9 +3,6 @@ package com.safetynet.alerts.DAO;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.joda.time.LocalDateTime;
-import org.joda.time.Years;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -78,25 +75,6 @@ public class PersonDAO implements IPersonDAO {
 		return null;
 	}
 	
-	/**
-	 * Method that get age by birthDate 
-	 * 
-	 * @param birthDate - A string containing the birthDate
-	 * @return The value of age
-	 */
-	@Override
-	public int getAge(String birthDate) {
-		if (birthDate != null) {
-			LocalDateTime bithDateParse = LocalDateTime.parse(birthDate, DateTimeFormat.forPattern("MM/dd/yyyy"));
-			LocalDateTime currentDate = LocalDateTime.now();
-			if (currentDate.isAfter(bithDateParse)) {
-				Years age = Years.yearsBetween(bithDateParse, currentDate);
-				log.info("DAO - Age calculate for bithDate: " + birthDate);
-				return age.getYears();
-			}
-		}
-		return -1;
-	}
 	
 	/**
 	 * Method that get person by address

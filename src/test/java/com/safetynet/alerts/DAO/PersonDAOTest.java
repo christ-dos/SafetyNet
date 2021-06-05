@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.utils.DateUtils;
 
 /**
  * Class that test PersonDAO
@@ -35,7 +36,12 @@ public class PersonDAOTest {
 	 */
 	@Mock
 	private List<Person> mockList;
-
+	
+	/**
+	 * A mock of  {@link DateUtils}
+	 */
+	private DateUtils dateUtils;
+	
 	/**
 	 * Method that created a mock of the ArrayList mockList with 3 elements
 	 * 
@@ -56,6 +62,7 @@ public class PersonDAOTest {
 		mockList.add(index2);
 
 		personDAOTest = PersonDAO.builder().listPersons(mockList).build();
+		dateUtils= new DateUtils();
 	}
 
 	/**
@@ -81,9 +88,10 @@ public class PersonDAOTest {
 	@Test
 	public void testGetAge_whenbithDateIsAString_thenReturnAge() {
 		//GIVEN
+		DateUtils dateUtils = new DateUtils();
 		String birthDate = "09/17/1974";
 		//WHEN
-		int resultAge = personDAOTest.getAge(birthDate);
+		int resultAge = dateUtils.getAge(birthDate);
 		//THEN
 		assertEquals(46, resultAge);
 	}
@@ -98,7 +106,7 @@ public class PersonDAOTest {
 		String birthDate = "";
 		//WHEN
 		//THEN
-		assertThrows(IllegalArgumentException.class, ()-> personDAOTest.getAge(birthDate));
+		assertThrows(IllegalArgumentException.class, ()-> dateUtils.getAge(birthDate));
 	}
 	/**
 	 * Method that test getAge when the birthdate is after date actual
@@ -109,7 +117,7 @@ public class PersonDAOTest {
 		//GIVEN
 		String birthDate = "01/25/2050";
 		//WHEN
-		int resultAge = personDAOTest.getAge(birthDate);
+		int resultAge = dateUtils.getAge(birthDate);
 		//THEN
 		assertEquals(-1, resultAge);
 	}

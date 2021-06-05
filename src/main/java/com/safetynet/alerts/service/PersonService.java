@@ -12,7 +12,6 @@ import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
-import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 
 import lombok.AllArgsConstructor;
@@ -152,7 +151,7 @@ public class PersonService implements IPersonService {
 	 * @throws CityNotFoundException
 	 */
 	@Override
-	public CommunityEmailDTO getEmailResidents(String city) {
+	public List<String> getEmailResidents(String city) {
 		List<Person> personList = getListPersons();
 		List<String> listEmailResidents = personList.stream().filter(person -> person.getCity().equalsIgnoreCase(city))
 				.map(person -> person.getEmail()).collect(Collectors.toList());
@@ -161,7 +160,6 @@ public class PersonService implements IPersonService {
 			throw new CityNotFoundException("The City not found, please try again");
 		}
 		log.info("Service - The list of emails of residents of the city: " + city + " has been requested");
-		CommunityEmailDTO listEmailDTO = new CommunityEmailDTO(listEmailResidents);
-		return listEmailDTO;
+		return listEmailResidents;
 	}
 }

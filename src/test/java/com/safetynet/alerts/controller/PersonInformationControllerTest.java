@@ -1,8 +1,9 @@
 package com.safetynet.alerts.controller;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,40 +27,48 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.DTO.DisplayPartialPerson;
+import com.safetynet.alerts.DTO.PersonInfoDisplaying;
+import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
+import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.model.ListPersonByStationNumberDTO;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.model.PersonDTO;
-import com.safetynet.alerts.model.PhoneAlertDTO;
-import com.safetynet.alerts.service.ByStationNumberDTOService;
+import com.safetynet.alerts.service.PersonInformationService;
 
 /**
- * A class which test {@link ByStationNumberDTOController}
+ * A class which test {@link PersonInformationController}
  * 
  * @author Christine Duarte
  *
  */
-@WebMvcTest(ByStationNumberDTOController.class)
+@WebMvcTest(PersonInformationController.class)
 @ExtendWith(MockitoExtension.class)
-public class ByStationNumberDTOControllerTest {
+public class PersonInformationControllerTest {
 	
 	/**
 	 * An instance of {@link MockMvc} that permit simulate a request HTTP
 	 */
 	@Autowired
-	private MockMvc mockMvcByStationNumberDTO;
+	private MockMvc mockMvcPersonInformation;
 	
 	/**
-	 * An instance of {@link ByStationNumberDTOService}
+	 * An instance of {@link PersonInformationService}
 	 * 
 	 */
 	@MockBean
-	private ByStationNumberDTOService byStationDTOServiceMock;
+	private PersonInformationService personInformationServiceMock;
 	
 	/**
-	 * An instance of {@link medicalRecordDAOMock}
+	 * An instance of {@link PersonDAOMock}
+	 * 
+	 */
+	@MockBean
+	private PersonDAO personDAOMock;
+	
+	/**
+	 * An instance of {@link MedicalRecordDAO}
 	 * 
 	 */
 	@MockBean
@@ -72,12 +81,12 @@ public class ByStationNumberDTOControllerTest {
 	@MockBean
 	private FireStationDAO fireStationDAOMock;
 	
+	
 	/**
-	 * An instance of {@link PersonDAOMock}
-	 * 
+	 * A mock of the arraysList of {@link Person}
 	 */
-	@MockBean
-	private PersonDAO personDAOMock;
+	@Mock
+	private List<Person> mockList;
 	
 	/**
 	 * A mock of the arraysList of {@link FireStation}
@@ -86,16 +95,15 @@ public class ByStationNumberDTOControllerTest {
 	private List<FireStation> mockListFireStation;
 
 	/**
-	 * A mock of the arraysList of {@link Person}
-	 */
-	@Mock
-	private List<Person> mockList;
-
-	/**
 	 * A mock of the arraysList of {@link MedicalRecord}
 	 */
 	@Mock
 	private List<MedicalRecord> mockListMedicalRecord;
+	
+	/**
+	 * An instance of {@link PersonInfoDisplaying}
+	 */
+	private PersonInfoDisplaying mockPersonInfoDisplaying;
 	
 	/**
 	 * A mock of the arraysList of String containing Addresses of person covered by Station number
@@ -104,9 +112,9 @@ public class ByStationNumberDTOControllerTest {
 	private List<String> mockListAddress;
 	
 	/**
-	 * An instance of {@link ListPersonByStationNumberDTO}
+	 * An instance of {@link PersonsCoveredByStation}
 	 */
-	private ListPersonByStationNumberDTO mockPersonResultByStationNumberDTO;
+	private PersonsCoveredByStation mockPersonsCoveredByStation;
 	
 	/**
 	 * Method that create a mocks of the ArrayLists mockListAddress, mockListFireStation, mockList,
@@ -129,7 +137,7 @@ public class ByStationNumberDTOControllerTest {
 		mockListFireStation.add(fireStationIndex1);
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
-
+		
 		mockList = new ArrayList<>();
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -152,10 +160,10 @@ public class ByStationNumberDTOControllerTest {
 		mockListMedicalRecord.add(indexMRecord1);
 		mockListMedicalRecord.add(indexMRecord2);
 		
-		mockPersonResultByStationNumberDTO = new ListPersonByStationNumberDTO(
-				new ArrayList<>(Arrays.asList(new PersonDTO("John", "Boyd", "1509 Culver St", "841-874-6512"),
-						new PersonDTO("Tessa", "Carman", "834 Binoc Ave", "841-874-6512"),
-						new PersonDTO("Foster", "Shepard", "748 Townings Dr", "841-874-6544"))),
+		mockPersonsCoveredByStation = new PersonsCoveredByStation(
+				new ArrayList<>(Arrays.asList(new DisplayPartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512"),
+						new DisplayPartialPerson("Tessa", "Carman", "834 Binoc Ave", "841-874-6512"),
+						new DisplayPartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544"))),
 				2, 1);
 	}
 	
@@ -170,13 +178,13 @@ public class ByStationNumberDTOControllerTest {
 	public void testGetListPersonsCoveredByStation_whenFireStationNumberExist_thenReturnAListPersonDTOCoveredByFireStation() throws Exception{
 		// GIVEN
 		String station = "3";
-		when(byStationDTOServiceMock.getAddressCoveredByFireStation(station)).thenReturn(mockPersonResultByStationNumberDTO);
+		when(personInformationServiceMock.getPersonCoveredByFireStation(station)).thenReturn(mockPersonsCoveredByStation);
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(station)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
 		// WHEN
 		// THEN
-		mockMvcByStationNumberDTO.perform(get("/firestation?station=3")).andExpect(status().isOk())
+		mockMvcPersonInformation.perform(get("/firestation?station=3")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.listPersonDTO[0].firstName", is("John"))).andExpect(jsonPath("$.listPersonDTO[0].lastName", is("Boyd")))
 				.andExpect(jsonPath("$.listPersonDTO[0].address", is("1509 Culver St"))).andExpect(jsonPath("$.listPersonDTO[0].phone", is("841-874-6512")))
 				.andExpect(jsonPath("$.adultsCounter", is(2)))
@@ -194,11 +202,11 @@ public class ByStationNumberDTOControllerTest {
 		// GIVEN
 		String station = "5";
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(station)).thenReturn(null);
-		when(byStationDTOServiceMock.getAddressCoveredByFireStation(station)).thenThrow(new FireStationNotFoundException("The FireStation number not found"));
+		when(personInformationServiceMock.getPersonCoveredByFireStation(station)).thenThrow(new FireStationNotFoundException("The FireStation number not found"));
 		// WHEN
 
 		// THEN
-		mockMvcByStationNumberDTO.perform(get("/firestation?station=5")).andExpect(status().isNotFound())
+		mockMvcPersonInformation.perform(get("/firestation?station=5")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(result -> assertEquals("The FireStation number not found",
 						result.getResolvedException().getMessage()))
@@ -214,15 +222,15 @@ public class ByStationNumberDTOControllerTest {
 	public void testGetPhoneAlertResidentsCoveredByStation_whenFireStationNumberExist_thenReturnAListPersonDTOCoveredByFireStation() throws Exception{
 		// GIVEN
 		String station = "3";
-		PhoneAlertDTO listPhoneCovrededByStationThree = new PhoneAlertDTO(Arrays.asList("841-874-6512", "841-874-6512", "841-874-6544"));
-		when(byStationDTOServiceMock.getPhoneAlertResidentsCoveredByStation(station)).thenReturn(listPhoneCovrededByStationThree);
+		List<String> listPhoneCovrededByStationThree = new ArrayList<>(Arrays.asList("841-874-6512", "841-874-6512", "841-874-6544"));
+		when(personInformationServiceMock.getPhoneAlertResidentsCoveredByStation(station)).thenReturn(listPhoneCovrededByStationThree);
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(station)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		// WHEN
 		// THEN
-		mockMvcByStationNumberDTO.perform(get("/phoneAlert?station=3")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.listPhoneAlert[0]", is("841-874-6512")))
-				.andExpect(jsonPath("$.listPhoneAlert[2]", is("841-874-6544")))
+		mockMvcPersonInformation.perform(get("/phoneAlert?station=3")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0]", is("841-874-6512")))
+				.andExpect(jsonPath("$.[2]", is("841-874-6544")))
 				.andDo(print());
 	}
 	
@@ -237,13 +245,60 @@ public class ByStationNumberDTOControllerTest {
 		// GIVEN
 		String station = "5";
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(station)).thenReturn(null);
-		when(byStationDTOServiceMock.getPhoneAlertResidentsCoveredByStation(station)).thenThrow(new FireStationNotFoundException("The FireStation number not found"));
+		when(personInformationServiceMock.getPhoneAlertResidentsCoveredByStation(station)).thenThrow(new FireStationNotFoundException("The FireStation number not found"));
 		// WHEN
 		// THEN
-		mockMvcByStationNumberDTO.perform(get("/phoneAlert?station=5")).andExpect(status().isNotFound())
+		mockMvcPersonInformation.perform(get("/phoneAlert?station=5")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(result -> assertEquals("The FireStation number not found",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
+	}
+
+	/**
+	 * Method that test GetPersonInfo when person exist fistName John and lastName Boyd
+	 * then return informations of person: "John", "Boyd", "1509 Culver St", 37,"jaboyd@email.com" and medical history of person
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetPersonInfo_whenPersonIsJohnBoydAndExist_thenReturnPersonInfoDTOJohnBoyd() throws Exception {
+		// GIVEN
+		Person personJohnBoyd = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		MedicalRecord medicalRecordJohnBoyd = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		Integer age = 37;
+		mockPersonInfoDisplaying = new PersonInfoDisplaying(personJohnBoyd.getFirstName(), personJohnBoyd.getLastName(), personJohnBoyd.getAddress(), age, personJohnBoyd.getEmail(), new ArrayList<>(medicalRecordJohnBoyd.getMedications()), new ArrayList<>(medicalRecordJohnBoyd.getAllergies()));
+		when(personInformationServiceMock.getPersonInformation(anyString(), anyString())).thenReturn(mockPersonInfoDisplaying);
+		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personJohnBoyd);
+		when(medicalRecordDAOMock.get(anyString(), anyString())).thenReturn(medicalRecordJohnBoyd);
+		//when(personDAOMock.getAge(anyString())).thenReturn(37);
+		// WHEN
+		// THEN
+		mockMvcPersonInformation.perform(get("/personinfo?firstName=John&lastName=Boyd")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstName", is("John"))).andExpect(jsonPath("$.lastName", is("Boyd")))
+				.andExpect(jsonPath("$.address", is("1509 Culver St"))).andExpect(jsonPath("$.medication[0]", is("aznol:350mg")))
+				.andExpect(jsonPath("$.allergies[0]", is("nillacilan")))
+				.andExpect(jsonPath("$.age", is(37)))
+				.andDo(print());
+	}
+	
+	/**
+	 * Method that test GetPersonInfo when person  not exist fistName Lily and lastName Sacha
+	 * then throw a PersonNotFoundException
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetPersonInfo_whenPersonNotExist_thenThrowPersonNotFoundException() throws Exception {
+		// GIVEN
+		when(personInformationServiceMock.getPersonInformation(anyString(), anyString())).thenThrow(new PersonNotFoundException("Person not found exception"));
+		// WHEN
+		// THEN
+		mockMvcPersonInformation.perform(get("/personinfo?firstName=Lily&lastName=Sacha")).andExpect(status().isNotFound())
+		.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
+		.andExpect(result -> assertEquals("Person not found exception",
+				result.getResolvedException().getMessage()))
+		.andDo(print());
 	}
 }

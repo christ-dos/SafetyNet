@@ -48,7 +48,7 @@ public interface IPersonDAO {
 	 * @param birthDate - A string containing the birthDate
 	 * @return The value of age
 	 */
-	public int getAge(String birthDate);
+	//public int getAge(String birthDate);
 
 	/**
 	 * Method that save a Person in the ArrayList

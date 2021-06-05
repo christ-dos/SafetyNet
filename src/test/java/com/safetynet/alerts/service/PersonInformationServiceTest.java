@@ -18,33 +18,36 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.DisplayPartialPerson;
+import com.safetynet.alerts.DTO.PersonInfoDisplaying;
+import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
+import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.model.ListPersonByStationNumberDTO;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.model.PersonDTO;
-import com.safetynet.alerts.model.PhoneAlertDTO;
+import com.safetynet.alerts.utils.DateUtils;
 
 /**
- * Class that test the ByStationNumberDTOService class
+ * Class that test the PersonInfoDTOService class
  * 
  * @author Chrsitine Duarte
  *
  */
 @ExtendWith(MockitoExtension.class)
-public class ByStationNumberDTOServiceTest {
+public class PersonInformationServiceTest {
 	/**
-	 * An instance of {@link ByStationNumberDTOService}
+	 * An instance of {@link PersonInformationService}
 	 */
-	private ByStationNumberDTOService byStationNumberDTOService;
-
+	private PersonInformationService personInformationService;
+	
 	/**
 	 * A mock of {@link PersonDAO}
 	 */
 	@Mock
 	private PersonDAO personDAOMock;
-
+	
 	/**
 	 * A mock of {@link MedicalRecordDAO}
 	 */
@@ -56,7 +59,25 @@ public class ByStationNumberDTOServiceTest {
 	 */
 	@Mock
 	private FireStationDAO fireStationDAOmock;
+	
+	/**
+	 * A mock of {@link PersonService}
+	 */
+	@Mock
+	private PersonService personServiceMock;
 
+	/**
+	 * A mock of {@link MedicalRecordDAO}
+	 */
+	@Mock
+	private MedicalRecordService medicalRecordServiceMock;
+	
+	/**
+	 * A mock of {@link DateUtils}
+	 */
+	@Mock
+	private DateUtils dateUtilsMock;
+	
 	/**
 	 * A mock of the arraysList of {@link FireStation}
 	 */
@@ -80,7 +101,7 @@ public class ByStationNumberDTOServiceTest {
 	 */
 	@Mock
 	private List<String> mockListAddress;
-
+	
 	/**
 	 * Method that create a mocks of the ArrayLists mockListAddress, mockListFireStation, mockList,
 	 * mockListMedicalRecord 
@@ -109,9 +130,21 @@ public class ByStationNumberDTOServiceTest {
 		Person index1 = new Person("Tessa", "Carman","834 Binoc Ave","Culver","97451", "841-874-6512", "tenz@email.com");
 		Person index3 = new Person("Foster", "Shepard", "748 Townings Dr", "Culver", "97451", "841-874-6544",
 				"jaboyd@email.com");
+		Person index4 = new Person("Jacob", "Boyd","1509 Culver St","Culver","97451", "841-874-6512"
+				, "drk@email.com" );
+		Person index5 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"tenz@email.com");
+		Person index6 = new Person("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		Person index7 = new Person("Felicia", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
 		mockList.add(index0);
 		mockList.add(index1);
 		mockList.add(index3);
+		mockList.add(index4);
+		mockList.add(index5);
+		mockList.add(index6);
+		mockList.add(index7);
 
 		mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
@@ -121,11 +154,26 @@ public class ByStationNumberDTOServiceTest {
 				new ArrayList<>());
 		MedicalRecord indexMRecord2 = new MedicalRecord("Foster", "Shepard", "01/08/1980",
 				new ArrayList<>(Arrays.asList()), new ArrayList<>());
+		MedicalRecord indexMRecord3 = new MedicalRecord("Jacob", "Boyd", "03/06/1989", new ArrayList<>(Arrays.asList("pharmacol:5000mg", "terazine:10mg", "noznazol:250mg")),
+				new ArrayList<>());
+		MedicalRecord indexMRecord4 = new MedicalRecord("Tenley", "Boyd", "02/18/2012",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord5 = new MedicalRecord("Roger", "Boyd", "09/06/2017",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord6 = new MedicalRecord("Felicia", "Boyd", "01/08/1986",
+				new ArrayList<>(Arrays.asList("tetracyclaz:650mg")), new ArrayList<>(Arrays.asList("xilliathal")));
+		
 		mockListMedicalRecord.add(indexMRecord0);
 		mockListMedicalRecord.add(indexMRecord1);
 		mockListMedicalRecord.add(indexMRecord2);
+		mockListMedicalRecord.add(indexMRecord3);
+		mockListMedicalRecord.add(indexMRecord4);
+		mockListMedicalRecord.add(indexMRecord5);
+		mockListMedicalRecord.add(indexMRecord6);
 
-		byStationNumberDTOService = ByStationNumberDTOService.builder()
+		personInformationService = PersonInformationService.builder()
+				.medicalRecordService(medicalRecordServiceMock)
+				.personService(personServiceMock)
 				.fireStationDAO(fireStationDAOmock)
 				.personDAO(personDAOMock)
 				.medicalRecordDAO(medicalRecordDAOMock)
@@ -141,15 +189,15 @@ public class ByStationNumberDTOServiceTest {
 		// GIVEN
 		
 		String stationNumber = "3";
-		PersonDTO expectedJohnBoyd = new PersonDTO("John", "Boyd", "1509 Culver St", "841-874-6512");
-		PersonDTO expectedFoster = new PersonDTO("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		DisplayPartialPerson expectedJohnBoyd = new DisplayPartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
+		DisplayPartialPerson expectedFoster = new DisplayPartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOmock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
-		when(personDAOMock.getAge(anyString())).thenReturn(37, 9, 41);
+		//when(dateUtilsMock.getAge(anyString())).thenReturn(37, 9, 41);
 		// WHEN
-		ListPersonByStationNumberDTO PersonsCovededByStationThree = byStationNumberDTOService
-				.getAddressCoveredByFireStation(stationNumber);
+		PersonsCoveredByStation PersonsCovededByStationThree = personInformationService
+				.getPersonCoveredByFireStation(stationNumber);
 		// THEN
 		// verify that the list contained 3 elements of personDTO
 		assertEquals(3, PersonsCovededByStationThree.getListPersonDTO().size());
@@ -172,7 +220,7 @@ public class ByStationNumberDTOServiceTest {
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class,
-				() -> byStationNumberDTOService.getAddressCoveredByFireStation(station));
+				() -> personInformationService.getPersonCoveredByFireStation(station));
 	}
 	
 	/**
@@ -184,19 +232,19 @@ public class ByStationNumberDTOServiceTest {
 		// GIVEN
 		
 		String fireStation = "3";
-		PersonDTO expectedJohnBoyd = new PersonDTO("John", "Boyd", "1509 Culver St", "841-874-6512");
-		PersonDTO expectedFoster = new PersonDTO("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		DisplayPartialPerson expectedJohnBoyd = new DisplayPartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
+		DisplayPartialPerson expectedFoster = new DisplayPartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOmock.getAddressesCoveredByStationNumber(fireStation)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		// WHEN
-		PhoneAlertDTO phoneAlertPersonCovededByStationThree = byStationNumberDTOService
+		List<String> phoneAlertPersonCovededByStationThree = personInformationService
 				.getPhoneAlertResidentsCoveredByStation(fireStation);
 		// THEN
 		// verify that the list contained 3 elements of personDTO
-		assertEquals(3, phoneAlertPersonCovededByStationThree.getListPhoneAlert().size());
+		assertEquals(3, phoneAlertPersonCovededByStationThree.size());
 		//verify the list contain in index 0 John Boyd
-		assertEquals(expectedJohnBoyd.getPhone(), phoneAlertPersonCovededByStationThree.getListPhoneAlert().get(0));
-		assertEquals(expectedFoster.getPhone(), phoneAlertPersonCovededByStationThree.getListPhoneAlert().get(2));
+		assertEquals(expectedJohnBoyd.getPhone(), phoneAlertPersonCovededByStationThree.get(0));
+		assertEquals(expectedFoster.getPhone(), phoneAlertPersonCovededByStationThree.get(2));
 	}
 	/**
 	 * Method that test getPhoneAlertResidentsCoveredByStation
@@ -211,6 +259,61 @@ public class ByStationNumberDTOServiceTest {
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class,
-				() -> byStationNumberDTOService.getPhoneAlertResidentsCoveredByStation(fireStation));
+				() -> personInformationService.getPhoneAlertResidentsCoveredByStation(fireStation));
 	}
+
+	
+	/**
+	 * Method that test GetPersonInformationDTO with firstName John and LastName Boyd when
+	 * return the person informations,age is 37 and two arrayLists with the medication and allergies forJohn Boyd
+	 * 
+	 */
+	@Test
+	public void testGetPersonInformation_whenfirstNameIsJohnAndLastNameIsBoyd_thenReturnFirstNameLastNameAddressAgeEmailAndMedicalHistoryOfPeson() {
+		//GIVEN
+		Person personExpected = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		MedicalRecord medicalRecordJohnBoyd = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		when(personServiceMock.getPerson(anyString(), anyString())).thenReturn(personExpected);
+		when(medicalRecordServiceMock.getMedicalRecord(anyString(), anyString())).thenReturn(medicalRecordJohnBoyd);
+		//WHEN
+		PersonInfoDisplaying resultInformationPerson = personInformationService.getPersonInformation(personExpected.getFirstName(), personExpected.getLastName());
+		//THEN
+		assertEquals("John", resultInformationPerson.getFirstName());
+		assertEquals("Boyd", resultInformationPerson.getLastName());
+		assertEquals(37, resultInformationPerson.getAge());
+		assertEquals("nillacilan", resultInformationPerson.getAllergies().get(0));
+		assertEquals("aznol:350mg", resultInformationPerson.getMedication().get(0));
+	}
+	
+	/**
+	 * Method that test getPersonInformationDTO when person not exist then should throw a
+	 * {@link PersonNotFoundException} and verify that the method  in DAO was not
+	 * called
+	 */
+	@Test
+	public void testGetPersongetPersonInformation__whenInputPersonNotExist_resultThrowPersonNotFoundException() {
+		// GIVEN
+		String firstName = "Lubin";
+		String lastName = "Dujardin";
+		when(personServiceMock.getPerson(firstName, lastName)).thenThrow(new PersonNotFoundException("Person not found exception"));
+		// WHEN
+		// THEN
+		assertThrows(PersonNotFoundException.class, () -> personInformationService.getPersonInformation(firstName, lastName));
+	}
+	
+	@Test
+	public void testGetChildAlertList_whenAddressExist_thenReturnListOfChildAndListOfAdultsLivingInSameAddress() {
+		//GIVEN
+		String address = "1509 Culver St";
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		//WHEN
+		ChildAlertDisplaying childAlertResult = personInformationService.getChildAlertList(address);
+		//THEN
+		assertEquals("Tenley", childAlertResult.getListChild().get(0).getFirstName());
+		assertEquals("Boyd", childAlertResult.getListChild().get(0).getLastName());
+	}
+	
 }

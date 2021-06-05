@@ -1,4 +1,4 @@
-package com.safetynet.alerts.model;
+package com.safetynet.alerts.DTO;
 
 import lombok.AllArgsConstructor;
 
@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
  *
  */
 @AllArgsConstructor
-public class PersonChildAlertDTO {
+public class PersonChildAlert {
 	/**
 	 * A String that contain the firstName of the person
 	 */

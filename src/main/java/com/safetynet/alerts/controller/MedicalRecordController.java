@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RestController
 @Slf4j
-public class MedicalController {
+public class MedicalRecordController {
 	
 	/**
 	 * An instance of the MedicalRecordService

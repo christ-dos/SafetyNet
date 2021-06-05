@@ -1,11 +1,11 @@
-package com.safetynet.alerts.model;
+package com.safetynet.alerts.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PersonDTO {
+public class DisplayPartialPerson {
 	
 	/**
 	 * A String that contain the firstName of the person
