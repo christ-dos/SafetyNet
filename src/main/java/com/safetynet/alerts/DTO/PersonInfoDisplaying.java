@@ -1,4 +1,4 @@
-package com.safetynet.alerts.model;
+package com.safetynet.alerts.DTO;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
  *
  */
 @AllArgsConstructor
-public class PersonInfoDTO {
+public class PersonInfoDisplaying {
 	
 	/**
 	 * A String that contain the firstName of the person

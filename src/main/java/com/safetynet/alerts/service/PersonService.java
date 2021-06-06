@@ -12,7 +12,6 @@ import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
-import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 
 import lombok.AllArgsConstructor;
@@ -38,10 +37,6 @@ public class PersonService implements IPersonService {
 	 */
 	@Autowired
 	private IPersonDAO personDAO;
-	
-	
-	//@Autowired
-	//private IMedicalRecordDAO medicalRecordDAO;
 
 	/**
 	 * Method private that get a list of persons
@@ -69,7 +64,7 @@ public class PersonService implements IPersonService {
 		}
 		Person person = personDAO.getPerson(firstName, lastName);
 		if (person != null) {
-			log.debug("Service - Person found : " + person.getFirstName() + " " + person.getLastName());
+			log.debug("Service - Person found: " + person.getFirstName() + " " + person.getLastName());
 			return person;
 		}
 		log.error("Service - Person not found: " + firstName +  " " + lastName);
@@ -109,10 +104,10 @@ public class PersonService implements IPersonService {
 	public String deletePerson(String firstName, String lastName) {
 		Person person = personDAO.getPerson(firstName, lastName);
 		if (person != null) {
-			log.debug("Service - Person deleted : " + firstName + " " + lastName);
+			log.debug("Service - Person deleted: " + firstName + " " + lastName);
 			return personDAO.delete(person);
 		}
-		log.error("Service - Person cannot be deleted : " + firstName + " " + lastName + " because not exist");
+		log.error("Service - Person cannot be deleted: " + firstName + " " + lastName + " because not exist");
 		return "Person not Deleted";
 	}
 
@@ -130,10 +125,10 @@ public class PersonService implements IPersonService {
 		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);
 
 		if (resultPersonFinded == null) {
-			log.error("Service - The person that we want update not exist : " + person.getFirstName() + " "
+			log.error("Service - The person that we want update not exist: " + person.getFirstName() + " "
 					+ person.getLastName());
 			throw new PersonNotFoundException(
-					"The person that we want update not exist : " + person.getFirstName() + " " + person.getLastName());
+					"The person that we want update not exist: " + person.getFirstName() + " " + person.getLastName());
 		}
 		List<Person> personList = getListPersons();
 		int indexPosition = personList.indexOf(resultPersonFinded);
@@ -156,7 +151,7 @@ public class PersonService implements IPersonService {
 	 * @throws CityNotFoundException
 	 */
 	@Override
-	public CommunityEmailDTO getEmailResidents(String city) {
+	public List<String> getEmailResidents(String city) {
 		List<Person> personList = getListPersons();
 		List<String> listEmailResidents = personList.stream().filter(person -> person.getCity().equalsIgnoreCase(city))
 				.map(person -> person.getEmail()).collect(Collectors.toList());
@@ -165,7 +160,6 @@ public class PersonService implements IPersonService {
 			throw new CityNotFoundException("The City not found, please try again");
 		}
 		log.info("Service - The list of emails of residents of the city: " + city + " has been requested");
-		CommunityEmailDTO listEmailDTO = new CommunityEmailDTO(listEmailResidents);
-		return listEmailDTO;
+		return listEmailResidents;
 	}
 }

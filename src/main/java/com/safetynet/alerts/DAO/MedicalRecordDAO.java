@@ -112,8 +112,4 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 		log.debug("DAO - MedicalRecord deleted for person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
 		return "SUCCESS";
 	}
-
-	public MedicalRecordDAO() {
-		// TODO Auto-generated constructor stub
-	}
 }

@@ -260,7 +260,7 @@ public class PersonTestIT {
 				.andExpect(jsonPath("$.message", is("Person not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 				.andExpect(
-						result -> assertEquals("The person that we want update not exist : " + personTest.getFirstName()
+						result -> assertEquals("The person that we want update not exist: " + personTest.getFirstName()
 								+ " " + personTest.getLastName(), result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
@@ -303,8 +303,8 @@ public class PersonTestIT {
 		// WHEN
 		// THEN
 		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.listEmail").isArray()).andExpect(jsonPath("$.listEmail[0]", is("drk@email.com")))
-				.andExpect(jsonPath("$.listEmail[2]", is("jaboyd@email.com"))).andDo(print());
+				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$.[0]", is("drk@email.com")))
+				.andExpect(jsonPath("$.[2]", is("jaboyd@email.com"))).andDo(print());
 	}
 
 	/**

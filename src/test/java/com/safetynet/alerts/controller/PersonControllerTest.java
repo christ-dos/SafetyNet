@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +35,6 @@ import com.safetynet.alerts.exceptions.CityNotFoundException;
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
-import com.safetynet.alerts.model.CommunityEmailDTO;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.PersonService;
 
@@ -329,14 +329,14 @@ public class PersonControllerTest {
 	@Test
 	public void testGetEmailResident_whenCityIsCulverAndExist__thenReturnListOfEmails() throws Exception{
 		// GIVEN
-		CommunityEmailDTO listEmail = new CommunityEmailDTO(Arrays.asList("jaboyd@email.com","tenz@email.com", "zarc@email.com"));
+		List<String> listEmail = new ArrayList<>(Arrays.asList("jaboyd@email.com","tenz@email.com", "zarc@email.com"));
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		when(personServiceMock.getEmailResidents(any())).thenReturn(listEmail);
 		// WHEN
 
 		// THEN
 		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.listEmail[0]", is("jaboyd@email.com"))).andExpect(jsonPath("$.listEmail[2]", is("zarc@email.com")))
+				.andExpect(jsonPath("$.[0]", is("jaboyd@email.com"))).andExpect(jsonPath("$.[2]", is("zarc@email.com")))
 				.andDo(print());
 	}
 	

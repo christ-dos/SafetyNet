@@ -44,7 +44,7 @@ import com.safetynet.alerts.service.MedicalRecordService;
  * @author Christine Duarte
  *
  */
-@WebMvcTest(MedicalController.class)
+@WebMvcTest(MedicalRecordController.class)
 @ExtendWith(MockitoExtension.class)
 public class MedicalRecordControllerTest {
 	/**

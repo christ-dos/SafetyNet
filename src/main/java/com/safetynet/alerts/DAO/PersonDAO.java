@@ -3,9 +3,6 @@ package com.safetynet.alerts.DAO;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.joda.time.LocalDateTime;
-import org.joda.time.Years;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -40,6 +37,7 @@ public class PersonDAO implements IPersonDAO {
 	 * 
 	 * @return An ArrayList of Persons
 	 */
+	@Override
 	public List<Person> getPersons() {
 		return listPersons;
 	}
@@ -49,6 +47,7 @@ public class PersonDAO implements IPersonDAO {
 	 * 
 	 * @return An ArrayList of Persons with address provided in parameter
 	 */
+	@Override
 	public List<Person> getPersonsByListAdresses(List<String> listAddress){
 		List<Person> listPersonGetByListAddress = listPersons.stream()
 		.filter(person -> listAddress.contains(person.getAddress()))
@@ -64,6 +63,7 @@ public class PersonDAO implements IPersonDAO {
 	 * @param lastName  - The lastName
 	 * @return An instance of Person or null if the person not exist
 	 */
+	@Override
 	public Person getPerson(String firstName, String lastName) {
 		for (Person person : listPersons) {
 			if (person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName)) {
@@ -75,24 +75,6 @@ public class PersonDAO implements IPersonDAO {
 		return null;
 	}
 	
-	/**
-	 * Method that get age by birthDate 
-	 * 
-	 * @param birthDate - A string containing the birthDate
-	 * @return The value of age
-	 */
-	public int getAge(String birthDate) {
-		if (birthDate != null) {
-			LocalDateTime bithDateParse = LocalDateTime.parse(birthDate, DateTimeFormat.forPattern("MM/dd/yyyy"));
-			LocalDateTime currentDate = LocalDateTime.now();
-			if (currentDate.isAfter(bithDateParse)) {
-				Years age = Years.yearsBetween(bithDateParse, currentDate);
-				log.info("DAO - Age calculate for bithDate: " + birthDate);
-				return age.getYears();
-			}
-		}
-		return -1;
-	}
 	
 	/**
 	 * Method that get person by address
@@ -119,6 +101,7 @@ public class PersonDAO implements IPersonDAO {
 	 * @param person - An instance of Person
 	 * @return The Person that was saved in the arrayList
 	 */
+	@Override
 	public Person save(int index, Person person) {
 		if (index < 0) {
 			listPersons.add(person);
@@ -135,6 +118,7 @@ public class PersonDAO implements IPersonDAO {
 	 * @param person - The person we want deleted
 	 * @return A String to confirm the deletion "SUCCESS"
 	 */
+	@Override
 	public String delete(Person person) {
 		listPersons.remove(person);
 		log.debug("DAO - Person deleted : " + person.getFirstName() + " " + person.getLastName());

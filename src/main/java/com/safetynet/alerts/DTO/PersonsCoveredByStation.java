@@ -1,4 +1,4 @@
-package com.safetynet.alerts.model;
+package com.safetynet.alerts.DTO;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ import lombok.AllArgsConstructor;
  */
 
 @AllArgsConstructor
-public class ListPersonByStationNumberDTO {
+public class PersonsCoveredByStation {
 	/**
-	 * A list of {@link PersonDTO} 
+	 * A list of {@link PartialPerson} 
 	 * that contain only firstName, lastName, address and phone
 	 */
-	private List<PersonDTO> listPersonDTO;
+	private List<PartialPerson> listPartialPersons;
 	
 	/** 
 	 *A counter that counts adults
@@ -30,12 +30,12 @@ public class ListPersonByStationNumberDTO {
 	private Integer childsCounter;
 	
 	/**
-	 * getter for listPersonDTO
+	 * getter for listPartialPersons
 	 * @return a list with field firstName, 
 	 * lastName, address and phone of person
 	 */
-	public List<PersonDTO> getListPersonDTO() {
-		return listPersonDTO;
+	public List<PartialPerson> getListPartialPersons() {
+		return listPartialPersons;
 	}
 	
 	/**
@@ -53,4 +53,5 @@ public class ListPersonByStationNumberDTO {
 	public Integer getChildsCounter() {
 		return childsCounter;
 	}
+
 }

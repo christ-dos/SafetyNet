@@ -214,4 +214,23 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
+	
+	/**
+	 * Method that return a message when a AddressNotFoundException is thrown when a
+	 * city is not found in the arrayList
+	 * 
+	 * @param ex      - the exception handle
+	 * @param request - a web request
+	 * @return a response entity with the message :"The city not found, please try again!", and the code
+	 *         HttpStatus 404
+	 */
+	@ExceptionHandler(AddressNotFoundException.class)
+	public ResponseEntity<Object> handleAddressNotFoundException(AddressNotFoundException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", "Address not found, please try again");
+
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
 }
