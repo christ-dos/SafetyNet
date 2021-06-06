@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 
@@ -144,5 +145,55 @@ public class PersonInformationTestIT {
 				.andExpect(result -> assertEquals("Person not found exception",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
+	}
+	
+	/**
+	 * Method that test request to getChildAlertList when address is "1509 Culver St"
+	 * then return a list with childs : Tenley and Roger Boyd and a list with adults: John, Jacob, Felicia
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetChildAlertList_whenAddressIs1509CulverStAndExist_thenReturnAListWithRogerAndTenleyBoydandAListWithJohnJacobAndFeliciBoyd() throws Exception {
+		//GIVEN
+		//WHEN
+		//THEN
+		mockMvc.perform(get("/childAlert?address=1509 Culver St")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.listChild.[1].firstName", is("Roger"))).andExpect(jsonPath("$.listChild.[1].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.listChild.[1].age", is(3)))
+		.andExpect(jsonPath("$.listOtherPersonInHouse.[0].firstName", is("John"))).andExpect(jsonPath("$.listOtherPersonInHouse.[0].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.listOtherPersonInHouse.[0].age", is(37)))
+		.andDo(print());
+	}
+	/**
+	 * Method that test request to getChildAlertList when address is "908 73rd St"
+	 * then return an empty list for childs and a list with adults: Reginold Walker and Jamie Peters
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetChildAlertList_whenAddressIs90873rdStAndExist_thenReturnAnEmptyListWithChildsAndAListOfAdultsWithReginoldWalkerAndJamiePeters() throws Exception {
+		//GIVEN
+		//WHEN
+		//THEN
+		mockMvc.perform(get("/childAlert?address=908 73rd St")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.listOtherPersonInHouse.[0].firstName", is("Reginold"))).andExpect(jsonPath("$.listOtherPersonInHouse.[0].lastName", is("Walker")))
+		.andExpect(jsonPath("$.listOtherPersonInHouse.[0].age", is(41)))
+		.andDo(print());
+	}
+	
+	/**
+	 * Method that test request to getChildAlertList when address is "15 Boston St" and not exist 
+	 * then throw a AddressNotFoundException
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetChildAlertList_whenAddressNotExist_thenThrowAddressNotFoundException() throws Exception {
+		// GIVEN
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/childAlert?address=15 Boston St")).andExpect(status().isNotFound())
+		.andExpect(result -> assertTrue(result.getResolvedException() instanceof AddressNotFoundException))
+		.andExpect(result -> assertEquals("Address not found exception",
+				result.getResolvedException().getMessage()))
+		.andDo(print());
 	}
 }

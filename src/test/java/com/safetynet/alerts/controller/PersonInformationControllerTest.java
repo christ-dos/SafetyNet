@@ -352,7 +352,7 @@ public class PersonInformationControllerTest {
 		ChildAlertDisplaying childAlertDisplaying = new ChildAlertDisplaying(
 				new ArrayList<>(
 						Arrays.asList(new PersonChildAlert("Tenley", "Boyd", 9), 
-								new PersonChildAlert("Roger", "Boyd", 4))), new ArrayList<>(
+								new PersonChildAlert("Roger", "Boyd", 3))), new ArrayList<>(
 										Arrays.asList(new PersonChildAlert("John", "Boyd", 37),
 												new PersonChildAlert("Jacob", "Boyd", 32),
 												new PersonChildAlert("Felicia", "Boyd", 35))));
@@ -365,15 +365,15 @@ public class PersonInformationControllerTest {
 		// THEN
 		mockMvcPersonInformation.perform(get("/childAlert?address=1509 Culver St")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.listChild.[1].firstName", is("Roger"))).andExpect(jsonPath("$.listChild.[1].lastName", is("Boyd")))
-				.andExpect(jsonPath("$.listChild.[1].age", is(4)))
+				.andExpect(jsonPath("$.listChild.[1].age", is(3)))
 				.andExpect(jsonPath("$.listOtherPersonInHouse.[0].firstName", is("John"))).andExpect(jsonPath("$.listOtherPersonInHouse.[0].lastName", is("Boyd")))
 				.andExpect(jsonPath("$.listOtherPersonInHouse.[0].age", is(37)))
 				.andDo(print());
 	}
 
 	/**
-	 * Method that test getChildAlertList when person  not exist fistName Lily and lastName Sacha
-	 * then throw a PersonNotFoundException
+	 * Method that test getChildAlertList when address is "15 Boston St" and not exist 
+	 * then throw a AddressNotFoundException
 	 * @throws Exception
 	 */
 	@Test
