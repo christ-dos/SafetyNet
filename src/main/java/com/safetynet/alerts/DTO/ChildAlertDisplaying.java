@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 
 /**
  * Class that models the result for 
- * the endpoint /childAlert?address=<address>
+ * the Endpoint /childAlert?address=<address>
+ * 
  * @author Christine Duarte
  *
  */

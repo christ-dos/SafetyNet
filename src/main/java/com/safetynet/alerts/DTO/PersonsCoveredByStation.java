@@ -14,10 +14,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PersonsCoveredByStation {
 	/**
-	 * A list of {@link DisplayPartialPerson} 
+	 * A list of {@link PartialPerson} 
 	 * that contain only firstName, lastName, address and phone
 	 */
-	private List<DisplayPartialPerson> listPersonDTO;
+	private List<PartialPerson> listPersonDTO;
 	
 	/** 
 	 *A counter that counts adults
@@ -34,7 +34,7 @@ public class PersonsCoveredByStation {
 	 * @return a list with field firstName, 
 	 * lastName, address and phone of person
 	 */
-	public List<DisplayPartialPerson> getListPersonDTO() {
+	public List<PartialPerson> getListPersonDTO() {
 		return listPersonDTO;
 	}
 	

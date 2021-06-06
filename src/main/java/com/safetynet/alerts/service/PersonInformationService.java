@@ -13,7 +13,8 @@ import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
-import com.safetynet.alerts.DTO.DisplayPartialPerson;
+import com.safetynet.alerts.DTO.PartialPerson;
+import com.safetynet.alerts.DTO.PersonChildAlert;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
@@ -124,9 +125,9 @@ public class PersonInformationService implements IPersonInformationService {
 			}
 		}
 		
-		List<DisplayPartialPerson> listPersonDTO = new ArrayList<>();
+		List<PartialPerson> listPersonDTO = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
-			DisplayPartialPerson personDTO = new DisplayPartialPerson(person.getFirstName(), person.getLastName(), person.getAddress(),
+			PartialPerson personDTO = new PartialPerson(person.getFirstName(), person.getLastName(), person.getAddress(),
 					person.getPhone());
 			listPersonDTO.add(personDTO);
 		}
@@ -155,39 +156,48 @@ public class PersonInformationService implements IPersonInformationService {
 				new PersonInfoDisplaying(personInfo.getFirstName(), personInfo.getLastName(), personInfo.getAddress(), agePerson, personInfo.getEmail(), new ArrayList<>(medicalRecordPerson.getMedications()), new ArrayList<>(medicalRecordPerson.getAllergies()));
 		log.info("Service - displaying person informations for: " + firstName + " " + lastName);
 		return personInfoDTO;
-		
 	}
 	
 	/**
 	 * Method which get the list of childs and adults that living same address
 	 * 
 	 * @param address - A String containing the address of person
-	 * @return An arrayList with childs and other arrayList containing adults living in same address
+	 * @return An arrayList with childs and other arrayList containing adults living
+	 *         in same address
 	 */
 	@Override
-	public ChildAlertDisplaying getChildAlertList(String address){
+	public ChildAlertDisplaying getChildAlertList(String address) {
 		List<Person> listPersons = personDAO.getPersons();
 		List<Person> ListPersonByAddess = new ArrayList<>();
-		for(Person person : listPersons) {
-			if(person.getAddress().equals(address)){
+		for (Person person : listPersons) {
+			if (person.getAddress().equals(address)) {
 				ListPersonByAddess.add(person);
 			}
 		}
-		if(ListPersonByAddess.isEmpty()){
-			log.error("Service - Address not found: " + address);
-			throw new AddressNotFoundException("Address not found");
-		}
-		
 		List<MedicalRecord> listMedicalRecordCoveredByAddress = medicalRecordDAO
 				.getListMedicalRecordByListOfPerson(ListPersonByAddess);
-		List<DisplayPartialPerson> listAdultsByAddress = new ArrayList<>();
-		List<DisplayPartialPerson> listChildsByAddress = new ArrayList<>();
-		DateUtils dateUtils = new DateUtils();
-		for(MedicalRecord medicalRecord : listMedicalRecordCoveredByAddress) {
-			Integer age = dateUtils.getAge(medicalRecord.getBirthDate());
-			
+		if (listMedicalRecordCoveredByAddress == null) {
+			log.error("Service - Address not found: " + address);
+			throw new AddressNotFoundException("Address not found exception");
 		}
-		System.out.println(ListPersonByAddess.toString());
-		return null;
+		List<PersonChildAlert> listAdultsByAddress = new ArrayList<>();
+		List<PersonChildAlert> listChildsByAddress = new ArrayList<>();
+		DateUtils dateUtils = new DateUtils();
+		for (MedicalRecord medicalRecord : listMedicalRecordCoveredByAddress) {
+
+			Integer age = dateUtils.getAge(medicalRecord.getBirthDate());
+			PersonChildAlert personChildAlert = new PersonChildAlert(medicalRecord.getFirstName(),
+					medicalRecord.getLastName(), age);
+			if (DateUtils.isAdult(age)) {
+				listAdultsByAddress.add(personChildAlert);
+			} else {
+				listChildsByAddress.add(personChildAlert);
+			}
+		}
+		
+		ChildAlertDisplaying ChildAlertDisplaying = new ChildAlertDisplaying(listChildsByAddress, listAdultsByAddress);
+		log.info("Service -  In Address: " + address + ", living childs: " + listChildsByAddress.size() + ", adults: " + listAdultsByAddress.size());
+
+		return ChildAlertDisplaying;
 	}
 }

@@ -19,9 +19,10 @@ import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
-import com.safetynet.alerts.DTO.DisplayPartialPerson;
+import com.safetynet.alerts.DTO.PartialPerson;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.FireStation;
@@ -128,23 +129,23 @@ public class PersonInformationServiceTest {
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
 		Person index1 = new Person("Tessa", "Carman","834 Binoc Ave","Culver","97451", "841-874-6512", "tenz@email.com");
-		Person index3 = new Person("Foster", "Shepard", "748 Townings Dr", "Culver", "97451", "841-874-6544",
+		Person index2 = new Person("Foster", "Shepard", "748 Townings Dr", "Culver", "97451", "841-874-6544",
 				"jaboyd@email.com");
-		Person index4 = new Person("Jacob", "Boyd","1509 Culver St","Culver","97451", "841-874-6512"
+		Person index3 = new Person("Jacob", "Boyd","1509 Culver St","Culver","97451", "841-874-6512"
 				, "drk@email.com" );
-		Person index5 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+		Person index4 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
 				"tenz@email.com");
-		Person index6 = new Person("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+		Person index5 = new Person("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
 				"jaboyd@email.com" );
-		Person index7 = new Person("Felicia", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+		Person index6 = new Person("Felicia", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
 				"jaboyd@email.com" );
 		mockList.add(index0);
 		mockList.add(index1);
+		mockList.add(index2);
 		mockList.add(index3);
 		mockList.add(index4);
 		mockList.add(index5);
 		mockList.add(index6);
-		mockList.add(index7);
 
 		mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
@@ -189,8 +190,8 @@ public class PersonInformationServiceTest {
 		// GIVEN
 		
 		String stationNumber = "3";
-		DisplayPartialPerson expectedJohnBoyd = new DisplayPartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
-		DisplayPartialPerson expectedFoster = new DisplayPartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		PartialPerson expectedJohnBoyd = new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
+		PartialPerson expectedFoster = new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOmock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
@@ -232,8 +233,8 @@ public class PersonInformationServiceTest {
 		// GIVEN
 		
 		String fireStation = "3";
-		DisplayPartialPerson expectedJohnBoyd = new DisplayPartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
-		DisplayPartialPerson expectedFoster = new DisplayPartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		PartialPerson expectedJohnBoyd = new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
+		PartialPerson expectedFoster = new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOmock.getAddressesCoveredByStationNumber(fireStation)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		// WHEN
@@ -294,7 +295,7 @@ public class PersonInformationServiceTest {
 	 * called
 	 */
 	@Test
-	public void testGetPersongetPersonInformation__whenInputPersonNotExist_resultThrowPersonNotFoundException() {
+	public void testGetPersonInformation__whenInputPersonNotExist_resultThrowPersonNotFoundException() {
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";
@@ -304,16 +305,79 @@ public class PersonInformationServiceTest {
 		assertThrows(PersonNotFoundException.class, () -> personInformationService.getPersonInformation(firstName, lastName));
 	}
 	
+	/**
+	 * Method that test getChildAlertList when address is "1509 Culver St" 
+	 * then return A list with 2 childs: TenLey and Roger Boyd 
+	 * and a list with 3 adults : John, Jacob and Felicia Boyd
+	 */
 	@Test
 	public void testGetChildAlertList_whenAddressExist_thenReturnListOfChildAndListOfAdultsLivingInSameAddress() {
 		//GIVEN
+		List<Person> mockListByAddress = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Jacob", "Boyd","1509 Culver St","Culver","97451", "841-874-6512"
+				, "drk@email.com" );
+		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"tenz@email.com");
+		Person index3 = new Person("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		Person index4 = new Person("Felicia", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		mockListByAddress.add(index0);
+		mockListByAddress.add(index1);
+		mockListByAddress.add(index2);
+		mockListByAddress.add(index3);
+		mockListByAddress.add(index4);
+		
+		List<MedicalRecord> mockListMedicalRecordByAddress = new ArrayList<>();
+		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMRecord1 = new MedicalRecord("Jacob", "Boyd", "03/06/1989",
+				new ArrayList<>(Arrays.asList("pharmacol:5000mg", "terazine:10mg", "noznazol:250mg")),
+				new ArrayList<>());
+		MedicalRecord indexMRecord2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord3 = new MedicalRecord("Roger", "Boyd", "09/06/2017", new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord4 = new MedicalRecord("Felicia", "Boyd", "01/08/1986",
+				new ArrayList<>(Arrays.asList("tetracyclaz:650mg")), new ArrayList<>(Arrays.asList("xilliathal")));
+		
+		mockListMedicalRecordByAddress.add(indexMRecord0);
+		mockListMedicalRecordByAddress.add(indexMRecord1);
+		mockListMedicalRecordByAddress.add(indexMRecord2);
+		mockListMedicalRecordByAddress.add(indexMRecord3);
+		mockListMedicalRecordByAddress.add(indexMRecord4);
+		
 		String address = "1509 Culver St";
-		when(personDAOMock.getPersons()).thenReturn(mockList);
+		when(personDAOMock.getPersons()).thenReturn(mockListByAddress);
+		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockListByAddress)).thenReturn(mockListMedicalRecordByAddress);
 		//WHEN
 		ChildAlertDisplaying childAlertResult = personInformationService.getChildAlertList(address);
 		//THEN
+		//verify that Tenley Boyd is contained in childs list
 		assertEquals("Tenley", childAlertResult.getListChild().get(0).getFirstName());
 		assertEquals("Boyd", childAlertResult.getListChild().get(0).getLastName());
+		assertEquals(9, childAlertResult.getListChild().get(0).getAge());
+		//verify that John Boyd is contained in list of other person living in same address
+		assertEquals("John", childAlertResult.getListOtherPersonInHouse().get(0).getFirstName());
+		assertEquals("Boyd", childAlertResult.getListOtherPersonInHouse().get(0).getLastName());
+		assertEquals(37, childAlertResult.getListOtherPersonInHouse().get(0).getAge());
 	}
 	
+	/**
+	 * Method that test getChildAlertList when address not exist then should throw a
+	 * {@link AddressNotFoundException} 
+	 */
+	@Test
+	public void testGetChildAlertList__whenInputAddressNotExist_resultThrowAddressNotFoundException() {
+		// GIVEN
+		String address = "15 flower St";
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		when(personInformationService.getChildAlertList(address)).thenThrow(new AddressNotFoundException("Address not found exception"));
+		// WHEN
+		// THEN
+		assertThrows(AddressNotFoundException.class, () -> personInformationService.getChildAlertList(address));
+	}
 }

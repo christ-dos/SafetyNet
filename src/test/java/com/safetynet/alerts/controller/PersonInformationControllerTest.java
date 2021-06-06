@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
-import com.safetynet.alerts.DTO.DisplayPartialPerson;
+import com.safetynet.alerts.DTO.PartialPerson;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
@@ -161,9 +161,9 @@ public class PersonInformationControllerTest {
 		mockListMedicalRecord.add(indexMRecord2);
 		
 		mockPersonsCoveredByStation = new PersonsCoveredByStation(
-				new ArrayList<>(Arrays.asList(new DisplayPartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512"),
-						new DisplayPartialPerson("Tessa", "Carman", "834 Binoc Ave", "841-874-6512"),
-						new DisplayPartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544"))),
+				new ArrayList<>(Arrays.asList(new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512"),
+						new PartialPerson("Tessa", "Carman", "834 Binoc Ave", "841-874-6512"),
+						new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544"))),
 				2, 1);
 	}
 	
