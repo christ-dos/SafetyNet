@@ -260,7 +260,7 @@ public class PersonTestIT {
 				.andExpect(jsonPath("$.message", is("Person not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 				.andExpect(
-						result -> assertEquals("The person that we want update not exist : " + personTest.getFirstName()
+						result -> assertEquals("The person that we want update not exist: " + personTest.getFirstName()
 								+ " " + personTest.getLastName(), result.getResolvedException().getMessage()))
 				.andDo(print());
 	}

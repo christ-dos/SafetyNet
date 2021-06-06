@@ -64,7 +64,7 @@ public class PersonService implements IPersonService {
 		}
 		Person person = personDAO.getPerson(firstName, lastName);
 		if (person != null) {
-			log.debug("Service - Person found : " + person.getFirstName() + " " + person.getLastName());
+			log.debug("Service - Person found: " + person.getFirstName() + " " + person.getLastName());
 			return person;
 		}
 		log.error("Service - Person not found: " + firstName +  " " + lastName);
@@ -104,10 +104,10 @@ public class PersonService implements IPersonService {
 	public String deletePerson(String firstName, String lastName) {
 		Person person = personDAO.getPerson(firstName, lastName);
 		if (person != null) {
-			log.debug("Service - Person deleted : " + firstName + " " + lastName);
+			log.debug("Service - Person deleted: " + firstName + " " + lastName);
 			return personDAO.delete(person);
 		}
-		log.error("Service - Person cannot be deleted : " + firstName + " " + lastName + " because not exist");
+		log.error("Service - Person cannot be deleted: " + firstName + " " + lastName + " because not exist");
 		return "Person not Deleted";
 	}
 
@@ -125,10 +125,10 @@ public class PersonService implements IPersonService {
 		Person resultPersonFinded = personDAO.getPerson(firstName, lastName);
 
 		if (resultPersonFinded == null) {
-			log.error("Service - The person that we want update not exist : " + person.getFirstName() + " "
+			log.error("Service - The person that we want update not exist: " + person.getFirstName() + " "
 					+ person.getLastName());
 			throw new PersonNotFoundException(
-					"The person that we want update not exist : " + person.getFirstName() + " " + person.getLastName());
+					"The person that we want update not exist: " + person.getFirstName() + " " + person.getLastName());
 		}
 		List<Person> personList = getListPersons();
 		int indexPosition = personList.indexOf(resultPersonFinded);

@@ -80,14 +80,14 @@ public class PersonInformationService implements IPersonInformationService {
 	public List<String> getPhoneAlertResidentsCoveredByStation(String station) {
 		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(station);
 		if(listAddressCoveredByFireStation == null) {
-			log.error("PersonInformationService - FireStation not found with station number : " + station);
+			log.error("Service - FireStation not found with station number: " + station);
 			throw new FireStationNotFoundException("The FireStation number not found");
 		}
 		// collect persons by the list of addresses covered by station
 		List<Person> listPersonCoveredByStation = personDAO.getPersonsByListAdresses(listAddressCoveredByFireStation);
 		List<String> listPhoneResidents = listPersonCoveredByStation.stream()
 				.map(person -> person.getPhone()).collect(Collectors.toList());
-		log.info("PersonInformationService - The list of phone of residents by the station number : " + station + " has been requested");
+		log.info("PersonInformationService - The list of phone of residents by the station number: " + station + " has been requested");
 		return listPhoneResidents;
 	}
 	
@@ -104,7 +104,7 @@ public class PersonInformationService implements IPersonInformationService {
 		// get addresses covered by fireStation
 		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(station);
 		if(listAddressCoveredByFireStation == null) {
-			log.error("PersonInformationService - FireStation not found with station number : " + station);
+			log.error("Service - FireStation not found with station number: " + station);
 			throw new FireStationNotFoundException("The FireStation number not found");
 		}
 		
@@ -132,12 +132,11 @@ public class PersonInformationService implements IPersonInformationService {
 		}
 		PersonsCoveredByStation displayingListPersonsCoveredByStation = new PersonsCoveredByStation(
 				listPersonDTO, adultCouter, childCounter);
-		log.info("PersonInformationService - List of persons covered by station number: " + station);
+		log.info("Service - List of persons covered by station number: " + station);
 		
 		return displayingListPersonsCoveredByStation;
 	}
 	
-
 	/**
 	 * Method that get person informations and medicalRecord with the firstName and lastName
 	 * 
@@ -154,7 +153,7 @@ public class PersonInformationService implements IPersonInformationService {
 		
 		PersonInfoDisplaying personInfoDTO = 
 				new PersonInfoDisplaying(personInfo.getFirstName(), personInfo.getLastName(), personInfo.getAddress(), agePerson, personInfo.getEmail(), new ArrayList<>(medicalRecordPerson.getMedications()), new ArrayList<>(medicalRecordPerson.getAllergies()));
-		log.info("PersonInformationService - displaying person informations for: " + firstName + " " + lastName);
+		log.info("Service - displaying person informations for: " + firstName + " " + lastName);
 		return personInfoDTO;
 		
 	}
@@ -175,7 +174,7 @@ public class PersonInformationService implements IPersonInformationService {
 			}
 		}
 		if(ListPersonByAddess.isEmpty()){
-			log.error("PersonInformationService - Address not found: " + address);
+			log.error("Service - Address not found: " + address);
 			throw new AddressNotFoundException("Address not found");
 		}
 		
@@ -190,9 +189,5 @@ public class PersonInformationService implements IPersonInformationService {
 		}
 		System.out.println(ListPersonByAddess.toString());
 		return null;
-		
 	}
-
-	
-	
 }

@@ -199,13 +199,13 @@ public class PersonInformationServiceTest {
 		PersonsCoveredByStation PersonsCovededByStationThree = personInformationService
 				.getPersonCoveredByFireStation(stationNumber);
 		// THEN
-		// verify that the list contained 3 elements of personDTO
-		assertEquals(3, PersonsCovededByStationThree.getListPersonDTO().size());
+		// verify that the list contained 7 elements of personDTO
+		assertEquals(7, PersonsCovededByStationThree.getListPersonDTO().size());
 		//verify the list contain in index 0 John Boyd
 		assertEquals(expectedJohnBoyd, PersonsCovededByStationThree.getListPersonDTO().get(0));
 		assertEquals(expectedFoster, PersonsCovededByStationThree.getListPersonDTO().get(2));
-		assertEquals(2, PersonsCovededByStationThree.getAdultsCounter());
-		assertEquals(1, PersonsCovededByStationThree.getChildsCounter());
+		assertEquals(4, PersonsCovededByStationThree.getAdultsCounter());
+		assertEquals(3, PersonsCovededByStationThree.getChildsCounter());
 	}
 	/**
 	 * Method that test getListPersonsCoveredByFireStation
@@ -240,8 +240,8 @@ public class PersonInformationServiceTest {
 		List<String> phoneAlertPersonCovededByStationThree = personInformationService
 				.getPhoneAlertResidentsCoveredByStation(fireStation);
 		// THEN
-		// verify that the list contained 3 elements of personDTO
-		assertEquals(3, phoneAlertPersonCovededByStationThree.size());
+		// verify that the list contained 7 elements of personDTO
+		assertEquals(7, phoneAlertPersonCovededByStationThree.size());
 		//verify the list contain in index 0 John Boyd
 		assertEquals(expectedJohnBoyd.getPhone(), phoneAlertPersonCovededByStationThree.get(0));
 		assertEquals(expectedFoster.getPhone(), phoneAlertPersonCovededByStationThree.get(2));

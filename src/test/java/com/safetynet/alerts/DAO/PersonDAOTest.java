@@ -3,7 +3,6 @@ package com.safetynet.alerts.DAO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.utils.DateUtils;
 
 /**
- * Class that test PersonDAO
+ * Class that test {@link PersonDAO}
  * 
  * @author Christine Duarte
  *
@@ -37,10 +35,6 @@ public class PersonDAOTest {
 	@Mock
 	private List<Person> mockList;
 	
-	/**
-	 * A mock of  {@link DateUtils}
-	 */
-	private DateUtils dateUtils;
 	
 	/**
 	 * Method that created a mock of the ArrayList mockList with 3 elements
@@ -62,7 +56,6 @@ public class PersonDAOTest {
 		mockList.add(index2);
 
 		personDAOTest = PersonDAO.builder().listPersons(mockList).build();
-		dateUtils= new DateUtils();
 	}
 
 	/**
@@ -81,46 +74,6 @@ public class PersonDAOTest {
 		assertEquals(3, resultListgetted.size());
 	}
 	
-	/**
-	 * Method that test getAge for a birthdate 09/17/1974 
-	 * then return 46 years
-	 */
-	@Test
-	public void testGetAge_whenbithDateIsAString_thenReturnAge() {
-		//GIVEN
-		DateUtils dateUtils = new DateUtils();
-		String birthDate = "09/17/1974";
-		//WHEN
-		int resultAge = dateUtils.getAge(birthDate);
-		//THEN
-		assertEquals(46, resultAge);
-	}
-	
-	/**
-	 * Method that test getAge when the birthdate is empty
-	 * then throw an IllegalArgumentException
-	 */
-	@Test
-	public void testGetAge_whenbithDateIsEmpty_thenThrowAnIllegalArgumentException() {
-		//GIVEN
-		String birthDate = "";
-		//WHEN
-		//THEN
-		assertThrows(IllegalArgumentException.class, ()-> dateUtils.getAge(birthDate));
-	}
-	/**
-	 * Method that test getAge when the birthdate is after date actual
-	 * then return -1
-	 */
-	@Test
-	public void testGetAge_whenBirthDateIsAfterDateActual_thenReturnZero() {
-		//GIVEN
-		String birthDate = "01/25/2050";
-		//WHEN
-		int resultAge = dateUtils.getAge(birthDate);
-		//THEN
-		assertEquals(-1, resultAge);
-	}
 	
 	/**
 	 * Method that test getPersonDAO with firstName Lily and LastName Cooper when
@@ -139,7 +92,6 @@ public class PersonDAOTest {
 		assertEquals("Cooper", getPersonResult.getLastName());
 		assertEquals(mockList.get(1), getPersonResult);
 	}
-	
 
 	/**
 	 * Method that test getPersonDAO with firstName Toto and LastName Zero when
