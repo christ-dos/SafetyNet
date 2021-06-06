@@ -201,10 +201,10 @@ public class PersonInformationServiceTest {
 				.getPersonCoveredByFireStation(stationNumber);
 		// THEN
 		// verify that the list contained 7 elements of personDTO
-		assertEquals(7, PersonsCovededByStationThree.getListPersonDTO().size());
+		assertEquals(7, PersonsCovededByStationThree.getListPartialPersons().size());
 		//verify the list contain in index 0 John Boyd
-		assertEquals(expectedJohnBoyd, PersonsCovededByStationThree.getListPersonDTO().get(0));
-		assertEquals(expectedFoster, PersonsCovededByStationThree.getListPersonDTO().get(2));
+		assertEquals(expectedJohnBoyd, PersonsCovededByStationThree.getListPartialPersons().get(0));
+		assertEquals(expectedFoster, PersonsCovededByStationThree.getListPartialPersons().get(2));
 		assertEquals(4, PersonsCovededByStationThree.getAdultsCounter());
 		assertEquals(3, PersonsCovededByStationThree.getChildsCounter());
 	}
@@ -373,9 +373,8 @@ public class PersonInformationServiceTest {
 	@Test
 	public void testGetChildAlertList__whenInputAddressNotExist_resultThrowAddressNotFoundException() {
 		// GIVEN
-		String address = "15 flower St";
+		String address = "10 Flower St";
 		when(personDAOMock.getPersons()).thenReturn(mockList);
-		when(personInformationService.getChildAlertList(address)).thenThrow(new AddressNotFoundException("Address not found exception"));
 		// WHEN
 		// THEN
 		assertThrows(AddressNotFoundException.class, () -> personInformationService.getChildAlertList(address));

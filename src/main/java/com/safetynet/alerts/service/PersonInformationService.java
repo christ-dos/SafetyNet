@@ -125,14 +125,14 @@ public class PersonInformationService implements IPersonInformationService {
 			}
 		}
 		
-		List<PartialPerson> listPersonDTO = new ArrayList<>();
+		List<PartialPerson> listOfPartialPerson = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
 			PartialPerson personDTO = new PartialPerson(person.getFirstName(), person.getLastName(), person.getAddress(),
 					person.getPhone());
-			listPersonDTO.add(personDTO);
+			listOfPartialPerson.add(personDTO);
 		}
 		PersonsCoveredByStation displayingListPersonsCoveredByStation = new PersonsCoveredByStation(
-				listPersonDTO, adultCouter, childCounter);
+				listOfPartialPerson, adultCouter, childCounter);
 		log.info("Service - List of persons covered by station number: " + station);
 		
 		return displayingListPersonsCoveredByStation;
@@ -170,16 +170,18 @@ public class PersonInformationService implements IPersonInformationService {
 		List<Person> listPersons = personDAO.getPersons();
 		List<Person> ListPersonByAddess = new ArrayList<>();
 		for (Person person : listPersons) {
-			if (person.getAddress().equals(address)) {
+			if (person.getAddress().equalsIgnoreCase(address)) {
 				ListPersonByAddess.add(person);
 			}
 		}
-		List<MedicalRecord> listMedicalRecordCoveredByAddress = medicalRecordDAO
-				.getListMedicalRecordByListOfPerson(ListPersonByAddess);
-		if (listMedicalRecordCoveredByAddress == null) {
+		
+		if (ListPersonByAddess.isEmpty()) {
 			log.error("Service - Address not found: " + address);
 			throw new AddressNotFoundException("Address not found exception");
 		}
+		List<MedicalRecord> listMedicalRecordCoveredByAddress = medicalRecordDAO
+				.getListMedicalRecordByListOfPerson(ListPersonByAddess);
+		
 		List<PersonChildAlert> listAdultsByAddress = new ArrayList<>();
 		List<PersonChildAlert> listChildsByAddress = new ArrayList<>();
 		DateUtils dateUtils = new DateUtils();

@@ -17,7 +17,7 @@ public class PersonsCoveredByStation {
 	 * A list of {@link PartialPerson} 
 	 * that contain only firstName, lastName, address and phone
 	 */
-	private List<PartialPerson> listPersonDTO;
+	private List<PartialPerson> listPartialPersons;
 	
 	/** 
 	 *A counter that counts adults
@@ -30,12 +30,12 @@ public class PersonsCoveredByStation {
 	private Integer childsCounter;
 	
 	/**
-	 * getter for listPersonDTO
+	 * getter for listPartialPersons
 	 * @return a list with field firstName, 
 	 * lastName, address and phone of person
 	 */
-	public List<PartialPerson> getListPersonDTO() {
-		return listPersonDTO;
+	public List<PartialPerson> getListPartialPersons() {
+		return listPartialPersons;
 	}
 	
 	/**
@@ -53,4 +53,5 @@ public class PersonsCoveredByStation {
 	public Integer getChildsCounter() {
 		return childsCounter;
 	}
+
 }

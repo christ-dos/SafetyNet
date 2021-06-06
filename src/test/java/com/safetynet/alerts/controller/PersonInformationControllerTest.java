@@ -27,9 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.DTO.ChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PartialPerson;
+import com.safetynet.alerts.DTO.PersonChildAlert;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.model.FireStation;
@@ -185,8 +188,8 @@ public class PersonInformationControllerTest {
 		// WHEN
 		// THEN
 		mockMvcPersonInformation.perform(get("/firestation?station=3")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.listPersonDTO[0].firstName", is("John"))).andExpect(jsonPath("$.listPersonDTO[0].lastName", is("Boyd")))
-				.andExpect(jsonPath("$.listPersonDTO[0].address", is("1509 Culver St"))).andExpect(jsonPath("$.listPersonDTO[0].phone", is("841-874-6512")))
+				.andExpect(jsonPath("$.listPartialPersons[0].firstName", is("John"))).andExpect(jsonPath("$.listPartialPersons[0].lastName", is("Boyd")))
+				.andExpect(jsonPath("$.listPartialPersons[0].address", is("1509 Culver St"))).andExpect(jsonPath("$.listPartialPersons[0].phone", is("841-874-6512")))
 				.andExpect(jsonPath("$.adultsCounter", is(2)))
 				.andDo(print());
 	}
@@ -273,7 +276,6 @@ public class PersonInformationControllerTest {
 		when(personInformationServiceMock.getPersonInformation(anyString(), anyString())).thenReturn(mockPersonInfoDisplaying);
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(personJohnBoyd);
 		when(medicalRecordDAOMock.get(anyString(), anyString())).thenReturn(medicalRecordJohnBoyd);
-		//when(personDAOMock.getAge(anyString())).thenReturn(37);
 		// WHEN
 		// THEN
 		mockMvcPersonInformation.perform(get("/personinfo?firstName=John&lastName=Boyd")).andExpect(status().isOk())
@@ -285,7 +287,7 @@ public class PersonInformationControllerTest {
 	}
 	
 	/**
-	 * Method that test GetPersonInfo when person  not exist fistName Lily and lastName Sacha
+	 * Method that test GetPersonInfo when person not exist fistName Lily and lastName Sacha
 	 * then throw a PersonNotFoundException
 	 * @throws Exception
 	 */
@@ -298,6 +300,91 @@ public class PersonInformationControllerTest {
 		mockMvcPersonInformation.perform(get("/personinfo?firstName=Lily&lastName=Sacha")).andExpect(status().isNotFound())
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof PersonNotFoundException))
 		.andExpect(result -> assertEquals("Person not found exception",
+				result.getResolvedException().getMessage()))
+		.andDo(print());
+	}
+	
+	/**
+	 * Method that test getChildAlertList when address is "1509 Culver St"
+	 * then return a list with childs : Tenley and Roger Boyd and a list with adults: John, Jacob, Felicia
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetChildAlertList_whenAddressIs1509CulverStAndExist_thenReturnAListWithRogerAndTenleyBoydandAListWithJohnJacobAndFeliciBoyd() throws Exception {
+		// GIVEN
+		List<Person> mockListByAddress = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Jacob", "Boyd","1509 Culver St","Culver","97451", "841-874-6512"
+				, "drk@email.com" );
+		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"tenz@email.com");
+		Person index3 = new Person("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		Person index4 = new Person("Felicia", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		mockListByAddress.add(index0);
+		mockListByAddress.add(index1);
+		mockListByAddress.add(index2);
+		mockListByAddress.add(index3);
+		mockListByAddress.add(index4);
+		
+		List<MedicalRecord> mockListMedicalRecordByAddress = new ArrayList<>();
+		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMRecord1 = new MedicalRecord("Jacob", "Boyd", "03/06/1989",
+				new ArrayList<>(Arrays.asList("pharmacol:5000mg", "terazine:10mg", "noznazol:250mg")),
+				new ArrayList<>());
+		MedicalRecord indexMRecord2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord3 = new MedicalRecord("Roger", "Boyd", "09/06/2017", new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord4 = new MedicalRecord("Felicia", "Boyd", "01/08/1986",
+				new ArrayList<>(Arrays.asList("tetracyclaz:650mg")), new ArrayList<>(Arrays.asList("xilliathal")));
+		
+		mockListMedicalRecordByAddress.add(indexMRecord0);
+		mockListMedicalRecordByAddress.add(indexMRecord1);
+		mockListMedicalRecordByAddress.add(indexMRecord2);
+		mockListMedicalRecordByAddress.add(indexMRecord3);
+		mockListMedicalRecordByAddress.add(indexMRecord4);
+		
+		ChildAlertDisplaying childAlertDisplaying = new ChildAlertDisplaying(
+				new ArrayList<>(
+						Arrays.asList(new PersonChildAlert("Tenley", "Boyd", 9), 
+								new PersonChildAlert("Roger", "Boyd", 4))), new ArrayList<>(
+										Arrays.asList(new PersonChildAlert("John", "Boyd", 37),
+												new PersonChildAlert("Jacob", "Boyd", 32),
+												new PersonChildAlert("Felicia", "Boyd", 35))));
+										
+		String address = "1509 Culver St";
+		when(personDAOMock.getPersons()).thenReturn(mockListByAddress);
+		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockListByAddress)).thenReturn(mockListMedicalRecordByAddress);
+		when(personInformationServiceMock.getChildAlertList(address)).thenReturn(childAlertDisplaying);
+		// WHEN
+		// THEN
+		mockMvcPersonInformation.perform(get("/childAlert?address=1509 Culver St")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.listChild.[1].firstName", is("Roger"))).andExpect(jsonPath("$.listChild.[1].lastName", is("Boyd")))
+				.andExpect(jsonPath("$.listChild.[1].age", is(4)))
+				.andExpect(jsonPath("$.listOtherPersonInHouse.[0].firstName", is("John"))).andExpect(jsonPath("$.listOtherPersonInHouse.[0].lastName", is("Boyd")))
+				.andExpect(jsonPath("$.listOtherPersonInHouse.[0].age", is(37)))
+				.andDo(print());
+	}
+
+	/**
+	 * Method that test getChildAlertList when person  not exist fistName Lily and lastName Sacha
+	 * then throw a PersonNotFoundException
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetChildAlertList_whenAddressNotExist_thenThrowAddressNotFoundException() throws Exception {
+		// GIVEN
+		when(personInformationServiceMock.getChildAlertList(anyString())).thenThrow(new AddressNotFoundException("Address not found exception"));
+		// WHEN
+		// THEN
+		mockMvcPersonInformation.perform(get("/childAlert?address=15 Boston St")).andExpect(status().isNotFound())
+		.andExpect(result -> assertTrue(result.getResolvedException() instanceof AddressNotFoundException))
+		.andExpect(result -> assertEquals("Address not found exception",
 				result.getResolvedException().getMessage()))
 		.andDo(print());
 	}

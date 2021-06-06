@@ -48,8 +48,8 @@ public class PersonInformationTestIT {
 		// WHEN
 		// THEN
 		mockMvc.perform(get("/firestation?station=4")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.listPersonDTO[0].firstName", is("Tony"))).andExpect(jsonPath("$.listPersonDTO[0].lastName", is("Cooper")))
-				.andExpect(jsonPath("$.listPersonDTO[0].address", is("112 Steppes Pl"))).andExpect(jsonPath("$.listPersonDTO[0].phone", is("841-874-6874")))
+				.andExpect(jsonPath("$.listPartialPersons[0].firstName", is("Tony"))).andExpect(jsonPath("$.listPartialPersons[0].lastName", is("Cooper")))
+				.andExpect(jsonPath("$.listPartialPersons[0].address", is("112 Steppes Pl"))).andExpect(jsonPath("$.listPartialPersons[0].phone", is("841-874-6874")))
 				.andExpect(jsonPath("$.adultsCounter", is(4)))
 				.andExpect(jsonPath("$.childsCounter", is(0)))
 				.andDo(print());
