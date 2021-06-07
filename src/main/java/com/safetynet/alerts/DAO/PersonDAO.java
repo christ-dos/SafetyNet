@@ -55,6 +55,20 @@ public class PersonDAO implements IPersonDAO {
 		.collect(Collectors.toList());
 		return listPersonGetByListAddress;
 	}
+	
+	/**
+	 * Method that get the list of person by address
+	 * 
+	 * @return An ArrayList of Persons with address provided in parameter
+	 */
+	@Override
+	public List<Person> getListPersonByAddress(String address){
+		List<Person> listPersonGetByAddress = listPersons.stream()
+		.filter(person -> person.getAddress().equalsIgnoreCase(address))
+		.map(person-> person)
+		.collect(Collectors.toList());
+		return listPersonGetByAddress;
+	}
 
 	/**
 	 * Method that get a person by combining keys firstName and lastName
