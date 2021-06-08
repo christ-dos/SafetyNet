@@ -223,13 +223,15 @@ public class PersonInformationService implements IPersonInformationService {
 		List<String> stationsAddress = new ArrayList<>();
 		for (String station : stations) {
 			List<String> addresses = fireStationDAO.getAddressesCoveredByStationNumber(station);
-			for (String address : addresses) {
-				stationsAddress.add(address);
+			if (addresses != null) {
+				for (String address : addresses) {
+					stationsAddress.add(address);
+				} 
 			}
 		}
-		if (stationsAddress.isEmpty()) {
+		if (stationsAddress.size() == 0) {
 			log.error("Service - FireStations not found with stations number: " + stations);
-			throw new FireStationNotFoundException("FireStations not found");
+			throw new FireStationNotFoundException("FireStations number not found");
 		}
 		List<Person> listPersonsCoveredByStations = personDAO.getPersonsByListAdresses(stationsAddress);
 		List<MedicalRecord> medicalRecordsCoveredByStations = medicalRecordDAO

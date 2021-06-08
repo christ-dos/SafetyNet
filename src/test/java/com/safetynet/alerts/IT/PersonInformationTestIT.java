@@ -196,4 +196,45 @@ public class PersonInformationTestIT {
 				result.getResolvedException().getMessage()))
 		.andDo(print());
 	}
+	
+	/**
+	 * Method that test request to getFloodPersonsCoveredByStationList when 
+	 * stations number exist and Is "1" and "4" then return a map with persons informations
+	 * (firstName, lastName, phone, age, and medical history)grouping by address
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFloodPersonsCoveredByStationList_whenstationsNumberExist_thenReturnListPersonsGroupingByAddress() throws Exception {
+		//GIVEN
+		//WHEN
+		//THEN
+		mockMvc.perform(get("/flood/stations?stations=1,4")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.['908 73rd St'].[0].firstName", is("Reginold"))).andExpect(jsonPath("$.['908 73rd St'].[0].lastName", is("Walker")))
+		.andExpect(jsonPath("$.['908 73rd St'].[0].age", is(41))).andExpect(jsonPath("$.['908 73rd St'].[0].medication[0]", is("thradox:700mg")))
+		.andExpect(jsonPath("$.['908 73rd St'].[0].allergies[0]", is("illisoxian")))
+		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].firstName", is("Tony")))
+		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].medication[0]", is("hydrapermazol:300mg")))
+		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].medication[1]", is("dodoxadin:30mg")))
+		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].allergies[0]", is("shellfish")))
+		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].age", is(27)))
+		.andDo(print());
+	}
+	
+	/**
+	 * Method that test request to getFloodPersonsCoveredByStationList when stations number is "8" and "9" and not exist 
+	 * then throw {@link FireStationNotFoundException}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFloodPersonsCoveredByStationList_whenStationsNumberNotExist_thenReturnFireStationNotFoundException() throws Exception {
+		// GIVEN
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/flood/stations?stations=8,9")).andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
+				.andExpect(result -> assertEquals("FireStations number not found",
+						result.getResolvedException().getMessage()))
+				.andDo(print());
+	}
 }
