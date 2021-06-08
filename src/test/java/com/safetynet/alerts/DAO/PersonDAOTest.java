@@ -1,10 +1,12 @@
 package com.safetynet.alerts.DAO;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -71,6 +73,7 @@ public class PersonDAOTest {
 		List<Person> resultListgetted = personDAOTest.getPersons();
 		// THEN
 		assertEquals(personJohnBoyd, resultListgetted.get(0));
+		//the list conatin 3 elements
 		assertEquals(3, resultListgetted.size());
 	}
 	
@@ -140,7 +143,92 @@ public class PersonDAOTest {
 		// THEN
 		assertNull(getPersonResult);
 	}
-
+	
+	/**
+	 * Method that test GetPersonsByListAdresses with a list of address "892 Downing Ct" and "947 E. Rose Dr"
+	 * when addresses exist then return a list containing 2 persons: Sophia Zemicks and Brian Stelzer
+	 * 
+	 */
+	@Test
+	public void testGetPersonsByListAdresses_whenListAddressIs892DowningCtAnd947ERoseDr_thenReturnAListOfPersonswithTwoPersons() {
+		//GIVEN
+		Person personSophiaZemicks = new Person("Sophia", "Zemicks", "892 Downing Ct", "Culver", "97451", "841-874-7878",
+				"sophd@email.com");
+		Person personBrianStelzer = new Person("Brian", "Stelzer", "947 E. Rose Dr", "Culver", "97451", "841-874-7784",
+				"bstel@email.com");
+		Person personEricCardigan = new Person("Eric", "Cadigan", "951 LoneTree Rd", "Culver", "97451", "841-874-7458",
+				"gramp@email.com");
+		mockList.add(personSophiaZemicks);
+		mockList.add(personBrianStelzer);
+		mockList.add(personEricCardigan);
+		
+		List<String> mockListAddress = new ArrayList<>(Arrays.asList("892 Downing Ct", "947 E. Rose Dr"));
+		//WHEN
+		List<Person> listPersonsByListAddresses = personDAOTest.getPersonsByListAdresses(mockListAddress);
+		//THEN
+		//the list contain 2 persons
+		assertEquals(2, listPersonsByListAddresses.size());
+		assertEquals(personSophiaZemicks, listPersonsByListAddresses.get(0));
+		assertEquals(personBrianStelzer, listPersonsByListAddresses.get(1));
+	}
+	
+	/**
+	 * Method that test GetPersonsByListAdresses with a list of address
+	 * when addresses not exist then return an empty list
+	 * 
+	 */
+	@Test
+	public void testGetPersonsByListAdresses_whenListAddressNotExist_thenReturnAnEmptyList() {
+		List<String> mockListAddress = new ArrayList<>(Arrays.asList("89 parc St", "94 Hide St"));
+		//WHEN
+		List<Person> listPersonsByListAddresses = personDAOTest.getPersonsByListAdresses(mockListAddress);
+		//THEN
+		// if the list is empty then return true
+		assertTrue(listPersonsByListAddresses.isEmpty());
+	}
+	
+	/**
+	 * Method that test GetListPersonByAddress with address "112 Steppes Pl"
+	 * when address exist then return a list containing 2 persons which living in same address: 
+	 * Ron Peters and Allison Boyd 
+	 * 
+	 * 
+	 */
+	@Test
+	public void testGetListPersonByAddress_whenAdressExistInArray_resultShouldReturnListPersonLivingInSameAddress() {
+		// GIVEN
+		String address = "112 Steppes Pl";
+		Person personRonPeters= new Person("Ron", "Peters", "112 Steppes Pl", "Culver", "97451", "841-874-8888",
+				"jpeter@email.com");
+		Person personAllisonBoyd = new Person("Allison", "Boyd", "112 Steppes Pl", "Culver", "97451", "841-874-9888",
+				"aly@email.com");
+		mockList.add(personRonPeters);
+		mockList.add(personAllisonBoyd);
+		// WHEN
+		List<Person> getListPersonByAddress = personDAOTest.getListPersonByAddress(address);
+		// THEN
+		//2 persons living in same address
+		assertEquals(2, getListPersonByAddress.size());
+		assertEquals(personRonPeters, getListPersonByAddress.get(0));
+		assertEquals(personAllisonBoyd, getListPersonByAddress.get(1));
+		assertEquals(mockList.get(4), getListPersonByAddress.get(1));
+	}
+	
+	/**
+	 * Method that test GetListPersonByAddress 
+	 * when the address not exist then return an empty list
+	 * 
+	 */
+	@Test
+	public void testGetListPersonByAddress_whenAddressNotExist_thenReturnAnEmptyList() {
+		String addressNotExist = "89 parc St";
+		//WHEN
+		List<Person> listPersonsByAddress = personDAOTest.getListPersonByAddress(addressNotExist);
+		//THEN
+		// if the list is empty then return true
+		assertTrue(listPersonsByAddress.isEmpty());
+	}
+	
 	/**
 	 * Method that test savePersonDAO when person not exist then return the person
 	 * saved and verify if the person is saved at the end of the array and verify
@@ -157,7 +245,7 @@ public class PersonDAOTest {
 		// THEN
 		assertSame(personTest, resultPerson);
 		assertEquals("Tata", resultPerson.getFirstName());
-		// verify array contain 4 persons
+		// verify array contain 4persons
 		assertEquals(4, mockList.size());
 		// verify Person was Added at the end of Array
 		assertEquals(3, mockList.indexOf(resultPerson));

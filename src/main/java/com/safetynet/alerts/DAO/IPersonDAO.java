@@ -43,14 +43,6 @@ public interface IPersonDAO {
 	public Person getPersonByAddress(String address);
 	
 	/**
-	 * Method that get age by birthDate 
-	 * 
-	 * @param birthDate - A string containing the birthDate
-	 * @return The value of age
-	 */
-	//public int getAge(String birthDate);
-
-	/**
 	 * Method that save a Person in the ArrayList
 	 * 
 	 * @param index - the position where will be saved the Person
@@ -65,4 +57,11 @@ public interface IPersonDAO {
 	 * @return a String to confirm the deletion
 	 */
 	public String delete(Person person);
+
+	/**
+	 * Method that get the list of person by address
+	 * 
+	 * @return An ArrayList of Persons with address provided in parameter
+	 */
+	public List<Person> getListPersonByAddress(String address);
 }

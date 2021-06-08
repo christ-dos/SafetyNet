@@ -53,7 +53,23 @@ public class PersonDAO implements IPersonDAO {
 		.filter(person -> listAddress.contains(person.getAddress()))
 		.map(person-> person)
 		.collect(Collectors.toList());
+		log.debug("DAO - List of person found with the list address: " + listAddress);
 		return listPersonGetByListAddress;
+	}
+	
+	/**
+	 * Method that get the list of person by address
+	 * 
+	 * @return An ArrayList of Persons living in same address
+	 */
+	@Override
+	public List<Person> getListPersonByAddress(String address){
+		List<Person> listPersonGetByAddress = listPersons.stream()
+		.filter(person -> person.getAddress().equalsIgnoreCase(address))
+		.map(person-> person)
+		.collect(Collectors.toList());
+		log.debug("DAO - List of person found with address: " + address);
+		return listPersonGetByAddress;
 	}
 
 	/**
