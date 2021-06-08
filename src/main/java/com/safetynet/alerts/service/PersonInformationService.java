@@ -210,11 +210,20 @@ public class PersonInformationService implements IPersonInformationService {
 		return ChildAlertDisplaying;
 	}
 
+	/**
+	 * Method that get a list of persons covered by a list of station number the
+	 * list of person is grouping by address of households should return firstName,
+	 * lastName, phone, age and medical history
+	 * 
+	 * @param stations - a list containing station number
+	 * @return A map with the list of persons covered by the list of station number
+	 *         and persons are grouping by address
+	 */
 	public Map<String, List<PersonFlood>> getHouseHoldsCoveredByFireStation(List<String> stations) {
 		List<String> stationsAddress = new ArrayList<>();
 		for (String station : stations) {
-			List<String> Addresses = fireStationDAO.getAddressesCoveredByStationNumber(station);
-			for (String address : Addresses) {
+			List<String> addresses = fireStationDAO.getAddressesCoveredByStationNumber(station);
+			for (String address : addresses) {
 				stationsAddress.add(address);
 			}
 		}
@@ -225,11 +234,11 @@ public class PersonInformationService implements IPersonInformationService {
 		List<Person> listPersonsCoveredByStations = personDAO.getPersonsByListAdresses(stationsAddress);
 		List<MedicalRecord> medicalRecordsCoveredByStations = medicalRecordDAO
 				.getListMedicalRecordByListOfPerson(listPersonsCoveredByStations);
-		
+
 		List<PersonFlood> listPersonsFlood = new ArrayList<>();
 		for (Person person : listPersonsCoveredByStations) {
-			PersonFlood PersonFlood = new PersonFlood(person.getFirstName(), person.getLastName(), null, null, person.getAddress(),
-					person.getPhone(), null);
+			PersonFlood PersonFlood = new PersonFlood(person.getFirstName(), person.getLastName(), null, null,
+					person.getAddress(), person.getPhone(), null);
 			listPersonsFlood.add(PersonFlood);
 		}
 		for (int i = 0; i < medicalRecordsCoveredByStations.size(); i++) {
@@ -242,7 +251,6 @@ public class PersonInformationService implements IPersonInformationService {
 
 		Map<String, List<PersonFlood>> personGroupingByAddress = listPersonsFlood.stream()
 				.collect(Collectors.groupingBy(PersonFlood::getAddress));
-		System.out.println(personGroupingByAddress);
 		log.info("Service - Flood list of persons grouping by address displaying for station number: " + stations);
 		return personGroupingByAddress;
 	}

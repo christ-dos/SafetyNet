@@ -12,7 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,7 @@ import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PartialPerson;
 import com.safetynet.alerts.DTO.PersonChildAlert;
+import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
@@ -238,7 +241,7 @@ public class PersonInformationControllerTest {
 	}
 	
 	/**
-	 * Method that test getPhoneAlertResidentsCoveredByStation when the station number is five then throw
+	 * Method that test getPhoneAlertResidentsCoveredByStation when the station number is "5" then throw
 	 * {@link FireStationNotFoundException}
 	 * 
 	 * @throws Exception
@@ -259,7 +262,7 @@ public class PersonInformationControllerTest {
 	}
 
 	/**
-	 * Method that test GetPersonInfo when person exist fistName John and lastName Boyd
+	 * Method that test getPersonInfo when person exist fistName John and lastName Boyd
 	 * then return informations of person: "John", "Boyd", "1509 Culver St", 37,"jaboyd@email.com" and medical history of person
 	 * @throws Exception
 	 */
@@ -287,7 +290,7 @@ public class PersonInformationControllerTest {
 	}
 	
 	/**
-	 * Method that test GetPersonInfo when person not exist fistName Lily and lastName Sacha
+	 * Method that test getPersonInfo when person not exist fistName Lily and lastName Sacha
 	 * then throw a PersonNotFoundException
 	 * @throws Exception
 	 */
@@ -387,5 +390,65 @@ public class PersonInformationControllerTest {
 		.andExpect(result -> assertEquals("Address not found exception",
 				result.getResolvedException().getMessage()))
 		.andDo(print());
+	}
+	
+	/**
+	 * Method that test getFloodPersonsCoveredByStationList when 
+	 * stations number exist then return a map with persons informations
+	 * (firstName, lastName, phone, age, and medical history)grouping by address
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFloodPersonsCoveredByStationList_whenstationsNumberExist_thenReturnListPersonsGroupingByAddress() throws Exception {
+		//GIVEN
+		List<String> stations = new ArrayList<>(Arrays.asList("2", "3"));
+		
+		Map<String, List<PersonFlood>> mockMapPersonFlood = new HashMap<>();
+		mockMapPersonFlood.put("1509 Culver St",new ArrayList<>(Arrays.asList(
+				new PersonFlood("John", "Boyd",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")), "1509 Culver St", "841-874-6512", 37),
+				new PersonFlood("Felicia", "Boyd",
+				new ArrayList<>(Arrays.asList("tetracyclaz:650mg")),
+				new ArrayList<>(Arrays.asList("xilliathal")), "1509 Culver St", "841-874-6544", 35))));
+		mockMapPersonFlood.put("834 Binoc Ave", new ArrayList<>(Arrays.asList(new PersonFlood("Tessa", "Carman",
+				new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList()), "834 Binoc Ave", "841-874-6512", 9))));
+		mockMapPersonFlood.put("748 Townings Dr", new ArrayList<>(Arrays.asList(new PersonFlood("Foster", "Shepard",
+				new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList()), "748 Townings Dr", "841-874-6544", 41))));
+		mockMapPersonFlood.put("29 15th St", new ArrayList<>(Arrays.asList( new PersonFlood("Jonanathan", "Marrack",
+				new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList()), "29 15th St", "841-874-6513",32))));
+		
+		when(personInformationServiceMock.getHouseHoldsCoveredByFireStation(stations)).thenReturn(mockMapPersonFlood);
+		//WHEN
+		//THEN
+		mockMvcPersonInformation.perform(get("/flood/stations?stations=2,3")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.['748 Townings Dr'].[0].firstName", is("Foster"))).andExpect(jsonPath("$.['748 Townings Dr'].[0].lastName", is("Shepard")))
+		.andExpect(jsonPath("$.['748 Townings Dr'].[0].age", is(41)))
+		.andExpect(jsonPath("$.['1509 Culver St'].[1].firstName", is("Felicia"))).andExpect(jsonPath("$.['1509 Culver St'].[1].allergies[0]", is("xilliathal")))
+		.andExpect(jsonPath("$.['1509 Culver St'].[1].age", is(35)))
+		.andDo(print());
+	}
+	
+	/**
+	 * Method that test getFloodPersonsCoveredByStationList when stations number is "8" and "9" and not exist 
+	 * then throw {@link FireStationNotFoundException}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFloodPersonsCoveredByStationList_whenStationsNumberNotExist_thenReturnFireStationNotFoundException() throws Exception {
+		// GIVEN
+		List<String> stations = new ArrayList<>(Arrays.asList("8", "9"));
+		when(personInformationServiceMock.getHouseHoldsCoveredByFireStation(stations)).thenThrow(new FireStationNotFoundException("The FireStation number not found"));
+		// WHEN
+		// THEN
+		mockMvcPersonInformation.perform(get("/flood/stations?stations=8,9")).andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
+				.andExpect(result -> assertEquals("The FireStation number not found",
+						result.getResolvedException().getMessage()))
+				.andDo(print());
 	}
 }

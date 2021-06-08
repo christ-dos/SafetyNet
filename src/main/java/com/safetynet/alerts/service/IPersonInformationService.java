@@ -1,8 +1,10 @@
 package com.safetynet.alerts.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 
@@ -44,9 +46,15 @@ public interface IPersonInformationService {
 	 * @return An arrayList with childs and other arrayList containing adults living in same address
 	 */
 	public ChildAlertDisplaying getChildAlertList(String address);
-
 	
-
-	
-
+	/**
+	 * Method that get a list of persons covered by a list of station number the
+	 * list of person is grouping by address of households should return firstName,
+	 * lastName, phone, age and medical history
+	 * 
+	 * @param stations - a list containing station number
+	 * @return A map with the list of persons covered by the list of station number
+	 *         and persons are grouping by address
+	 */
+	public Map<String, List<PersonFlood>> getHouseHoldsCoveredByFireStation(List<String> stations);
 }

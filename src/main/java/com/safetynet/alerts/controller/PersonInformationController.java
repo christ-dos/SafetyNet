@@ -1,6 +1,7 @@
 package com.safetynet.alerts.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.service.IPersonInformationService;
@@ -82,5 +84,17 @@ public class PersonInformationController {
 	public ChildAlertDisplaying getChildAlertList(@Valid @RequestParam  String address) {
 		log.debug("Controller  - Request list of childs living in address " + address);
 		return personInformationService.getChildAlertList(address);
+	}
+	
+	/**
+	 * Request get to obtain a list of persons covered by a list of fireStation number
+	 * 
+	 * @param stations - A list of String containing stations numbers
+	 * @return A map containing persons grouping by address
+	 */
+	@GetMapping(value = "/flood/stations")
+	public Map<String, List<PersonFlood>> getFloodPersonsCoveredByStationList(@Valid @RequestParam List<String> stations) {
+		log.debug("Controller  - Request list of childs living in address " + stations);
+		return personInformationService.getHouseHoldsCoveredByFireStation(stations);
 	}
 }

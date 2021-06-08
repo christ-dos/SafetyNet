@@ -61,7 +61,7 @@ public class PersonInformationServiceTest {
 	 * A mock of {@link FireStationDAO}
 	 */
 	@Mock
-	private FireStationDAO fireStationDAOmock;
+	private FireStationDAO fireStationDAOMock;
 	
 	/**
 	 * A mock of {@link PersonService}
@@ -178,7 +178,7 @@ public class PersonInformationServiceTest {
 		personInformationService = PersonInformationService.builder()
 				.medicalRecordService(medicalRecordServiceMock)
 				.personService(personServiceMock)
-				.fireStationDAO(fireStationDAOmock)
+				.fireStationDAO(fireStationDAOMock)
 				.personDAO(personDAOMock)
 				.medicalRecordDAO(medicalRecordDAOMock)
 				.build();
@@ -195,7 +195,7 @@ public class PersonInformationServiceTest {
 		String stationNumber = "3";
 		PartialPerson expectedJohnBoyd = new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
 		PartialPerson expectedFoster = new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
 		//when(dateUtilsMock.getAge(anyString())).thenReturn(37, 9, 41);
@@ -220,7 +220,7 @@ public class PersonInformationServiceTest {
 	public void testgetListPersonsCoveredByFireStation_whenStationNumberNotExist_thenThrowFireStationNotFoundException() {
 		// GIVEN
 		String station = "5";
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber(anyString())).thenReturn(null);
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber(anyString())).thenReturn(null);
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class,
@@ -238,7 +238,7 @@ public class PersonInformationServiceTest {
 		String fireStation = "3";
 		PartialPerson expectedJohnBoyd = new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
 		PartialPerson expectedFoster = new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber(fireStation)).thenReturn(mockListAddress);
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber(fireStation)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		// WHEN
 		List<String> phoneAlertPersonCovededByStationThree = personInformationService
@@ -259,7 +259,7 @@ public class PersonInformationServiceTest {
 	public void testgetPhoneAlertResidentsCoveredByStation_whenStationNumberNotExist_thenThrowFireStationNotFoundException() {
 		// GIVEN
 		String fireStation = "5";
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber(anyString())).thenReturn(null);
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber(anyString())).thenReturn(null);
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class,
@@ -382,19 +382,19 @@ public class PersonInformationServiceTest {
 		// THEN
 		assertThrows(AddressNotFoundException.class, () -> personInformationService.getChildAlertList(address));
 	}
-	
+	/**
+	 * Method that test getHouseHoldsCoveredByFireStation 
+	 * when stations number are "2" and "3" and addresses covered by stations are: "1509 Culver St","834 Binoc Ave",
+	 *  "748 Townings Dr"
+	 * then return a map containing persons grouping by address 
+	 * and in each key a list of person with firstName, lastName, phone, age and medical history for each person
+	 */
 	@Test
 	public void testGetHouseHoldsCoveredByFireStation_whenStationNumberIsTwoAndThree_thenReturnPersonsCoveredByFireStationTwoAndThree() {
 		//GIVEN
 		List<String> stations = new ArrayList<>(Arrays.asList("2", "3"));
-		List<String> mockListAddressStationThree = new ArrayList<>();
-		mockListAddressStationThree.add("1509 Culver St");
-		mockListAddressStationThree.add("834 Binoc Ave");
-		mockListAddressStationThree.add("748 Townings Dr");
+		List<String> mockListAddressStationThree = new ArrayList<>(Arrays.asList("1509 Culver St", "834 Binoc Ave","748 Townings Dr" ));
 		List<String> mockListAddressStationTwo = new ArrayList<>(Arrays.asList("29 15th St"));
-		
-		//List<Person> mockListPersonStation2 = new ArrayList<>(Arrays.asList(new Person("Jonanathan", "Marrack", "29 15th St", "Culver", "97451", "841-874-6513",
-				//"drk@email.com")));
 		
 		List<Person > mockListPersonsStationsTwoAndThree = new ArrayList<>();
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
@@ -462,22 +462,25 @@ public class PersonInformationServiceTest {
 		PersonFlood PersonFloodJonanathanMarrack= new PersonFlood("Jonanathan", "Marrack",
 				new ArrayList<>(Arrays.asList()),
 				new ArrayList<>(Arrays.asList()), "29 15th St", "841-874-6513",32);
+		PersonFlood PersonFloodFosterShepard= new PersonFlood("Foster", "Shepard",
+				new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList()), "748 Townings Dr", "841-874-6544", 41);
 
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber("2")).thenReturn(mockListAddressStationTwo);
-		when(fireStationDAOmock.getAddressesCoveredByStationNumber("3")).thenReturn(mockListAddressStationThree);
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber("2")).thenReturn(mockListAddressStationTwo);
+		when(fireStationDAOMock.getAddressesCoveredByStationNumber("3")).thenReturn(mockListAddressStationThree);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockListPersonsStationsTwoAndThree);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockListPersonsStationsTwoAndThree)).thenReturn(mockListMedicalRecordStationsTwoAndThree);
 		//WHEN
-		Map<String, List<PersonFlood>> listPersonsFood = personInformationService.getHouseHoldsCoveredByFireStation(stations);
+		Map<String, List<PersonFlood>> mapPersonsgroupingByAddress = personInformationService.getHouseHoldsCoveredByFireStation(stations);
 		//THEN
 		//persons covered by station 3
 		// verify that John boyd is recorded in the key "1509 Culver St" in index 0
-		assertEquals(PersonFloodJohnBoyd, listPersonsFood.get("1509 Culver St").get(0));
-		assertEquals(PersonFloodFeliciaBoyd, listPersonsFood.get("1509 Culver St").get(4));
-		assertEquals(PersonFloodTessaCarman, listPersonsFood.get("834 Binoc Ave").get(0));
+		assertEquals(PersonFloodJohnBoyd, mapPersonsgroupingByAddress.get("1509 Culver St").get(0));
+		assertEquals(PersonFloodFeliciaBoyd, mapPersonsgroupingByAddress.get("1509 Culver St").get(4));
+		assertEquals(PersonFloodTessaCarman, mapPersonsgroupingByAddress.get("834 Binoc Ave").get(0));
+		assertEquals(PersonFloodFosterShepard, mapPersonsgroupingByAddress.get("748 Townings Dr").get(0));
 		//persons covered by Station 2
-		assertEquals(PersonFloodJonanathanMarrack, listPersonsFood.get("29 15th St").get(0));
-		
+		assertEquals(PersonFloodJonanathanMarrack, mapPersonsgroupingByAddress.get("29 15th St").get(0));
 	}
 	
 	/**
