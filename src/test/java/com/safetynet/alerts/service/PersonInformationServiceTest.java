@@ -21,6 +21,7 @@ import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PartialPerson;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
@@ -494,5 +495,66 @@ public class PersonInformationServiceTest {
 		// WHEN
 		// THEN
 		assertThrows(FireStationNotFoundException.class, () -> personInformationService.getHouseHoldsCoveredByFireStation(stations));
+	}
+	
+	@Test
+	public void testGetPersonsFireByAddress_whenAddressExist_thenReturnListPersons() {
+		//GIVEN
+		String address = "1509 Culver St";
+		List<Person> mockListByAddress = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Jacob", "Boyd","1509 Culver St","Culver","97451", "841-874-6512"
+				, "drk@email.com" );
+		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"tenz@email.com");
+		Person index3 = new Person("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		Person index4 = new Person("Felicia", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6544",
+				"jaboyd@email.com" );
+		mockListByAddress.add(index0);
+		mockListByAddress.add(index1);
+		mockListByAddress.add(index2);
+		mockListByAddress.add(index3);
+		mockListByAddress.add(index4);
+		
+		List<MedicalRecord> mockListMedicalRecordByAddress = new ArrayList<>();
+		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMRecord1 = new MedicalRecord("Jacob", "Boyd", "03/06/1989",
+				new ArrayList<>(Arrays.asList("pharmacol:5000mg", "terazine:10mg", "noznazol:250mg")),
+				new ArrayList<>());
+		MedicalRecord indexMRecord2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord3 = new MedicalRecord("Roger", "Boyd", "09/06/2017", new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord indexMRecord4 = new MedicalRecord("Felicia", "Boyd", "01/08/1986",
+				new ArrayList<>(Arrays.asList("tetracyclaz:650mg")), new ArrayList<>(Arrays.asList("xilliathal")));
+		
+		mockListMedicalRecordByAddress.add(indexMRecord0);
+		mockListMedicalRecordByAddress.add(indexMRecord1);
+		mockListMedicalRecordByAddress.add(indexMRecord2);
+		mockListMedicalRecordByAddress.add(indexMRecord3);
+		mockListMedicalRecordByAddress.add(indexMRecord4);
+		
+		
+		FireStation fireStationMock = new FireStation("3", "1509 Culver St");
+		when(personDAOMock.getListPersonByAddress(address)).thenReturn(mockListByAddress);
+		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockListByAddress)).thenReturn(mockListMedicalRecordByAddress);
+		when(fireStationDAOMock.get(address)).thenReturn(fireStationMock);
+		
+		//WHEN
+		PersonFireDisplaying resultListPersonFireDisplaying = personInformationService.getPersonsFireByAddress(address);
+		//THEN
+		//in households living 5 persons
+		assertEquals(5, resultListPersonFireDisplaying.getListPersonFire().size());
+		assertEquals("Tenley", resultListPersonFireDisplaying.getListPersonFire().get(2).getFirstName());
+		assertEquals("Boyd", resultListPersonFireDisplaying.getListPersonFire().get(2).getLastName());
+		assertEquals(9, resultListPersonFireDisplaying.getListPersonFire().get(2).getAge());
+		assertEquals("John", resultListPersonFireDisplaying.getListPersonFire().get(0).getFirstName());
+		assertEquals("Boyd", resultListPersonFireDisplaying.getListPersonFire().get(0).getLastName());
+		//allergies of John Boyd
+		assertEquals("nillacilan", resultListPersonFireDisplaying.getListPersonFire().get(0).getAllergies().get(0));
 	}
 }

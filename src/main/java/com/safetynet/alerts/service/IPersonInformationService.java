@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
@@ -57,4 +58,12 @@ public interface IPersonInformationService {
 	 *         and persons are grouping by address
 	 */
 	public Map<String, List<PersonFlood>> getHouseHoldsCoveredByFireStation(List<String> stations);
+	
+	/**
+	 * Method that get a list of persons living in same address and given firstName, lastName, phone, age 
+	 * and medical history
+	 * @param address - A String containing address of person
+	 * @return A list of persons and the station number that covers the households
+	 */
+	public PersonFireDisplaying getPersonsFireByAddress(String address);
 }

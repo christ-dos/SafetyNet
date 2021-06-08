@@ -16,11 +16,14 @@ import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PartialPerson;
 import com.safetynet.alerts.DTO.PersonChildAlert;
+import com.safetynet.alerts.DTO.PersonFire;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
+import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.utils.DateUtils;
@@ -255,5 +258,39 @@ public class PersonInformationService implements IPersonInformationService {
 				.collect(Collectors.groupingBy(PersonFlood::getAddress));
 		log.info("Service - Flood list of persons grouping by address displaying for station number: " + stations);
 		return personGroupingByAddress;
+	}
+	
+	/**
+	 * Method that get a list of persons living in same address and given firstName, lastName, phone, age 
+	 * and medical history
+	 * @param address - A String containing address of person
+	 * @return A list of persons and the station number that covers the households
+	 */
+	public PersonFireDisplaying getPersonsFireByAddress(String address) {
+		List<Person> listPersonsInSameAddress = personDAO.getListPersonByAddress(address);
+		if(listPersonsInSameAddress.isEmpty()) {
+			log.error("Service - Address not found: " + address);
+			throw new AddressNotFoundException("Address not found");
+		}
+		
+		FireStation fireStationThatCoversAddress = fireStationDAO.get(address);
+		List<MedicalRecord> listMedicalRecordPersonInAddress = medicalRecordDAO.getListMedicalRecordByListOfPerson(listPersonsInSameAddress);
+		List<PersonFire> personsFire = new ArrayList<>();
+		for(Person person : listPersonsInSameAddress) {
+			PersonFire personFire = new PersonFire(person.getFirstName(), person.getLastName(), person.getPhone(), null, null, null);
+			personsFire.add(personFire);
+		}
+		for(int i = 0; i < listMedicalRecordPersonInAddress.size(); i++) {
+			DateUtils dateUtils = new DateUtils();
+			Integer age = dateUtils.getAge(listMedicalRecordPersonInAddress.get(i).getBirthDate());
+			personsFire.get(i).setAge(age);
+			personsFire.get(i).setMedication(listMedicalRecordPersonInAddress.get(i).getMedications());
+			personsFire.get(i).setAllergies(listMedicalRecordPersonInAddress.get(i).getAllergies());
+		}
+		
+		PersonFireDisplaying personFireDisplaying = new PersonFireDisplaying(personsFire, fireStationThatCoversAddress.getStation());
+		System.out.println(personFireDisplaying);
+		log.debug("Service - list of person fire living in: " + address);
+		return personFireDisplaying;
 	}
 }

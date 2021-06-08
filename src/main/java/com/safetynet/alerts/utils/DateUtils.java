@@ -26,10 +26,11 @@ public class DateUtils {
 			LocalDateTime currentDate = LocalDateTime.now();
 			if (currentDate.isAfter(bithDateParse)) {
 				Years age = Years.yearsBetween(bithDateParse, currentDate);
-				log.info("DateUtils - Age calculate for bithDate: " + birthDate);
+				log.debug("DateUtils - Age calculated for bithDate: " + birthDate);
 				return age.getYears();
 			}
 		}
+		log.error("DateUtils - The bithdate is not valid");
 		return -1;
 	}
 	
