@@ -237,4 +237,45 @@ public class PersonInformationTestIT {
 						result.getResolvedException().getMessage()))
 				.andDo(print());
 	}
+	
+	/**
+	 * Method that test request to getPersonsFireByAddress when 
+	 * address exist and is "892 Downing Ct" then return a list with persons informations:
+	 * firstName, lastName, phone, age, and medical history of Sophia, Warren et Zach Zemicks
+	 * as well as FireStation number "2" that covers this address
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetPersonsFireByAddress_whenAddressExist_thenReturnListPersonAndStationNumberThatCoversAddress() throws Exception {
+		//GIVEN
+		//WHEN
+		//THEN
+		mockMvc.perform(get("/fire?address=892 Downing Ct")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.listPersonFire.[0].firstName", is("Sophia"))).andExpect(jsonPath("$.listPersonFire[0].lastName", is("Zemicks")))
+		.andExpect(jsonPath("$.listPersonFire.[0].age", is(33))).andExpect(jsonPath("$.listPersonFire.[0].medication.[0]", is("aznol:60mg")))
+		.andExpect(jsonPath("$.listPersonFire.[0].medication.[3]", is("terazine:500mg"))).andExpect(jsonPath("$.listPersonFire.[0].allergies.[0]", is("peanut")))
+		.andExpect(jsonPath("$.listPersonFire.[2].firstName", is("Zach"))).andExpect(jsonPath("$.listPersonFire[2].lastName", is("Zemicks")))
+		.andExpect(jsonPath("$.listPersonFire.[2].medication").isEmpty()).andExpect(jsonPath("$.listPersonFire.[2].allergies").isEmpty())
+		.andExpect(jsonPath("$.listPersonFire.[2].age", is(4)))
+		.andExpect(jsonPath("$.stationNumber", is("2")))
+		.andDo(print());
+	}
+	
+	/**
+	 * Method that test request to getPersonsFireByAddress when address is "15 Backer St" and not exist 
+	 * then throw {@link AddressNotFoundException}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFirePersonsByAddress_whenAddressNotExist_thenReturnAddressNotFoundException() throws Exception {
+		// GIVEN
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/fire?address=15 Backer St")).andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof AddressNotFoundException))
+				.andExpect(result -> assertEquals("Address not found",
+						result.getResolvedException().getMessage()))
+				.andDo(print());
+	}
 }

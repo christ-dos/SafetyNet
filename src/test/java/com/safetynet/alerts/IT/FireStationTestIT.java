@@ -200,7 +200,7 @@ public class FireStationTestIT {
 	public void testRequetePut_whenTheFireStationExistAndfieldStationIsUpdated_thenVerifyThatFieldStationUpadtedWithFive() throws Exception {
 		//GIVEN
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
-		FireStation fireStationToUpdateExist = new FireStation("5","892 Downing Ct");
+		FireStation fireStationToUpdateExist = new FireStation("15","748 Townings Dr");
 		//WHEN
 		//THEN
 		mockMvcFireStation.perform(MockMvcRequestBuilders
@@ -209,8 +209,8 @@ public class FireStationTestIT {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.address", is("892 Downing Ct")))
-				.andExpect(jsonPath("$.station", is("5")))
+				.andExpect(jsonPath("$.address", is("748 Townings Dr")))
+				.andExpect(jsonPath("$.station", is("15")))
 				.andDo(print());
 	}
 	

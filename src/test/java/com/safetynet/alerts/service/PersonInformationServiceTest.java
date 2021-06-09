@@ -383,6 +383,7 @@ public class PersonInformationServiceTest {
 		// THEN
 		assertThrows(AddressNotFoundException.class, () -> personInformationService.getChildAlertList(address));
 	}
+	
 	/**
 	 * Method that test getHouseHoldsCoveredByFireStation 
 	 * when stations number are "2" and "3" and addresses covered by stations are: "1509 Culver St","834 Binoc Ave",
@@ -497,6 +498,13 @@ public class PersonInformationServiceTest {
 		assertThrows(FireStationNotFoundException.class, () -> personInformationService.getHouseHoldsCoveredByFireStation(stations));
 	}
 	
+	/**
+	 * Method that test getPersonsFireByAddress 
+	 * when stations address "1509 Culver St"
+	 * then return a list containing persons with informations:firstName, lastName, phone, age, list of medication and list of Allergies
+	 * and the station number that covers this address
+	 * 
+	 */
 	@Test
 	public void testGetPersonsFireByAddress_whenAddressExist_thenReturnListPersons() {
 		//GIVEN
@@ -538,7 +546,6 @@ public class PersonInformationServiceTest {
 		mockListMedicalRecordByAddress.add(indexMRecord3);
 		mockListMedicalRecordByAddress.add(indexMRecord4);
 		
-		
 		FireStation fireStationMock = new FireStation("3", "1509 Culver St");
 		when(personDAOMock.getListPersonByAddress(address)).thenReturn(mockListByAddress);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockListByAddress)).thenReturn(mockListMedicalRecordByAddress);
@@ -557,4 +564,19 @@ public class PersonInformationServiceTest {
 		//allergies of John Boyd
 		assertEquals("nillacilan", resultListPersonFireDisplaying.getListPersonFire().get(0).getAllergies().get(0));
 	}
+	
+	/**
+	 * Method that test GetPersonsFireByAddress when address not exist then should throw a
+	 * {@link AddressNotFoundException} 
+	 */
+	@Test
+	public void testGetPersonsFireByAddress_whenAddressNotExist_thenThrowAddressNotFoundException() {
+		// GIVEN
+		String address = "2 Backer St";
+		// WHEN
+		// THEN
+		assertThrows(AddressNotFoundException.class, () -> personInformationService.getPersonsFireByAddress(address));
+	}
+	
+	
 }

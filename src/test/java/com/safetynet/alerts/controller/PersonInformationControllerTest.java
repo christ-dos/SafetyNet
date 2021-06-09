@@ -32,6 +32,8 @@ import com.safetynet.alerts.DAO.PersonDAO;
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PartialPerson;
 import com.safetynet.alerts.DTO.PersonChildAlert;
+import com.safetynet.alerts.DTO.PersonFire;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
@@ -399,7 +401,7 @@ public class PersonInformationControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetFloodPersonsCoveredByStationList_whenstationsNumberExist_thenReturnListPersonsGroupingByAddress() throws Exception {
+	public void testGetFloodPersonsCoveredByStationList_whenStationsNumberExist_thenReturnListPersonsGroupingByAddress() throws Exception {
 		//GIVEN
 		List<String> stations = new ArrayList<>(Arrays.asList("2", "3"));
 		
@@ -432,6 +434,7 @@ public class PersonInformationControllerTest {
 		.andDo(print());
 	}
 	
+		
 	/**
 	 * Method that test getFloodPersonsCoveredByStationList when stations number is "8" and "9" and not exist 
 	 * then throw {@link FireStationNotFoundException}
@@ -448,6 +451,63 @@ public class PersonInformationControllerTest {
 		mockMvcPersonInformation.perform(get("/flood/stations?stations=8,9")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(result -> assertEquals("The FireStation number not found",
+						result.getResolvedException().getMessage()))
+				.andDo(print());
+	}
+	
+	/**
+	 * Method that test getPersonsFireByAddress when 
+	 * address exist and is "112 Steppes Pl" then return a list with persons informations:
+	 * firstName, lastName, phone, age, and medical history of Tony Cooper, Ron Peters and Allison Boyd
+	 * as well as FireStation number "3" that covers this address
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetPersonsFireByAddress_whenAddressExist_thenReturnListPersonAndStationNumberThatCoversAddress() throws Exception {
+		//GIVEN
+		String address = "112 Steppes Pl";
+		PersonFireDisplaying personFireDisplayingMock = new PersonFireDisplaying(
+				Arrays.asList(
+						new PersonFire("Tony", "Cooper", "841-874-8888", 27, 
+								new ArrayList<>(Arrays.asList("hydrapermazol:300mg", "dodoxadin:30mg")), 
+								new ArrayList<>(Arrays.asList("shellfish"))
+						),
+						new PersonFire("Ron", "Peters", "841-874-6874", 56, 
+								new ArrayList<>(), 
+								new ArrayList<>()),
+						new PersonFire("Allison", "Boyd", "841-874-9888", 56, 
+								new ArrayList<>(Arrays.asList("aznol:200mg")), 
+								new ArrayList<>(Arrays.asList("nillacilan")))), "3");
+		
+		when(personInformationServiceMock.getPersonsFireByAddress(address)).thenReturn(personFireDisplayingMock);
+		//WHEN
+		//THEN
+		mockMvcPersonInformation.perform(get("/fire?address=112 Steppes Pl")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.listPersonFire.[0].firstName", is("Tony"))).andExpect(jsonPath("$.listPersonFire[0].lastName", is("Cooper")))
+		.andExpect(jsonPath("$.listPersonFire.[0].age", is(27))).andExpect(jsonPath("$.listPersonFire.[0].medication.[1]", is("dodoxadin:30mg")))
+		.andExpect(jsonPath("$.listPersonFire.[2].firstName", is("Allison"))).andExpect(jsonPath("$.listPersonFire[2].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.listPersonFire.[2].medication[0]", is("aznol:200mg")))
+		.andExpect(jsonPath("$.listPersonFire.[2].age", is(56)))
+		.andExpect(jsonPath("$.stationNumber", is("3")))
+		.andDo(print());
+	}
+
+	/**
+	 * Method that test getPersonsFireByAddress when address is "15 Backer St" and not exist 
+	 * then throw {@link AddressNotFoundException}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFirePersonsByAddress_whenAddressNotExist_thenReturnAddressNotFoundException() throws Exception {
+		// GIVEN
+		String address = "15 Backer St";
+		when(personInformationServiceMock.getPersonsFireByAddress(address)).thenThrow(new AddressNotFoundException("Address not found"));
+		// WHEN
+		// THEN
+		mockMvcPersonInformation.perform(get("/fire?address=15 Backer St")).andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof AddressNotFoundException))
+				.andExpect(result -> assertEquals("Address not found",
 						result.getResolvedException().getMessage()))
 				.andDo(print());
 	}

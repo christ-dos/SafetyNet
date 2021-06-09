@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonsCoveredByStation;
@@ -94,7 +95,21 @@ public class PersonInformationController {
 	 */
 	@GetMapping(value = "/flood/stations")
 	public Map<String, List<PersonFlood>> getFloodPersonsCoveredByStationList(@Valid @RequestParam List<String> stations) {
-		log.debug("Controller  - Request list of childs living in address " + stations);
+		log.debug("Controller  - Request list of person grouping by address in case of flooding for stations: " + stations);
 		return personInformationService.getHouseHoldsCoveredByFireStation(stations);
+	}
+	
+	/**
+	 * Request get to obtain a list of person and the station number that covers the address requested
+	 * 
+	 * @param address - A String that contain the address of person
+	 * @return A list containing person information: 
+	 * firstName, lastName, phone, age, list of medication and list of allergies 
+	 * as well as the station number that covers this address
+	 */
+	@GetMapping(value = "/fire")
+	public PersonFireDisplaying getFirePersonsByAddress(@Valid @RequestParam String address) {
+		log.debug("Controller  - Request list of person in the event of fire in address: " + address);
+		return personInformationService.getPersonsFireByAddress(address);
 	}
 }
