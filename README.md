@@ -1,2 +1,2 @@
 # SafetyNet Alerts 
-est une application dont le but est d'envoyer des informations aux systèmes de services d'urgence
+Alert is an API that allows you to obtain a person’s information, their medical record and the fireSation that covers this address.
