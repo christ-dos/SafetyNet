@@ -58,9 +58,9 @@ public class PersonInformationController {
 	 * @return A list of PersonDTO and a counter of adults and childs
 	 */
 	@GetMapping(value = "/firestation")
-	public PersonsCoveredByStation getListPersonsCoveredByStation(@Valid @RequestParam  String station) {
-		log.debug("Controller - Request list person covered by station: " + station);
-		return personInformationService.getPersonCoveredByFireStation(station);
+	public PersonsCoveredByStation getListPersonsCoveredByStation(@Valid @RequestParam  String stationNumber) {
+		log.debug("Controller - Request list person covered by station: " + stationNumber);
+		return personInformationService.getPersonCoveredByFireStation(stationNumber);
 	}
 	
 	/**
