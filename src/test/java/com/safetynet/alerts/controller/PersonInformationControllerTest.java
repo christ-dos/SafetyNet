@@ -192,7 +192,7 @@ public class PersonInformationControllerTest {
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
 		// WHEN
 		// THEN
-		mockMvcPersonInformation.perform(get("/firestation?station=3")).andExpect(status().isOk())
+		mockMvcPersonInformation.perform(get("/firestation?stationNumber=3")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.listPartialPersons[0].firstName", is("John"))).andExpect(jsonPath("$.listPartialPersons[0].lastName", is("Boyd")))
 				.andExpect(jsonPath("$.listPartialPersons[0].address", is("1509 Culver St"))).andExpect(jsonPath("$.listPartialPersons[0].phone", is("841-874-6512")))
 				.andExpect(jsonPath("$.adultsCounter", is(2)))
@@ -214,7 +214,7 @@ public class PersonInformationControllerTest {
 		// WHEN
 
 		// THEN
-		mockMvcPersonInformation.perform(get("/firestation?station=5")).andExpect(status().isNotFound())
+		mockMvcPersonInformation.perform(get("/firestation?stationNumber=5")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(result -> assertEquals("The FireStation number not found",
 						result.getResolvedException().getMessage()))

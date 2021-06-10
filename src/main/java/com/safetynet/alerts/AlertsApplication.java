@@ -2,6 +2,8 @@ package com.safetynet.alerts;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 /**
  * Class that start the application
  * 
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
+@EnableSwagger2
 public class AlertsApplication {
 	/**
 	 * Method that run the application

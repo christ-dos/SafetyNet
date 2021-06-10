@@ -54,13 +54,6 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.10</version>
 		</dependency>
-		<!--****************** Dependency  powerMockito **************** -->
-		<dependency>
-		    <groupId>org.powermock</groupId>
-		    <artifactId>powermock-api-mockito2</artifactId>
-		    <version>2.0.0</version>
-		    <scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -70,6 +63,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- **************Swagger2 dependency ***************-->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.8.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.8.0</version>
 		</dependency>
 		<!-- *************jaCoCo dependency******************-->
 		<dependency>
@@ -93,13 +97,13 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- *************apache maven site plugin*****************-->
+			<!-- *************Apache Maven site plugin*****************-->
 			 <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
             </plugin>
-            <!-- *************apache maven surefire plugin*************-->
+            <!-- *************Apache Maven Surefire plugin*************-->
              <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -179,7 +183,7 @@
 		            <artifactId>findbugs-maven-plugin</artifactId>
 		            <version>3.0.4</version>
 		        </plugin>
-		        <!--***** report surefire - report plugin********** -->
+		        <!--***** report Surefire - report plugin********** -->
 		        <plugin>
 			        <groupId>org.apache.maven.plugins</groupId>
 			        <artifactId>maven-surefire-report-plugin</artifactId>

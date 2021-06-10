@@ -48,7 +48,7 @@ public class PersonInformationTestIT {
 		// GIVEN
 		// WHEN
 		// THEN
-		mockMvc.perform(get("/firestation?station=4")).andExpect(status().isOk())
+		mockMvc.perform(get("/firestation?stationNumber=4")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.listPartialPersons[0].firstName", is("Tony"))).andExpect(jsonPath("$.listPartialPersons[0].lastName", is("Cooper")))
 				.andExpect(jsonPath("$.listPartialPersons[0].address", is("112 Steppes Pl"))).andExpect(jsonPath("$.listPartialPersons[0].phone", is("841-874-6874")))
 				.andExpect(jsonPath("$.adultsCounter", is(4)))
@@ -67,7 +67,7 @@ public class PersonInformationTestIT {
 		// GIVEN
 		// WHEN
 		// THEN
-		mockMvc.perform(get("/firestation?station=9")).andExpect(status().isNotFound())
+		mockMvc.perform(get("/firestation?stationNumber=9")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(result -> assertEquals("The FireStation number not found",
 						result.getResolvedException().getMessage()))
