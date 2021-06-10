@@ -10,7 +10,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * Class that configures Swagger documentation
+ * Class which configures Swagger documentation
  * 
  * @author Christine Duarte
  *
@@ -30,5 +30,4 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
-
 }

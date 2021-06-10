@@ -14,16 +14,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class AlertsApplication {
 	/**
-	 * Method that run the application
+	 * Method which run the application
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(AlertsApplication.class, args);
 	}
-
-	/**@Bean
-	public DataJson getData() {
-		return new DataJson();
-	}*/
-	
 }
