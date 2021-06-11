@@ -240,7 +240,7 @@ public class MedicalRecordControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testUpdateMedicalRecord_whenfieldMedicationsWasModified_thenReturnMedicalRecordWithFieldMedicationsUpdated() throws Exception {
+	public void testUpdateMedicalRecord_whenfieldMedicationWasModified_thenReturnMedicalRecordWithFieldMedicationsUpdated() throws Exception {
 		// GIVEN
 		MedicalRecord medicalRecordToUpdate = new MedicalRecord("John", "Boyd", "03/06/1984",
 				   new ArrayList<>(Arrays.asList("ibupurin:200mg", "tradoxidine:400mg")),

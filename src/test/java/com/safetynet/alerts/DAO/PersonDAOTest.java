@@ -84,7 +84,7 @@ public class PersonDAOTest {
 	 * 
 	 */
 	@Test
-	public void testGetPersonDAO_whenPersonExistInArray_resultShouldGivenLilyCooper() {
+	public void testGetPersonDAO_whenPersonExistInArray_thenReturnLilyCooper() {
 		// GIVEN
 		String firstName = "Lily";
 		String lastName = "Cooper";
@@ -195,7 +195,7 @@ public class PersonDAOTest {
 	 * 
 	 */
 	@Test
-	public void testGetListPersonByAddress_whenAdressExistInArray_resultShouldReturnListPersonLivingInSameAddress() {
+	public void testGetListPersonByAddress_whenAdressExistInArray_thenReturnListPersonLivingInSameAddress() {
 		// GIVEN
 		String address = "112 Steppes Pl";
 		Person personRonPeters= new Person("Ron", "Peters", "112 Steppes Pl", "Culver", "97451", "841-874-8888",
@@ -282,7 +282,7 @@ public class PersonDAOTest {
 	 * verify that the arrayList contain 2 elements after the deletion
 	 */
 	@Test
-	public void testDeletePersonDAO_whenPersonTenleyBoydExist_resultShouldReturnMessageSUCCESS() {
+	public void testDeletePersonDAO_whenPersonTenleyBoydExist_thenReturnMessageSUCCESS() {
 		// GIVEN
 		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");

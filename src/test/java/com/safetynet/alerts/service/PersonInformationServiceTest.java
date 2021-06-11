@@ -375,7 +375,7 @@ public class PersonInformationServiceTest {
 	 * {@link AddressNotFoundException} 
 	 */
 	@Test
-	public void testGetChildAlertList__whenInputAddressNotExist_resultThrowAddressNotFoundException() {
+	public void testGetChildAlertList__whenInputAddressNotExist_thenThrowAddressNotFoundException() {
 		// GIVEN
 		String address = "10 Flower St";
 		when(personDAOMock.getPersons()).thenReturn(mockList);

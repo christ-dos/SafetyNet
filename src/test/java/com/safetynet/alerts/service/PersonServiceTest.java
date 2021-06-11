@@ -106,7 +106,7 @@ public class PersonServiceTest {
 	 * throws {@link EmptyFieldsException}
 	 */
 	@Test
-	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAPersonJohnBoyd() {
+	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_thenReturnPersonJohnBoyd() {
 		// GIVEN
 		Person personInput = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -127,7 +127,7 @@ public class PersonServiceTest {
 	 * called
 	 */
 	@Test
-	public void testGetPerson_whenInputPersonNotExist_resultThrowPersonNotFoundException() {
+	public void testGetPerson_whenInputPersonNotExist_thenThrowPersonNotFoundException() {
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";

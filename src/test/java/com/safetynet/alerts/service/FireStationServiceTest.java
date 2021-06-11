@@ -232,7 +232,7 @@ public class FireStationServiceTest {
 	 * the method delete was not called
 	 */
 	@Test
-	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressButNotExist_theReturnMessageFireStationCannotBeDeleted() {
+	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressButNotExist_thenReturnMessageFireStationCannotBeDeleted() {
 		// GIVEN
 		String addressFireStationToDeleted = "7 Toontown St";
 		when(fireStationDAOMock.get(addressFireStationToDeleted)).thenReturn(null);

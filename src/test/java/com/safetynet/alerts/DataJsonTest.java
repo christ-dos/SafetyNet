@@ -147,7 +147,7 @@ public class DataJsonTest {
 	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
 	@Test
-	public void listPersonsTest_testWhenGetIndex0_shouldReturnPersonTenleyBoyd() {
+	public void testListPersons_WhenGetIndex0_thenReturnPersonTenleyBoyd() {
 		// GIVEN
 		Person personInIndex0 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"tenz@email.com");
@@ -174,7 +174,7 @@ public class DataJsonTest {
 	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
 	@Test
-	public void listFireStationsTest_testWhenGetIndex0_shouldReturnFireStationthreeAndAdress1509CulverSt() {
+	public void testListFireStations_WhenGetIndex0_thenReturnFireStationthreeAndAdress1509CulverSt() {
 		// GIVEN
 		FireStation fireStationInIndex0 = new FireStation("3", "1509 Culver St");
 		dataJsonTest = DataJson.builder()
@@ -201,7 +201,7 @@ public class DataJsonTest {
 	 * and if we have recovered 2 elements of our jsonObjectMock
 	 */
 	@Test
-	public void listMedicalRecordsTest_testWhenGetIndex0_shouldReturnMedicalRecordsWithFirstNameJohnAndLastNameBoyd() {
+	public void testListMedicalRecords_WhenGetIndex0_thenReturnMedicalRecordsWithFirstNameJohnAndLastNameBoyd() {
 		// GIVEN
 		List<String> medications = new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg"));
 		List<String> allergies = new ArrayList<>(Arrays.asList("nillacilan"));

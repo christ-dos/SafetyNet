@@ -227,7 +227,7 @@ public class PersonInformationControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetPhoneAlertResidentsCoveredByStation_whenFireStationNumberExist_thenReturnAListPersonDTOCoveredByFireStation() throws Exception{
+	public void testGetPhoneAlertResidentsCoveredByStation_whenFireStationNumberExist_thenReturnAListPersonCoveredByFireStation() throws Exception{
 		// GIVEN
 		String station = "3";
 		List<String> listPhoneCovrededByStationThree = new ArrayList<>(Arrays.asList("841-874-6512", "841-874-6512", "841-874-6544"));
@@ -269,7 +269,7 @@ public class PersonInformationControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetPersonInfo_whenPersonIsJohnBoydAndExist_thenReturnPersonInfoDTOJohnBoyd() throws Exception {
+	public void testGetPersonInfo_whenPersonIsJohnBoydAndExist_thenReturnPersonInfoJohnBoyd() throws Exception {
 		// GIVEN
 		Person personJohnBoyd = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");

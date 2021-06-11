@@ -64,7 +64,7 @@ public class DateUtilsTest {
 	 * then return -1
 	 */
 	@Test
-	public void testGetAge_whenBirthDateIsAfterDateActual_thenReturnZero() {
+	public void testGetAge_whenBirthDateIsAfterDateActual_thenReturnMoin1() {
 		//GIVEN
 		String birthDate = "01/25/2050";
 		//WHEN

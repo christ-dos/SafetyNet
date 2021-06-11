@@ -84,7 +84,7 @@ public class MedicalRecordServiceTest {
 	 * 
 	 */
 	@Test
-	public void testGetMedicalRecord_whenMedicalRecordExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAMedicalRecordWithNameJohnBoyd() {
+	public void testGetMedicalRecord_whenMedicalRecordExistWithFirstNameJohnAndLastNameBoyd_thenReturnAMedicalRecordWithNameJohnBoyd() {
 		// GIVEN
 		MedicalRecord medicalRecordJohnBoyd = new MedicalRecord("John", "Boyd", "03/06/1984",
 				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
@@ -108,7 +108,7 @@ public class MedicalRecordServiceTest {
 	 * getMedicalRecord was not called
 	 */
 	@Test
-	public void testGetMedicalRecord_whenInputMedicalRecordNotExist_resultThrowMedicalNotFoundException() {
+	public void testGetMedicalRecord_whenInputMedicalRecordNotExist_thenThrowMedicalNotFoundException() {
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";

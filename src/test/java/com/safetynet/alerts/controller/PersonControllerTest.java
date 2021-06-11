@@ -243,7 +243,7 @@ public class PersonControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testUpdatePerson_whenfieldCityWasModified_thenReturnPersonWithFieldCityUpdated() throws Exception {
+	public void testUpdatePerson_whenFieldCityWasModified_thenReturnPersonWithFieldCityUpdated() throws Exception {
 		// GIVEN
 		Person personToUpdate = new Person("John", "Boyd", "1509 Culver St", "Croix", "97451", "841-874-6512",
 				"jaboyd@email.com");
