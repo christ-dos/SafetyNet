@@ -86,7 +86,7 @@ public class FireStationTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetFireStation_whenInputAddressIsEmpty_shouldReturnAnEmptyFieldsException() throws Exception {
+	public void testRequestGetFireStation_whenInputAddressIsEmpty_thenReturnAnEmptyFieldsException() throws Exception {
 		//GIVEN
 		//WHEN
 		//THEN
@@ -105,7 +105,7 @@ public class FireStationTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenFireStationAlreadyExist_shouldThrowFireStationAlreadyExistException() throws Exception {
+	public void testRequestPost_whenFireStationAlreadyExist_thenThrowFireStationAlreadyExistException() throws Exception {
 		//GIVEN
 		FireStationControllerTest fireStationControllerTest = new FireStationControllerTest();
 		FireStation fireStaionToAddExist = new FireStation("2", "29 15th St");

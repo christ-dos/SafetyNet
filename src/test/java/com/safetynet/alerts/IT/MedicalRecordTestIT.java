@@ -53,7 +53,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetMedicalRecordExist_whenInputMedicalRecordWithFirstNameRogerAndLastNameBoyd_shouldReturnStatusOK()
+	public void testRequestGetMedicalRecordExist_whenInputMedicalRecordWithFirstNameRogerAndLastNameBoyd_thenReturnStatusOK()
 			throws Exception {
 		// GIVEN
 		// WHEN
@@ -72,7 +72,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetMedicalRecordNotExist_whenMedicalRecordFirstNameLilyAndLastNameSaguet_shouldReturnMedicalRecordNotFoundException()
+	public void testRequestGetMedicalRecordNotExist_whenMedicalRecordFirstNameLilyAndLastNameSaguet_thenReturnMedicalRecordNotFoundException()
 			throws Exception {
 		// GIVEN
 		// WHEN
@@ -94,7 +94,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetMedicanRecord_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException()
+	public void testRequestGetMedicanRecord_whenInputFirstNameOrLastNameIsEmpty_thenReturnAnEmptyFieldsException()
 			throws Exception {
 		// GIVEN
 		// WHEN
@@ -114,7 +114,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenMedicalRecordAlreadyExist_shouldThrowMedicalRecordAlreadyExistException()
+	public void testRequestPost_whenMedicalRecordAlreadyExist_thenThrowMedicalRecordAlreadyExistException()
 			throws Exception {
 		// GIVEN
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
@@ -144,7 +144,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenMedicalRecordNotExist_shouldSaveTheMedicalRecord() throws Exception {
+	public void testRequestPost_whenMedicalRecordNotExist_thenSaveTheMedicalRecord() throws Exception {
 		// GIVEN
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
 		MedicalRecord medicalRecordNotExistInArray = new MedicalRecord("Joana", "Martin", "02/05/1992",
@@ -309,7 +309,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequetePut_whenInputFieldsIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank()
+	public void testRequetePut_whenInputFieldsIsInvalid_thenReturnMethodArgumentNotValidExceptionMustNotBeBlank()
 			throws Exception {
 		// GIVEN
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();

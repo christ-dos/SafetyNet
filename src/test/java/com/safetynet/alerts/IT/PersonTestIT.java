@@ -50,7 +50,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetPersonExist_whenInputFirstNameRogerAndLastNameBoyd_shouldReturnStatusOK()
+	public void testRequestGetPersonExist_whenInputFirstNameRogerAndLastNameBoyd_thenReturnStatusOK()
 			throws Exception {
 		// GIVEN
 
@@ -69,7 +69,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetPersonNotExist_whenInputFirstNameLilyAndLastNameSaguet_shouldReturnPersonNotFoundException()
+	public void testRequestGetPersonNotExist_whenInputFirstNameLilyAndLastNameSaguet_thenReturnPersonNotFoundException()
 			throws Exception {
 		// GIVEN
 
@@ -91,7 +91,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetPerson_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException()
+	public void testRequestGetPerson_whenInputFirstNameOrLastNameIsEmpty_thenReturnAnEmptyFieldsException()
 			throws Exception {
 		// GIVEN
 
@@ -112,7 +112,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenPersonAlreadyExist_shouldThrowPersonAlreadyExistException() throws Exception {
+	public void testRequestPost_whenPersonAlreadyExist_thenThrowPersonAlreadyExistException() throws Exception {
 		// GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
@@ -137,7 +137,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenPersonNotExist_shouldSaveThePerson() throws Exception {
+	public void testRequestPost_whenPersonNotExist_thenSavePerson() throws Exception {
 		// GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
 		Person personTest = new Person("Joana", "Martin", "22 Croix St", "TerraNova", "59000", "000-000-1203",
@@ -273,7 +273,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequetePut_whenInputFieldsIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank()
+	public void testRequetePut_whenInputFieldsIsInvalid_thenReturnMethodArgumentNotValidExceptionMustNotBeBlank()
 			throws Exception {
 		// GIVEN
 		PersonControllerTest personControllerTest = new PersonControllerTest();
@@ -298,13 +298,13 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetEmailResident_whenCityIsCulverAndExist__thenReturnListOfEmails() throws Exception {
+	public void testGetEmailResident_whenCityIsCulverAndExist__thenReturnListOfEmail() throws Exception {
 		// GIVEN
 		// WHEN
 		// THEN
 		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
-				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$.[0]", is("drk@email.com")))
-				.andExpect(jsonPath("$.[2]", is("jaboyd@email.com"))).andDo(print());
+				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$.[0]", is("jaboyd@email.com")))
+				.andExpect(jsonPath("$.[2]", is("tenz@email.com"))).andDo(print());
 	}
 
 	/**
