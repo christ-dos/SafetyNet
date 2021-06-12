@@ -12,12 +12,12 @@ import lombok.AllArgsConstructor;
  */
 
 @AllArgsConstructor
-public class PersonsCoveredByStation {
+public class PersonCoveredByStationDisplaying {
 	/**
-	 * A list of {@link PartialPerson} 
+	 * A list of {@link PersonCoveredByStation} 
 	 * that contain only firstName, lastName, address and phone
 	 */
-	private List<PartialPerson> listPartialPersons;
+	private List<PersonCoveredByStation> listPartialPersons;
 	
 	/** 
 	 *A counter that counts adults
@@ -34,7 +34,7 @@ public class PersonsCoveredByStation {
 	 * @return a list with field firstName, 
 	 * lastName, address and phone of person
 	 */
-	public List<PartialPerson> getListPartialPersons() {
+	public List<PersonCoveredByStation> getListPartialPersons() {
 		return listPartialPersons;
 	}
 	

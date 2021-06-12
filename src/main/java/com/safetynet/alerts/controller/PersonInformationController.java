@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
-import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 import com.safetynet.alerts.service.IPersonInformationService;
 import com.safetynet.alerts.service.IPersonService;
 
@@ -58,7 +58,7 @@ public class PersonInformationController {
 	 * @return A list of PersonDTO and a counter of adults and childs
 	 */
 	@GetMapping(value = "/firestation")
-	public PersonsCoveredByStation getListPersonsCoveredByStation(@Valid @RequestParam  String stationNumber) {
+	public PersonCoveredByStationDisplaying getListPersonsCoveredByStation(@Valid @RequestParam  String stationNumber) {
 		log.debug("Controller - Request list person covered by station: " + stationNumber);
 		return personInformationService.getPersonCoveredByFireStation(stationNumber);
 	}
@@ -82,7 +82,7 @@ public class PersonInformationController {
 	 * @return A result containing a list with childs and adults living in address
 	 */
 	@GetMapping(value = "/childAlert")
-	public ChildAlertDisplaying getChildAlertList(@Valid @RequestParam  String address) {
+	public PersonChildAlertDisplaying getChildAlertList(@Valid @RequestParam  String address) {
 		log.debug("Controller  - Request list of childs living in address " + address);
 		return personInformationService.getChildAlertList(address);
 	}

@@ -13,14 +13,14 @@ import com.safetynet.alerts.DAO.IFireStationDAO;
 import com.safetynet.alerts.DAO.IMedicalRecordDAO;
 import com.safetynet.alerts.DAO.IPersonDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
-import com.safetynet.alerts.DTO.ChildAlertDisplaying;
-import com.safetynet.alerts.DTO.PartialPerson;
+import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonCoveredByStation;
 import com.safetynet.alerts.DTO.PersonChildAlert;
 import com.safetynet.alerts.DTO.PersonFire;
 import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
-import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.model.FireStation;
@@ -107,7 +107,7 @@ public class PersonInformationService implements IPersonInformationService {
 	 *         adult
 	 */
 	@Override
-	public PersonsCoveredByStation getPersonCoveredByFireStation(String station) {
+	public PersonCoveredByStationDisplaying getPersonCoveredByFireStation(String station) {
 		// get addresses covered by fireStation
 		List<String> listAddressCoveredByFireStation = fireStationDAO.getAddressesCoveredByStationNumber(station);
 		if (listAddressCoveredByFireStation == null) {
@@ -131,13 +131,13 @@ public class PersonInformationService implements IPersonInformationService {
 			}
 		}
 
-		List<PartialPerson> listOfPartialPerson = new ArrayList<>();
+		List<PersonCoveredByStation> listOfPartialPerson = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
-			PartialPerson personDTO = new PartialPerson(person.getFirstName(), person.getLastName(),
+			PersonCoveredByStation personDTO = new PersonCoveredByStation(person.getFirstName(), person.getLastName(),
 					person.getAddress(), person.getPhone());
 			listOfPartialPerson.add(personDTO);
 		}
-		PersonsCoveredByStation displayingListPersonsCoveredByStation = new PersonsCoveredByStation(listOfPartialPerson,
+		PersonCoveredByStationDisplaying displayingListPersonsCoveredByStation = new PersonCoveredByStationDisplaying(listOfPartialPerson,
 				adultCouter, childCounter);
 		log.info("Service - List of persons covered by station number: " + station);
 
@@ -176,7 +176,7 @@ public class PersonInformationService implements IPersonInformationService {
 	 *         in same address
 	 */
 	@Override
-	public ChildAlertDisplaying getChildAlertList(String address) {
+	public PersonChildAlertDisplaying getChildAlertList(String address) {
 		List<Person> listPersons = personDAO.getPersons();
 		List<Person> ListPersonByAddess = new ArrayList<>();
 		for (Person person : listPersons) {
@@ -206,7 +206,7 @@ public class PersonInformationService implements IPersonInformationService {
 			}
 		}
 
-		ChildAlertDisplaying ChildAlertDisplaying = new ChildAlertDisplaying(listChildsByAddress, listAdultsByAddress);
+		PersonChildAlertDisplaying ChildAlertDisplaying = new PersonChildAlertDisplaying(listChildsByAddress, listAdultsByAddress);
 		log.info("Service -  In Address: " + address + ", living childs: " + listChildsByAddress.size() + ", adults: "
 				+ listAdultsByAddress.size());
 

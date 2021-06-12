@@ -19,12 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
-import com.safetynet.alerts.DTO.ChildAlertDisplaying;
-import com.safetynet.alerts.DTO.PartialPerson;
+import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonCoveredByStation;
 import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
-import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
@@ -194,14 +194,14 @@ public class PersonInformationServiceTest {
 		// GIVEN
 		
 		String stationNumber = "3";
-		PartialPerson expectedJohnBoyd = new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
-		PartialPerson expectedFoster = new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		PersonCoveredByStation expectedJohnBoyd = new PersonCoveredByStation("John", "Boyd", "1509 Culver St", "841-874-6512");
+		PersonCoveredByStation expectedFoster = new PersonCoveredByStation("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
 		//when(dateUtilsMock.getAge(anyString())).thenReturn(37, 9, 41);
 		// WHEN
-		PersonsCoveredByStation PersonsCovededByStationThree = personInformationService
+		PersonCoveredByStationDisplaying PersonsCovededByStationThree = personInformationService
 				.getPersonCoveredByFireStation(stationNumber);
 		// THEN
 		// verify that the list contained 7 elements of personDTO
@@ -237,8 +237,8 @@ public class PersonInformationServiceTest {
 		// GIVEN
 		
 		String fireStation = "3";
-		PartialPerson expectedJohnBoyd = new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512");
-		PartialPerson expectedFoster = new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
+		PersonCoveredByStation expectedJohnBoyd = new PersonCoveredByStation("John", "Boyd", "1509 Culver St", "841-874-6512");
+		PersonCoveredByStation expectedFoster = new PersonCoveredByStation("Foster", "Shepard", "748 Townings Dr", "841-874-6544");
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(fireStation)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		// WHEN
@@ -358,7 +358,7 @@ public class PersonInformationServiceTest {
 		when(personDAOMock.getPersons()).thenReturn(mockListByAddress);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockListByAddress)).thenReturn(mockListMedicalRecordByAddress);
 		//WHEN
-		ChildAlertDisplaying childAlertResult = personInformationService.getChildAlertList(address);
+		PersonChildAlertDisplaying childAlertResult = personInformationService.getChildAlertList(address);
 		//THEN
 		//verify that Tenley Boyd is contained in childs list
 		assertEquals("Tenley", childAlertResult.getListChild().get(0).getFirstName());

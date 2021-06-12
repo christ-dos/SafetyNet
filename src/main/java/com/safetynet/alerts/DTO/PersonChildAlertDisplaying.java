@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
  *
  */
 @AllArgsConstructor
-public class ChildAlertDisplaying {
+public class PersonChildAlertDisplaying {
 	/**
 	 * An list of {@link PersonChildAlert} containing childs living in address
 	 */

@@ -3,11 +3,11 @@ package com.safetynet.alerts.service;
 import java.util.List;
 import java.util.Map;
 
-import com.safetynet.alerts.DTO.ChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
-import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 
 /**
  * An interface which get person informations and medical history with the firstName and lastName
@@ -30,7 +30,7 @@ public interface IPersonInformationService {
 	 * @param station - the number of station
 	 * @return A list with persons covered by station ant the number of child and adult
 	 */
-	public PersonsCoveredByStation getPersonCoveredByFireStation(String station);
+	public PersonCoveredByStationDisplaying getPersonCoveredByFireStation(String station);
 	/**
 	 * Method that get person informations and medicalRecord with the firstName and lastName
 	 * 
@@ -46,7 +46,7 @@ public interface IPersonInformationService {
 	 * @param address - A String containing the address of person
 	 * @return An arrayList with childs and other arrayList containing adults living in same address
 	 */
-	public ChildAlertDisplaying getChildAlertList(String address);
+	public PersonChildAlertDisplaying getChildAlertList(String address);
 	
 	/**
 	 * Method that get a list of persons covered by a list of station number the

@@ -29,14 +29,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
-import com.safetynet.alerts.DTO.ChildAlertDisplaying;
-import com.safetynet.alerts.DTO.PartialPerson;
+import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
+import com.safetynet.alerts.DTO.PersonCoveredByStation;
 import com.safetynet.alerts.DTO.PersonChildAlert;
 import com.safetynet.alerts.DTO.PersonFire;
 import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
-import com.safetynet.alerts.DTO.PersonsCoveredByStation;
+import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
@@ -120,9 +120,9 @@ public class PersonInformationControllerTest {
 	private List<String> mockListAddress;
 	
 	/**
-	 * An instance of {@link PersonsCoveredByStation}
+	 * An instance of {@link PersonCoveredByStationDisplaying}
 	 */
-	private PersonsCoveredByStation mockPersonsCoveredByStation;
+	private PersonCoveredByStationDisplaying mockPersonsCoveredByStation;
 	
 	/**
 	 * Method that create a mocks of the ArrayLists mockListAddress, mockListFireStation, mockList,
@@ -168,10 +168,10 @@ public class PersonInformationControllerTest {
 		mockListMedicalRecord.add(indexMRecord1);
 		mockListMedicalRecord.add(indexMRecord2);
 		
-		mockPersonsCoveredByStation = new PersonsCoveredByStation(
-				new ArrayList<>(Arrays.asList(new PartialPerson("John", "Boyd", "1509 Culver St", "841-874-6512"),
-						new PartialPerson("Tessa", "Carman", "834 Binoc Ave", "841-874-6512"),
-						new PartialPerson("Foster", "Shepard", "748 Townings Dr", "841-874-6544"))),
+		mockPersonsCoveredByStation = new PersonCoveredByStationDisplaying(
+				new ArrayList<>(Arrays.asList(new PersonCoveredByStation("John", "Boyd", "1509 Culver St", "841-874-6512"),
+						new PersonCoveredByStation("Tessa", "Carman", "834 Binoc Ave", "841-874-6512"),
+						new PersonCoveredByStation("Foster", "Shepard", "748 Townings Dr", "841-874-6544"))),
 				2, 1);
 	}
 	
@@ -354,7 +354,7 @@ public class PersonInformationControllerTest {
 		mockListMedicalRecordByAddress.add(indexMRecord3);
 		mockListMedicalRecordByAddress.add(indexMRecord4);
 		
-		ChildAlertDisplaying childAlertDisplaying = new ChildAlertDisplaying(
+		PersonChildAlertDisplaying childAlertDisplaying = new PersonChildAlertDisplaying(
 				new ArrayList<>(
 						Arrays.asList(new PersonChildAlert("Tenley", "Boyd", 9), 
 								new PersonChildAlert("Roger", "Boyd", 3))), new ArrayList<>(
