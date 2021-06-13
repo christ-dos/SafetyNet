@@ -213,12 +213,12 @@ public class PersonInformationTestIT {
 		.andExpect(jsonPath("$.[0].listPersonsFlood[0].firstName", is("Peter"))).andExpect(jsonPath("$.[0].listPersonsFlood[0].lastName", is("Duncan")))
 		.andExpect(jsonPath("$.[0].listPersonsFlood[0].age", is(20))).andExpect(jsonPath("$.[0].listPersonsFlood[0].medication").isEmpty())
 		.andExpect(jsonPath("$.[0].listPersonsFlood[0].allergies[0]", is("shellfish")))
-		.andExpect(jsonPath("$.[0].address", is("112 Steppes Pl")))
-		.andExpect(jsonPath("$.[0].listPersonsFlood[0].firstName", is("Tony")))
-		.andExpect(jsonPath("$.[0].listPersonsFlood[0].medication[0]", is("hydrapermazol:300mg")))
-		.andExpect(jsonPath("$.[0].listPersonsFlood[0].medication[1]", is("dodoxadin:30mg")))
-		.andExpect(jsonPath("$.[0].listPersonsFlood[0].allergies[0]", is("shellfish")))
-		.andExpect(jsonPath("$.[0].listPersonsFlood[0].age", is(27)))
+		.andExpect(jsonPath("$.[3].address", is("112 Steppes Pl")))
+		.andExpect(jsonPath("$.[3].listPersonsFlood[0].firstName", is("Tony")))
+		.andExpect(jsonPath("$.[3].listPersonsFlood[0].medication[0]", is("hydrapermazol:300mg")))
+		.andExpect(jsonPath("$.[3].listPersonsFlood[0].medication[1]", is("dodoxadin:30mg")))
+		.andExpect(jsonPath("$.[3].listPersonsFlood[0].allergies[0]", is("shellfish")))
+		.andExpect(jsonPath("$.[3].listPersonsFlood[0].age", is(27)))
 		.andDo(print());
 	}
 	

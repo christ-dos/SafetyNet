@@ -17,26 +17,27 @@ public class PersonFloodDisplaying {
 	 * A String that contain the address of the person
 	 */
 	private String address;
-	
+
 	/**
 	 * An ArrayList of String with medications of person
 	 */
 	private List<PersonFlood> listPersonsFlood;
-	
+
 	/**
 	 * getter for address
+	 * 
 	 * @return A String containing address
 	 */
 	public String getAddress() {
 		return address;
 	}
-	
+
 	/**
 	 * getter for listPersonsFlood
+	 * 
 	 * @return A list of PersonFlood
 	 */
 	public List<PersonFlood> getListPersonsFlood() {
 		return listPersonsFlood;
 	}
-
 }

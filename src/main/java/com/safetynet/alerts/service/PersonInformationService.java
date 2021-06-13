@@ -135,8 +135,8 @@ public class PersonInformationService implements IPersonInformationService {
 					person.getAddress(), person.getPhone());
 			listOfPartialPerson.add(personDTO);
 		}
-		PersonCoveredByStationDisplaying displayingListPersonsCoveredByStation = new PersonCoveredByStationDisplaying(listOfPartialPerson,
-				adultCouter, childCounter);
+		PersonCoveredByStationDisplaying displayingListPersonsCoveredByStation = new PersonCoveredByStationDisplaying(
+				listOfPartialPerson, adultCouter, childCounter);
 		log.info("Service - List of persons covered by station number: " + station);
 
 		return displayingListPersonsCoveredByStation;
@@ -196,9 +196,8 @@ public class PersonInformationService implements IPersonInformationService {
 			}
 		}
 
-		PersonChildAlertDisplaying ChildAlertDisplaying = PersonChildAlertDisplaying.builder().
-				listChild(listChildsByAddress).
-				listOtherPersonInHouse(listAdultsByAddress).build();
+		PersonChildAlertDisplaying ChildAlertDisplaying = PersonChildAlertDisplaying.builder()
+				.listChild(listChildsByAddress).listOtherPersonInHouse(listAdultsByAddress).build();
 		log.info("Service -  In Address: " + address + ", living childs: " + listChildsByAddress.size() + ", adults: "
 				+ listAdultsByAddress.size());
 		return ChildAlertDisplaying;
@@ -210,8 +209,7 @@ public class PersonInformationService implements IPersonInformationService {
 	 * lastName, phone, age and medical history
 	 * 
 	 * @param stations - a list containing station number
-	 * @return A map with the list of persons covered by the list of station number
-	 *         and persons are grouping by address
+	 * @return A list of PersonFloodDisplaying grouping by address
 	 */
 	public List<PersonFloodDisplaying> getHouseHoldsCoveredByFireStation(List<String> stations) {
 		List<String> stationsAddress = new ArrayList<>();
@@ -220,91 +218,67 @@ public class PersonInformationService implements IPersonInformationService {
 			if (addresses != null) {
 				for (String address : addresses) {
 					stationsAddress.add(address);
-				} 
+				}
 			}
 		}
 		if (stationsAddress.size() == 0) {
 			log.error("Service - FireStations not found with stations number: " + stations);
 			throw new FireStationNotFoundException("FireStations number not found");
 		}
-		List<List<Person>> listPersonsGroupedByAddress= new ArrayList<>();
-		for(String address : stationsAddress) {
+		List<PersonFloodDisplaying> listPersonsFloodDisplaying = new ArrayList<>();
+		for (String address : stationsAddress) {
+			PersonFloodDisplaying personFloodDisplaying;
 			List<Person> listPersonByAddress = personDAO.getListPersonByAddress(address);
-			listPersonsGroupedByAddress.add(listPersonByAddress) ;
-		}
-		System.out.println("listPersonsGroupedByAddress" + listPersonsGroupedByAddress);
-		List<PersonFlood> listPersonsFlood = new ArrayList<>();
-		List<PersonFloodDisplaying> listPersonFlooDisplaying = new ArrayList<>();
-		List<List<PersonFlood>> listPersonsFloodGroupedByAddress = new ArrayList<>();
-		
-		
-		List<Person> listPersonsCoveredByStations = personDAO.getPersonsByListAdresses(stationsAddress);
+			List<PersonFlood> listPersonFlood = new ArrayList<>();
+			for (Person person : listPersonByAddress) {
+				MedicalRecord medicalRecord = medicalRecordDAO.get(person.getFirstName(), person.getLastName());
+				Integer age = DateUtils.getAge(medicalRecord.getBirthDate());
+				PersonFlood personFlood = PersonFlood.builder().firstName(medicalRecord.getFirstName())
+						.lastName(medicalRecord.getLastName()).medication(medicalRecord.getMedications())
+						.allergies(medicalRecord.getAllergies()).phone(person.getPhone()).age(age).build();
 
-		
-		for (Person person : listPersonsCoveredByStations) {
-			//List<Person> listPersonsByAddress = personDAO.getListPersonByAddress(stationsAddress.get(0));
-			MedicalRecord medicalRecord = medicalRecordDAO.get(person.getFirstName(), person.getLastName());
-			Integer age = DateUtils.getAge(medicalRecord.getBirthDate());
-			/**PersonFlood personFlood = PersonFlood.builder().firstName(medicalRecord.getFirstName()).lastName(medicalRecord.getLastName())
-					.medication(medicalRecord.getMedications()).allergies(medicalRecord.getAllergies())
-					.phone(person.getPhone()).age(age).build();*/
-			
-			//listPersonsFlood.add(personFlood);
-			
-			//System.out.println("listPersonsByAddress" + listPersonsByAddress);
-			//PersonFloodDisplaying personFloodDisplaying = PersonFloodDisplaying.builder().address(listPersonsByAddress.get(0).getAddress())
-			//		.listPersonsFlood(listPersonsFlood).build();
-			//listPersonFlooDisplaying.add(personFloodDisplaying);
-		}
-		//System.out.println(listPersonsCoveredByStations);
-		/**List<Person> ListPersonByAddress = new ArrayList<>();
-		for(Person person: listPersonsCoveredByStations) {
-			
-			MedicalRecord medicalRecord = medicalRecordDAO.get(person.getFirstName(), person.getFirstName());
-			Integer age = DateUtils.getAge(medicalRecord.getBirthDate());
-			Person personByAddress = personDAO.getPersonByAddress(person.getAddress());
-			if(personByAddress != null) {
-				ListPersonByAddress.add(personByAddress);
+				listPersonFlood.add(personFlood);
 			}
-			PersonFlood personFloodByAddress = PersonFlood.builder().firstName(medicalRecord.getFirstName()).lastName(medicalRecord.getLastName())
-					.medication(medicalRecord.getMedications()).allergies(medicalRecord.getAllergies())
-					.phone(person.getPhone()).age(age).build();	
-			System.out.println(personFloodByAddress);
-			
-			
-		}*/
-		//System.out.println(ListPersonByAddress);
+			personFloodDisplaying = PersonFloodDisplaying.builder().address(address).listPersonsFlood(listPersonFlood)
+					.build();
+
+			listPersonsFloodDisplaying.add(personFloodDisplaying);
+		}
 		log.info("Service - Flood list of persons grouping by address displaying for station number: " + stations);
-		return listPersonFlooDisplaying;
+		return listPersonsFloodDisplaying;
 	}
-	
+
 	/**
-	 * Method that get a list of persons living in same address and given firstName, lastName, phone, age 
-	 * and medical history
+	 * Method that get a list of persons living in same address and given firstName,
+	 * lastName, phone, age and medical history
+	 * 
 	 * @param address - A String containing address of person
 	 * @return A list of persons and the station number that covers the households
 	 */
 	public PersonFireDisplaying getPersonsFireByAddress(String address) {
 		List<Person> listPersonsInSameAddress = personDAO.getListPersonByAddress(address);
-		if(listPersonsInSameAddress == null) {
+
+		if (listPersonsInSameAddress == null) {
 			log.error("Service - Address not found: " + address);
 			throw new AddressNotFoundException("Address not found");
 		}
-		
 		List<PersonFlood> personsFlood = new ArrayList<>();
-		for(Person person : listPersonsInSameAddress) {
+		for (Person person : listPersonsInSameAddress) {
 			MedicalRecord medicalRecord = medicalRecordDAO.get(person.getFirstName(), person.getLastName());
 			Integer age = DateUtils.getAge(medicalRecord.getBirthDate());
-			PersonFlood personFlood = PersonFlood.builder().firstName(medicalRecord.getFirstName()).lastName(medicalRecord.getLastName())
-			.medication(medicalRecord.getMedications()).allergies(medicalRecord.getAllergies())
-			.phone(person.getPhone()).age(age).build();
-			//PersonFire personFire = new PersonFire(medicalRecord.getFirstName(), medicalRecord.getLastName(), person.getPhone(), age, medicalRecord.getMedications(), medicalRecord.getAllergies());
+
+			PersonFlood personFlood = PersonFlood.builder().firstName(medicalRecord.getFirstName())
+					.lastName(medicalRecord.getLastName()).medication(medicalRecord.getMedications())
+					.allergies(medicalRecord.getAllergies()).phone(person.getPhone()).age(age).build();
+
 			personsFlood.add(personFlood);
 		}
 
 		FireStation fireStationThatCoversAddress = fireStationDAO.get(address);
-		PersonFireDisplaying personFireDisplaying = new PersonFireDisplaying(personsFlood, fireStationThatCoversAddress.getStation());
+		PersonFireDisplaying personFireDisplaying = new PersonFireDisplaying(personsFlood,
+				fireStationThatCoversAddress.getStation());
 		log.debug("Service - list of person fire living in: " + address);
+
 		return personFireDisplaying;
 	}
 }
