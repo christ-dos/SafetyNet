@@ -2,7 +2,7 @@ package com.safetynet.alerts.DTO;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 /**
  * Class that models the result for 
@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
  * @author Christine Duarte
  *
  */
-@AllArgsConstructor
+@Builder
 public class PersonChildAlertDisplaying {
 	/**
 	 * An list of {@link PersonChildAlert} containing childs living in address

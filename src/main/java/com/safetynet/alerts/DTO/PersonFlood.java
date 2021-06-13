@@ -2,7 +2,7 @@ package com.safetynet.alerts.DTO;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -13,7 +13,7 @@ import lombok.Data;
  *
  */
 @Data
-@AllArgsConstructor
+@Builder
 public class PersonFlood {
 	/**
 	 * A String that contain the firstName of the person
@@ -35,12 +35,6 @@ public class PersonFlood {
 	 * An ArrayList of String with allergies of person
 	 */
 	private List<String> allergies;
-
-	/**
-	 * 
-	 * A String that contain the address of the person
-	 */
-	private String address;
 
 	/**
 	 * 

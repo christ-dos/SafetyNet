@@ -137,7 +137,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- *************jaCoCo plugin******************-->
+            <!-- *************JaCoCo plugin******************-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -191,5 +191,4 @@
 			    </plugin>
 		    </plugins>
 		</reporting>
-		
 </project>

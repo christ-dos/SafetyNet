@@ -209,14 +209,16 @@ public class PersonInformationTestIT {
 		//WHEN
 		//THEN
 		mockMvc.perform(get("/flood/stations?stations=1,4")).andExpect(status().isOk())
-		.andExpect(jsonPath("$.['908 73rd St'].[0].firstName", is("Reginold"))).andExpect(jsonPath("$.['908 73rd St'].[0].lastName", is("Walker")))
-		.andExpect(jsonPath("$.['908 73rd St'].[0].age", is(41))).andExpect(jsonPath("$.['908 73rd St'].[0].medication[0]", is("thradox:700mg")))
-		.andExpect(jsonPath("$.['908 73rd St'].[0].allergies[0]", is("illisoxian")))
-		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].firstName", is("Tony")))
-		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].medication[0]", is("hydrapermazol:300mg")))
-		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].medication[1]", is("dodoxadin:30mg")))
-		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].allergies[0]", is("shellfish")))
-		.andExpect(jsonPath("$.['112 Steppes Pl'].[0].age", is(27)))
+		.andExpect(jsonPath("$.[0].address", is("644 Gershwin Cir")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].firstName", is("Peter"))).andExpect(jsonPath("$.[0].listPersonsFlood[0].lastName", is("Duncan")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].age", is(20))).andExpect(jsonPath("$.[0].listPersonsFlood[0].medication").isEmpty())
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].allergies[0]", is("shellfish")))
+		.andExpect(jsonPath("$.[0].address", is("112 Steppes Pl")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].firstName", is("Tony")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].medication[0]", is("hydrapermazol:300mg")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].medication[1]", is("dodoxadin:30mg")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].allergies[0]", is("shellfish")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood[0].age", is(27)))
 		.andDo(print());
 	}
 	

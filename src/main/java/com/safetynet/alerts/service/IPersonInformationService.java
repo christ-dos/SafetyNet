@@ -1,13 +1,12 @@
 package com.safetynet.alerts.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
-import com.safetynet.alerts.DTO.PersonFireDisplaying;
-import com.safetynet.alerts.DTO.PersonFlood;
-import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
+import com.safetynet.alerts.DTO.PersonFloodDisplaying;
+import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 
 /**
  * An interface which get person informations and medical history with the firstName and lastName
@@ -57,7 +56,7 @@ public interface IPersonInformationService {
 	 * @return A map with the list of persons covered by the list of station number
 	 *         and persons are grouping by address
 	 */
-	public Map<String, List<PersonFlood>> getHouseHoldsCoveredByFireStation(List<String> stations);
+	public List<PersonFloodDisplaying> getHouseHoldsCoveredByFireStation(List<String> stations);
 	
 	/**
 	 * Method that get a list of persons living in same address and given firstName, lastName, phone, age 

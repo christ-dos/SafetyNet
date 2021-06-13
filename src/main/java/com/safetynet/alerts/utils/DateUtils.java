@@ -20,7 +20,7 @@ public class DateUtils {
 	 * @param birthDate - A string containing the birthDate
 	 * @return The value of age
 	 */
-	public int getAge(String birthDate) {
+	public static int getAge(String birthDate) {
 		if (birthDate != null) {
 			LocalDateTime bithDateParse = LocalDateTime.parse(birthDate, DateTimeFormat.forPattern("MM/dd/yyyy"));
 			LocalDateTime currentDate = LocalDateTime.now();

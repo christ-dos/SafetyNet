@@ -226,7 +226,7 @@ public class PersonDAOTest {
 		List<Person> listPersonsByAddress = personDAOTest.getListPersonByAddress(addressNotExist);
 		//THEN
 		// if the list is empty then return true
-		assertTrue(listPersonsByAddress.isEmpty());
+		assertNull(listPersonsByAddress);
 	}
 	
 	/**

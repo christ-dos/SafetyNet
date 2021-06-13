@@ -12,9 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +27,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.safetynet.alerts.DAO.FireStationDAO;
 import com.safetynet.alerts.DAO.MedicalRecordDAO;
 import com.safetynet.alerts.DAO.PersonDAO;
+import com.safetynet.alerts.DTO.PersonChildAlert;
 import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
 import com.safetynet.alerts.DTO.PersonCoveredByStation;
-import com.safetynet.alerts.DTO.PersonChildAlert;
-import com.safetynet.alerts.DTO.PersonFire;
+import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 import com.safetynet.alerts.DTO.PersonFireDisplaying;
 import com.safetynet.alerts.DTO.PersonFlood;
+import com.safetynet.alerts.DTO.PersonFloodDisplaying;
 import com.safetynet.alerts.DTO.PersonInfoDisplaying;
-import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
 import com.safetynet.alerts.exceptions.AddressNotFoundException;
 import com.safetynet.alerts.exceptions.FireStationNotFoundException;
 import com.safetynet.alerts.exceptions.PersonNotFoundException;
@@ -354,13 +352,15 @@ public class PersonInformationControllerTest {
 		mockListMedicalRecordByAddress.add(indexMRecord3);
 		mockListMedicalRecordByAddress.add(indexMRecord4);
 		
-		PersonChildAlertDisplaying childAlertDisplaying = new PersonChildAlertDisplaying(
-				new ArrayList<>(
+		PersonChildAlertDisplaying childAlertDisplaying = PersonChildAlertDisplaying.builder()
+				.listChild(new ArrayList<>(
 						Arrays.asList(new PersonChildAlert("Tenley", "Boyd", 9), 
-								new PersonChildAlert("Roger", "Boyd", 3))), new ArrayList<>(
-										Arrays.asList(new PersonChildAlert("John", "Boyd", 37),
-												new PersonChildAlert("Jacob", "Boyd", 32),
-												new PersonChildAlert("Felicia", "Boyd", 35))));
+								new PersonChildAlert("Roger", "Boyd", 3))))
+				.listOtherPersonInHouse(new ArrayList<>(
+						Arrays.asList(new PersonChildAlert("John", "Boyd", 37),
+								new PersonChildAlert("Jacob", "Boyd", 32),
+								new PersonChildAlert("Felicia", "Boyd", 35))))
+				.build();
 										
 		String address = "1509 Culver St";
 		when(personDAOMock.getPersons()).thenReturn(mockListByAddress);
@@ -405,32 +405,54 @@ public class PersonInformationControllerTest {
 		//GIVEN
 		List<String> stations = new ArrayList<>(Arrays.asList("2", "3"));
 		
-		Map<String, List<PersonFlood>> mockMapPersonFlood = new HashMap<>();
-		mockMapPersonFlood.put("1509 Culver St",new ArrayList<>(Arrays.asList(
-				new PersonFlood("John", "Boyd",
-				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
-				new ArrayList<>(Arrays.asList("nillacilan")), "1509 Culver St", "841-874-6512", 37),
-				new PersonFlood("Felicia", "Boyd",
-				new ArrayList<>(Arrays.asList("tetracyclaz:650mg")),
-				new ArrayList<>(Arrays.asList("xilliathal")), "1509 Culver St", "841-874-6544", 35))));
-		mockMapPersonFlood.put("834 Binoc Ave", new ArrayList<>(Arrays.asList(new PersonFlood("Tessa", "Carman",
-				new ArrayList<>(Arrays.asList()),
-				new ArrayList<>(Arrays.asList()), "834 Binoc Ave", "841-874-6512", 9))));
-		mockMapPersonFlood.put("748 Townings Dr", new ArrayList<>(Arrays.asList(new PersonFlood("Foster", "Shepard",
-				new ArrayList<>(Arrays.asList()),
-				new ArrayList<>(Arrays.asList()), "748 Townings Dr", "841-874-6544", 41))));
-		mockMapPersonFlood.put("29 15th St", new ArrayList<>(Arrays.asList( new PersonFlood("Jonanathan", "Marrack",
-				new ArrayList<>(Arrays.asList()),
-				new ArrayList<>(Arrays.asList()), "29 15th St", "841-874-6513",32))));
+		List<PersonFlood> mockListPersonFlood1509CulverST = new ArrayList<>(Arrays.asList(
+				PersonFlood.builder().firstName("John").lastName("Boyd")
+				.medication(new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")))
+				.allergies(new ArrayList<>(Arrays.asList("nillacilan"))).age(37).phone("841-874-6512").build(), 
+				PersonFlood.builder().firstName("Felicia").lastName("Boyd")
+				.medication(new ArrayList<>(Arrays.asList("tetracyclaz:650mg")))
+				.allergies(new ArrayList<>(Arrays.asList("xilliathal"))).age(35).phone("841-874-6544").build()));
+				
+		PersonFlood PersonFloodTessaCarman = PersonFlood.builder().firstName("Tessa").lastName("Carman")
+				.medication(new ArrayList<>())
+				.allergies(new ArrayList<>()).age(9).phone("841-874-6512").build();
+				
+		PersonFlood PersonFloodJonanathanMarrack = PersonFlood.builder().firstName("Jonanathan").lastName("Marrack")
+				.medication(new ArrayList<>())
+				.allergies(new ArrayList<>()).age(32).phone("841-874-6513").build();
 		
-		when(personInformationServiceMock.getHouseHoldsCoveredByFireStation(stations)).thenReturn(mockMapPersonFlood);
+		PersonFlood PersonFloodFosterShepard  = PersonFlood.builder().firstName("Foster").lastName("Shepard")
+				.medication(new ArrayList<>())
+				.allergies(new ArrayList<>()).age(41).phone("841-874-6544").build();
+		
+		PersonFloodDisplaying personFloodDisplaying1509CulverSt = PersonFloodDisplaying.builder()
+				.address("1509 Culver St").listPersonsFlood(mockListPersonFlood1509CulverST).build();
+		
+		PersonFloodDisplaying personFloodDisplaying834BinocAve = PersonFloodDisplaying.builder()
+				.address("834 Binoc Ave").listPersonsFlood(new ArrayList<>(Arrays.asList(PersonFloodTessaCarman))).build();
+		
+		PersonFloodDisplaying personFloodDisplaying2915thSt = PersonFloodDisplaying.builder()
+				.address("29 15th St").listPersonsFlood(new ArrayList<>(Arrays.asList(PersonFloodJonanathanMarrack))).build();
+		
+		PersonFloodDisplaying personFloodDisplaying748TowningsDr = PersonFloodDisplaying.builder()
+				.address("748 Townings Dr").listPersonsFlood(new ArrayList<>(Arrays.asList(PersonFloodFosterShepard))).build();
+		
+		List<PersonFloodDisplaying> listPersonsFloodDisplaying = new ArrayList<>(
+				Arrays.asList(
+						personFloodDisplaying1509CulverSt, personFloodDisplaying834BinocAve, personFloodDisplaying2915thSt, personFloodDisplaying748TowningsDr));
+		when(personInformationServiceMock.getHouseHoldsCoveredByFireStation(stations)).thenReturn(listPersonsFloodDisplaying);
 		//WHEN
 		//THEN
 		mockMvcPersonInformation.perform(get("/flood/stations?stations=2,3")).andExpect(status().isOk())
-		.andExpect(jsonPath("$.['748 Townings Dr'].[0].firstName", is("Foster"))).andExpect(jsonPath("$.['748 Townings Dr'].[0].lastName", is("Shepard")))
-		.andExpect(jsonPath("$.['748 Townings Dr'].[0].age", is(41)))
-		.andExpect(jsonPath("$.['1509 Culver St'].[1].firstName", is("Felicia"))).andExpect(jsonPath("$.['1509 Culver St'].[1].allergies[0]", is("xilliathal")))
-		.andExpect(jsonPath("$.['1509 Culver St'].[1].age", is(35)))
+		.andExpect(jsonPath("$.[0].address", is("1509 Culver St")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood.[0].firstName", is("John"))).andExpect(jsonPath("$.[0].listPersonsFlood.[0].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood.[0].age", is(37)))
+		.andExpect(jsonPath("$.[0].address", is("1509 Culver St")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood.[1].firstName", is("Felicia"))).andExpect(jsonPath("$.[0].listPersonsFlood.[1].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.[0].listPersonsFlood.[1].age", is(35)))
+		.andExpect(jsonPath("$.[2].address", is("29 15th St")))
+		.andExpect(jsonPath("$.[2].listPersonsFlood.[0].firstName", is("Jonanathan"))).andExpect(jsonPath("$.[2].listPersonsFlood.[0].lastName", is("Marrack")))
+		.andExpect(jsonPath("$.[2].listPersonsFlood.[0].age", is(32)))
 		.andDo(print());
 	}
 	
@@ -468,16 +490,18 @@ public class PersonInformationControllerTest {
 		String address = "112 Steppes Pl";
 		PersonFireDisplaying personFireDisplayingMock = new PersonFireDisplaying(
 				Arrays.asList(
-						new PersonFire("Tony", "Cooper", "841-874-8888", 27, 
-								new ArrayList<>(Arrays.asList("hydrapermazol:300mg", "dodoxadin:30mg")), 
-								new ArrayList<>(Arrays.asList("shellfish"))
-						),
-						new PersonFire("Ron", "Peters", "841-874-6874", 56, 
-								new ArrayList<>(), 
-								new ArrayList<>()),
-						new PersonFire("Allison", "Boyd", "841-874-9888", 56, 
-								new ArrayList<>(Arrays.asList("aznol:200mg")), 
-								new ArrayList<>(Arrays.asList("nillacilan")))), "3");
+						PersonFlood.builder()
+						.firstName("Tony").lastName("Cooper")
+						.medication(Arrays.asList("hydrapermazol:300mg", "dodoxadin:30mg")).allergies(Arrays.asList("shellfish"))
+						.phone("841-874-8888").age(27).build(), 
+						PersonFlood.builder()
+						.firstName("Ron").lastName("Peters").medication(new ArrayList<>())
+						.allergies(new ArrayList<>()).phone("841-874-6874").age(56).build(),
+						PersonFlood.builder()
+						.firstName("Allison").lastName("Boyd").medication(new ArrayList<>(Arrays.asList("aznol:200mg")))
+						.allergies(new ArrayList<>(Arrays.asList("nillacilan"))).phone("841-874-9822").age(56).build())
+						
+						,"3");
 		
 		when(personInformationServiceMock.getPersonsFireByAddress(address)).thenReturn(personFireDisplayingMock);
 		//WHEN

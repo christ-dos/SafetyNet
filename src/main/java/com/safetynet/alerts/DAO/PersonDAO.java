@@ -69,6 +69,10 @@ public class PersonDAO implements IPersonDAO {
 		.map(person-> person)
 		.collect(Collectors.toList());
 		log.debug("DAO - List of person found with address: " + address);
+		
+		if(listPersonGetByAddress.size() == 0) {
+			return null;
+		}
 		return listPersonGetByAddress;
 	}
 
@@ -90,7 +94,6 @@ public class PersonDAO implements IPersonDAO {
 		log.debug("DAO - Person not found: "  + firstName  + " " + lastName);
 		return null;
 	}
-	
 	
 	/**
 	 * Method that get person by address

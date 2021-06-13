@@ -16,7 +16,7 @@ public class PersonFireDisplaying {
 	 * A list of persons that displaying firstName, lastName, phone, age and medical
 	 * history
 	 */
-	private List<PersonFire> listPersonFire;
+	private List<PersonFlood> listPersonFire;
 
 	/**
 	 * A String that contain the station number that covers the address of the fire
@@ -28,7 +28,7 @@ public class PersonFireDisplaying {
 	 * 
 	 * @return An ArrayList containing a list of persons
 	 */
-	public List<PersonFire> getListPersonFire() {
+	public List<PersonFlood> getListPersonFire() {
 		return listPersonFire;
 	}
 

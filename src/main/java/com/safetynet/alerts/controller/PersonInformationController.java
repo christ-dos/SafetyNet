@@ -1,7 +1,6 @@
 package com.safetynet.alerts.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -11,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.alerts.DTO.PersonChildAlertDisplaying;
-import com.safetynet.alerts.DTO.PersonFireDisplaying;
-import com.safetynet.alerts.DTO.PersonFlood;
-import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.DTO.PersonCoveredByStationDisplaying;
+import com.safetynet.alerts.DTO.PersonFireDisplaying;
+import com.safetynet.alerts.DTO.PersonFloodDisplaying;
+import com.safetynet.alerts.DTO.PersonInfoDisplaying;
 import com.safetynet.alerts.service.IPersonInformationService;
 import com.safetynet.alerts.service.IPersonService;
 
@@ -94,7 +93,7 @@ public class PersonInformationController {
 	 * @return A map containing persons grouping by address
 	 */
 	@GetMapping(value = "/flood/stations")
-	public Map<String, List<PersonFlood>> getFloodPersonsCoveredByStationList(@Valid @RequestParam List<String> stations) {
+	public List<PersonFloodDisplaying> getFloodPersonsCoveredByStationList(@Valid @RequestParam List<String> stations) {
 		log.debug("Controller  - Request list of person grouping by address in case of flooding for stations: " + stations);
 		return personInformationService.getHouseHoldsCoveredByFireStation(stations);
 	}
