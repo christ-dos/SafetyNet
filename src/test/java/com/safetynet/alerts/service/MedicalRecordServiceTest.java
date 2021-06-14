@@ -34,6 +34,7 @@ import com.safetynet.alerts.model.MedicalRecord;
  */
 @ExtendWith(MockitoExtension.class)
 public class MedicalRecordServiceTest {
+
 	/**
 	 * an instance of {@link MedicalRecordService}
 	 */
@@ -59,17 +60,13 @@ public class MedicalRecordServiceTest {
 	public void setUpPerTest() {
 		mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord index0 = new MedicalRecord("John", "Boyd", "03/06/1984",
-							   new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
-							   new ArrayList<>(Arrays.asList("nillacilan")));
-		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", 
-							   new ArrayList<>(), 
-							   new ArrayList<>());
-		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012", 
-							   new ArrayList<>(Arrays.asList()),
-							   new ArrayList<>(Arrays.asList("peanut")));
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", new ArrayList<>(), new ArrayList<>());
+		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012", new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList("peanut")));
 		MedicalRecord index3 = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
-							   new ArrayList<>(Arrays.asList()), 
-							   new ArrayList<>(Arrays.asList()));
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList()));
 		mockListMedicalRecord.add(index0);
 		mockListMedicalRecord.add(index1);
 		mockListMedicalRecord.add(index2);
@@ -84,7 +81,7 @@ public class MedicalRecordServiceTest {
 	 * 
 	 */
 	@Test
-	public void testGetMedicalRecord_whenMedicalRecordExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAMedicalRecordWithNameJohnBoyd() {
+	public void testGetMedicalRecord_whenMedicalRecordExistWithFirstNameJohnAndLastNameBoyd_thenReturnAMedicalRecordWithNameJohnBoyd() {
 		// GIVEN
 		MedicalRecord medicalRecordJohnBoyd = new MedicalRecord("John", "Boyd", "03/06/1984",
 				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
@@ -108,12 +105,11 @@ public class MedicalRecordServiceTest {
 	 * getMedicalRecord was not called
 	 */
 	@Test
-	public void testGetMedicalRecord_whenInputMedicalRecordNotExist_resultThrowMedicalNotFoundException() {
+	public void testGetMedicalRecord_whenInputMedicalRecordNotExist_thenThrowMedicalNotFoundException() {
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";
 		// WHEN
-
 		// THEN
 		// verify that method getMedicalRecord was not called
 		verify(medicalRecordDAOMock, times(0)).get(anyString(), anyString());
@@ -131,7 +127,7 @@ public class MedicalRecordServiceTest {
 		// GIVEN
 		String firstName = "John";
 		String lastName = "";
-
+		// WHEN
 		// THEN
 		// verify that method getMedicalRecord was not called
 		verify(medicalRecordDAOMock, times(0)).get(anyString(), anyString());
@@ -171,7 +167,6 @@ public class MedicalRecordServiceTest {
 				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
 		when(medicalRecordDAOMock.getMedicalRecords()).thenReturn(mockListMedicalRecord);
 		// WHEN
-
 		// THEN
 		// verify that the method get in MedicalRecordDAO was not called
 		verify(medicalRecordDAOMock, times(0)).get(anyString(), anyString());
@@ -220,7 +215,6 @@ public class MedicalRecordServiceTest {
 				new ArrayList<>(Arrays.asList("thradox:700mg")), new ArrayList<>(Arrays.asList("banana")));
 		when(medicalRecordDAOMock.get(anyString(), anyString())).thenReturn(null);
 		// WHEN
-
 		// THEN
 		// verify that the method save was not called
 		verify(medicalRecordDAOMock, times(0)).save(anyInt(), any());
@@ -240,7 +234,6 @@ public class MedicalRecordServiceTest {
 				new ArrayList<>());
 		String firstName = medicalRecordToDelete.getFirstName();
 		String lastName = medicalRecordToDelete.getLastName();
-
 		when(medicalRecordDAOMock.get(anyString(), anyString())).thenReturn(medicalRecordToDelete);
 		when(medicalRecordDAOMock.delete(any())).thenReturn("SUCCESS");
 		// WHEN
@@ -263,7 +256,6 @@ public class MedicalRecordServiceTest {
 				new ArrayList<>(), new ArrayList<>(Arrays.asList("strawberry")));
 		String firstName = medicalRecordToDeleteNotExist.getFirstName();
 		String lastName = medicalRecordToDeleteNotExist.getLastName();
-
 		when(medicalRecordDAOMock.get(firstName, lastName)).thenReturn(null);
 		// WHEN
 		String resultMessage = medicalRecordServiceTest.deleteMedicalRecord(firstName, lastName);

@@ -25,7 +25,7 @@ public class FireStation {
 	@NotBlank
 	@JsonProperty("station")
 	private String station;
-	
+
 	/**
 	 * A String that contain the address of the fireStation
 	 */

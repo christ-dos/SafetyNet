@@ -73,16 +73,23 @@ public class FireStationDAOTest {
 		assertEquals(fireStationTest, resultListFireStations.get(1));
 
 	}
-	
+
+	/**
+	 * Method that test getAddressesCoveredByStationNumber then return a list of
+	 * addresses with 3 elements and verify that fireStation number "3" contain
+	 * address "1509 Culver St" in index 0
+	 */
 	@Test
 	public void testGetListAddressesCoveredByStationDAO_thenReturnListWithAddresseswithThreeElements() {
 		// GIVEN
 		String fireStationNumber = "3";
 		// WHEN
-		List<String> resultListAddressesFireStations = fireStationDAOTest.getAddressesCoveredByStationNumber(fireStationNumber);
+		List<String> resultListAddressesFireStations = fireStationDAOTest
+				.getAddressesCoveredByStationNumber(fireStationNumber);
 		// THEN
 		assertEquals(3, resultListAddressesFireStations.size());
-		// verify that the station in index 1 in the list is equal to resultListAddressesFireStations index 1
+		// verify that the station in index 1 in the list is equal to
+		// resultListAddressesFireStations index 1
 		assertEquals("1509 Culver St", resultListAddressesFireStations.get(0));
 	}
 

@@ -32,6 +32,7 @@ import com.safetynet.alerts.model.FireStation;
  */
 @ExtendWith(MockitoExtension.class)
 public class FireStationServiceTest {
+
 	/**
 	 * an instance of {@link FireStationService}
 	 */
@@ -42,8 +43,7 @@ public class FireStationServiceTest {
 	 */
 	@Mock
 	private FireStationDAO fireStationDAOMock;
-	
-	
+
 	/**
 	 * A mock of the arraysList of {@link FireStation}
 	 */
@@ -68,9 +68,7 @@ public class FireStationServiceTest {
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
 
-		fireStationServiceTest = FireStationService.builder()
-				.fireStationDAO(fireStationDAOMock)
-			    .build();
+		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock).build();
 	}
 
 	/**
@@ -232,7 +230,7 @@ public class FireStationServiceTest {
 	 * the method delete was not called
 	 */
 	@Test
-	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressButNotExist_theReturnMessageFireStationCannotBeDeleted() {
+	public void testdeleteFireStation_whenWeWantDeleteFireStationWithAddressButNotExist_thenReturnMessageFireStationCannotBeDeleted() {
 		// GIVEN
 		String addressFireStationToDeleted = "7 Toontown St";
 		when(fireStationDAOMock.get(addressFireStationToDeleted)).thenReturn(null);

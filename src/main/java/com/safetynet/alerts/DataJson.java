@@ -59,7 +59,7 @@ public class DataJson {
 	 * An arrayList that contain the list of FireStation
 	 */
 	private List<FireStation> fireStations;
-	
+
 	/**
 	 * An arrayList that contain the list of MedicalRecord
 	 */
@@ -72,8 +72,6 @@ public class DataJson {
 	 * @see JsonObject
 	 */
 	private JsonObject jsonObject;
-
-	
 
 	/**
 	 * Method that get the JsonObject that is read by the method readFileJson
@@ -127,10 +125,10 @@ public class DataJson {
 		log.info("DataJson - The JsonArray with name firestations is deserialized");
 		return fireStations;
 	}
-	
+
 	/**
-	 * Method that extract the JsonArray "medicalrecords" of the JsonObject and map in
-	 * an arrayList of MedicalRecord
+	 * Method that extract the JsonArray "medicalrecords" of the JsonObject and map
+	 * in an arrayList of MedicalRecord
 	 * 
 	 * @return A list of medicalRecord that was contained in the file Json
 	 */

@@ -53,15 +53,14 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetMedicalRecordExist_whenInputMedicalRecordWithFirstNameRogerAndLastNameBoyd_shouldReturnStatusOK()
+	public void testRequestGetMedicalRecordExist_whenInputMedicalRecordWithFirstNameRogerAndLastNameBoyd_thenReturnStatusOK()
 			throws Exception {
 		// GIVEN
 		// WHEN
 		// THEN
-		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=Roger&lastName=Boyd"))
-							.andExpect(status().isOk())
-							.andExpect(jsonPath("$.firstName", is("Roger"))).andExpect(jsonPath("$.lastName", is("Boyd")))
-							.andExpect(jsonPath("$.birthdate", is("09/06/2017"))).andDo(print());
+		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=Roger&lastName=Boyd")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstName", is("Roger"))).andExpect(jsonPath("$.lastName", is("Boyd")))
+				.andExpect(jsonPath("$.birthdate", is("09/06/2017"))).andDo(print());
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetMedicalRecordNotExist_whenMedicalRecordFirstNameLilyAndLastNameSaguet_shouldReturnMedicalRecordNotFoundException()
+	public void testRequestGetMedicalRecordNotExist_whenMedicalRecordFirstNameLilyAndLastNameSaguet_thenReturnMedicalRecordNotFoundException()
 			throws Exception {
 		// GIVEN
 		// WHEN
@@ -94,13 +93,12 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestGetMedicanRecord_whenInputFirstNameOrLastNameIsEmpty_shouldReturnAnEmptyFieldsException()
+	public void testRequestGetMedicanRecord_whenInputFirstNameOrLastNameIsEmpty_thenReturnAnEmptyFieldsException()
 			throws Exception {
 		// GIVEN
 		// WHEN
 		// THEN
-		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=&lastName="))
-				.andExpect(status().isBadRequest())
+		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=&lastName=")).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.message", is("Field cannot be empty")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof EmptyFieldsException))
 				.andExpect(result -> assertEquals("Field cannot be empty", result.getResolvedException().getMessage()))
@@ -114,7 +112,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenMedicalRecordAlreadyExist_shouldThrowMedicalRecordAlreadyExistException()
+	public void testRequestPost_whenMedicalRecordAlreadyExist_thenThrowMedicalRecordAlreadyExistException()
 			throws Exception {
 		// GIVEN
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
@@ -125,8 +123,8 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord
 				.perform(MockMvcRequestBuilders.post("/medicalRecord")
-				.content(medicalRecordControllerTest.asJsonString(MedicalRecordTenleyBoydExistInArray))
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+						.content(medicalRecordControllerTest.asJsonString(MedicalRecordTenleyBoydExistInArray))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.message",
 						is("The medicalRecord that we try to save already exist, please proceed to an update")))
@@ -138,13 +136,13 @@ public class MedicalRecordTestIT {
 	}
 
 	/**
-	 * Method that test request Post when MedicalRecord to save not exist then return
-	 * MedicalRecord saved
+	 * Method that test request Post when MedicalRecord to save not exist then
+	 * return MedicalRecord saved
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequestPost_whenMedicalRecordNotExist_shouldSaveTheMedicalRecord() throws Exception {
+	public void testRequestPost_whenMedicalRecordNotExist_thenSaveTheMedicalRecord() throws Exception {
 		// GIVEN
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
 		MedicalRecord medicalRecordNotExistInArray = new MedicalRecord("Joana", "Martin", "02/05/1992",
@@ -154,20 +152,17 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord
 				.perform(MockMvcRequestBuilders.post("/medicalRecord")
-				.content(medicalRecordControllerTest.asJsonString(medicalRecordNotExistInArray))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("Joana")))
-				.andExpect(jsonPath("$.lastName", is("Martin")))
-				.andExpect(jsonPath("$.birthdate", is("02/05/1992")))
+						.content(medicalRecordControllerTest.asJsonString(medicalRecordNotExistInArray))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.firstName", is("Joana")))
+				.andExpect(jsonPath("$.lastName", is("Martin"))).andExpect(jsonPath("$.birthdate", is("02/05/1992")))
 				.andExpect(jsonPath("$.medications[0]", is("terazine:500mg")))
 				.andExpect(jsonPath("$.allergies[0]", is("shellfish"))).andDo(print());
 	}
 
 	/**
-	 * Method that test request Delete when MedicalRecord to delete exist then return
-	 * a String "SUCCESS" to confirm the deletion
+	 * Method that test request Delete when MedicalRecord to delete exist then
+	 * return a String "SUCCESS" to confirm the deletion
 	 * 
 	 *
 	 * @throws Exception
@@ -179,14 +174,12 @@ public class MedicalRecordTestIT {
 		// WHEN
 
 		// THEN
-		mockMvcMedicalRecord.perform(delete("/medicalRecord?firstName=jacob&lastName=Boyd"))
-							.andExpect(status().isOk())
-							.andExpect(jsonPath("$", is("SUCCESS"))).andDo(print());
+		mockMvcMedicalRecord.perform(delete("/medicalRecord?firstName=jacob&lastName=Boyd")).andExpect(status().isOk())
+				.andExpect(jsonPath("$", is("SUCCESS"))).andDo(print());
 
 		mockMvcMedicalRecord.perform(get("/medicalRecord?firstName=jacob&lastName=Boyd"))
-							.andExpect(status().isNotFound())
-							.andExpect(jsonPath("$.firstName").doesNotExist())
-							.andExpect(jsonPath("$.lastName").doesNotExist()).andDo(print());
+				.andExpect(status().isNotFound()).andExpect(jsonPath("$.firstName").doesNotExist())
+				.andExpect(jsonPath("$.lastName").doesNotExist()).andDo(print());
 	}
 
 	/**
@@ -201,15 +194,13 @@ public class MedicalRecordTestIT {
 		// GIVEN
 		// WHEN
 		// THEN
-		mockMvcMedicalRecord.perform(delete("/medicalRecord?firstName=Zozor&lastName=Zeros"))
-							.andExpect(status().isOk())
-							.andExpect(jsonPath("$", is("MedicalRecord cannot be Deleted")))
-							.andDo(print());
+		mockMvcMedicalRecord.perform(delete("/medicalRecord?firstName=Zozor&lastName=Zeros")).andExpect(status().isOk())
+				.andExpect(jsonPath("$", is("MedicalRecord cannot be Deleted"))).andDo(print());
 	}
 
 	/**
 	 * Method that test request Put when MedicalRecord to update exist then return
-	 * MedicalRecord with the field allergies updated with "strawberry" 
+	 * MedicalRecord with the field allergies updated with "strawberry"
 	 *
 	 * @throws Exception
 	 */
@@ -225,16 +216,12 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord
 				.perform(MockMvcRequestBuilders.put("/medicalRecord")
-				.content(medicalRecordControllerTest.asJsonString(MedicalRecordToUpdateWhenExist))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("John")))
-				.andExpect(jsonPath("$.lastName", is("Boyd")))
-				.andExpect(jsonPath("$.birthdate", is("03/06/1984")))
+						.content(medicalRecordControllerTest.asJsonString(MedicalRecordToUpdateWhenExist))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.firstName", is("John")))
+				.andExpect(jsonPath("$.lastName", is("Boyd"))).andExpect(jsonPath("$.birthdate", is("03/06/1984")))
 				.andExpect(jsonPath("$.allergies[0]", is("nillacilan")))
-				.andExpect(jsonPath("$.allergies[1]", is("strawberry")))
-				.andDo(print());
+				.andExpect(jsonPath("$.allergies[1]", is("strawberry"))).andDo(print());
 	}
 
 	/**
@@ -244,7 +231,8 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequetePut_whenSeveralfieldsAreModified_thenVerifyThatMedicalRecordWasbeenUpdated() throws Exception {
+	public void testRequetePut_whenSeveralfieldsAreModified_thenVerifyThatMedicalRecordWasbeenUpdated()
+			throws Exception {
 		// GIVNE
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
 		MedicalRecord medicalRecordToUpdate = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
@@ -255,22 +243,18 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord
 				.perform(MockMvcRequestBuilders.put("/medicalRecord")
-				.content(medicalRecordControllerTest.asJsonString(medicalRecordToUpdate))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("Jonanathan")))
-				.andExpect(jsonPath("$.lastName", is("Marrack")))
-				.andExpect(jsonPath("$.birthdate", is("01/03/1989")))
+						.content(medicalRecordControllerTest.asJsonString(medicalRecordToUpdate))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.firstName", is("Jonanathan")))
+				.andExpect(jsonPath("$.lastName", is("Marrack"))).andExpect(jsonPath("$.birthdate", is("01/03/1989")))
 				.andExpect(jsonPath("$.medications[0]", is("aznol:350mg")))
 				.andExpect(jsonPath("$.medications[1]", is("hydrapermazol:100mg")))
-				.andExpect(jsonPath("$.allergies[0]", is("shellfish")))
-				.andDo(print());
+				.andExpect(jsonPath("$.allergies[0]", is("shellfish"))).andDo(print());
 	}
 
 	/**
-	 * Method that test request Put when MedicalRecord to update not exist then throw
-	 * a {@link MedicalRecordNotFoundException}
+	 * Method that test request Put when MedicalRecord to update not exist then
+	 * throw a {@link MedicalRecordNotFoundException}
 	 *
 	 * @throws Exception
 	 */
@@ -286,9 +270,8 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord
 				.perform(MockMvcRequestBuilders.put("/medicalRecord")
-				.content(medicalRecordControllerTest.asJsonString(medicalRecordToUpdateNotExist))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
+						.content(medicalRecordControllerTest.asJsonString(medicalRecordToUpdateNotExist))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.message", is("MedicalRecord not found, please try again")))
 				.andExpect(
@@ -309,7 +292,7 @@ public class MedicalRecordTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRequetePut_whenInputFieldsIsInvalid_shouldReturnMethodArgumentNotValidExceptionMustNotBeBlank()
+	public void testRequetePut_whenInputFieldsIsInvalid_thenReturnMethodArgumentNotValidExceptionMustNotBeBlank()
 			throws Exception {
 		// GIVEN
 		MedicalRecordControllerTest medicalRecordControllerTest = new MedicalRecordControllerTest();
@@ -321,10 +304,9 @@ public class MedicalRecordTestIT {
 		// THEN
 		mockMvcMedicalRecord
 				.perform(MockMvcRequestBuilders.put("/medicalRecord")
-				.content(medicalRecordControllerTest
-				.asJsonString(medicalRecordToUpdateWhenFieldFirstNameInvalid))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
+						.content(medicalRecordControllerTest
+								.asJsonString(medicalRecordToUpdateWhenFieldFirstNameInvalid))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(
 						result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))

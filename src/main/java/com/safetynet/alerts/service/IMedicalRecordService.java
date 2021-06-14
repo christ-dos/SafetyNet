@@ -3,12 +3,14 @@ package com.safetynet.alerts.service;
 import com.safetynet.alerts.model.MedicalRecord;
 
 /**
- * An interface that manage methods CRUD of the service of the entity MedicalRecord
+ * An interface that manage methods CRUD of the service of the entity
+ * MedicalRecord
  * 
  * @author Christine Duarte
  *
  */
 public interface IMedicalRecordService {
+
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName
 	 * 

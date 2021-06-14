@@ -25,6 +25,7 @@ import com.safetynet.alerts.model.Person;
  */
 @ExtendWith(MockitoExtension.class)
 public class MedicalRecordDAOTest {
+
 	/**
 	 * An instance of {@link MedicalRecordDAO}
 	 */
@@ -35,7 +36,6 @@ public class MedicalRecordDAOTest {
 	 */
 	@Mock
 	private List<MedicalRecord> mockListMedicalRecord;
-	
 
 	/**
 	 * Method that created a mock of the ArrayList mockListMedicalRecord with 3
@@ -47,14 +47,11 @@ public class MedicalRecordDAOTest {
 	public void setUpPerTest() {
 		mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord index0 = new MedicalRecord("John", "Boyd", "03/06/1984",
-							   new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
-							   new ArrayList<>(Arrays.asList("nillacilan")));
-		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994",
-							   new ArrayList<>(),
-							   new ArrayList<>());
-		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012", 
-							   new ArrayList<>(Arrays.asList()),
-							   new ArrayList<>(Arrays.asList("peanut")));
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", new ArrayList<>(), new ArrayList<>());
+		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/18/2012", new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList("peanut")));
 		mockListMedicalRecord.add(index0);
 		mockListMedicalRecord.add(index1);
 		mockListMedicalRecord.add(index2);
@@ -65,7 +62,8 @@ public class MedicalRecordDAOTest {
 	 * Method that test getMedicalRecords in DAO then return a list of
 	 * medicalRecords with 3 elements and verify that the medicalRecord of John Boyd
 	 * is present in the list in index 0 and the birthDate is "03/06/1984" and
-	 * medications saved in arrayList medications in index 1 is "hydrapermazol:100mg"
+	 * medications saved in arrayList medications in index 1 is
+	 * "hydrapermazol:100mg"
 	 */
 	@Test
 	public void testGetListMedicalRecords_resultShouldVerifythatListContainThreeMedicalRecords() {
@@ -81,15 +79,15 @@ public class MedicalRecordDAOTest {
 		assertEquals("hydrapermazol:100mg", resultListgetted.get(0).getMedications().get(1));
 		assertEquals(3, resultListgetted.size());
 	}
+
 	/**
-	 * Method that testGetListMedicalRecordForAlistOfPerson
-	 * when the list of person contain 3 persons
-	 * then return a list with three medicalRecords
+	 * Method that testGetListMedicalRecordForAlistOfPerson when the list of person
+	 * contain 3 persons then return a list with three medicalRecords
 	 */
 	@Test
 	public void testGetListMedicalRecordForAListOfPerson_whenListContainThreeElements_ShouldReturnTheeMedicalRecords() {
-		//GIVEN
-		List< MedicalRecord> mockListMedicalRecord = new ArrayList<>();
+		// GIVEN
+		List<MedicalRecord> mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord indexMRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
 				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
 				new ArrayList<>(Arrays.asList("nillacilan")));
@@ -103,16 +101,17 @@ public class MedicalRecordDAOTest {
 		List<Person> listPersons = new ArrayList<>();
 		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
-		Person index1 = new Person("Tessa", "Carman","834 Binoc Ave","Culver","97451", "841-874-6512", "tenz@email.com");
+		Person index1 = new Person("Tessa", "Carman", "834 Binoc Ave", "Culver", "97451", "841-874-6512",
+				"tenz@email.com");
 		Person index3 = new Person("Foster", "Shepard", "748 Townings Dr", "Culver", "97451", "841-874-6544",
 				"jaboyd@email.com");
 		listPersons.add(index0);
 		listPersons.add(index1);
 		listPersons.add(index3);
 		medicalRecordDAOTest = MedicalRecordDAO.builder().listMedicalRecords(mockListMedicalRecord).build();
-		//WHEN
-		List<MedicalRecord> medicalRecordResult  = medicalRecordDAOTest.getListMedicalRecordByListOfPerson(listPersons);
-		//THEN
+		// WHEN
+		List<MedicalRecord> medicalRecordResult = medicalRecordDAOTest.getListMedicalRecordByListOfPerson(listPersons);
+		// THEN
 		assertEquals(3, medicalRecordResult.size());
 		assertEquals(indexMRecord0, medicalRecordResult.get(0));
 		assertEquals("03/06/1984", medicalRecordResult.get(0).getBirthDate());

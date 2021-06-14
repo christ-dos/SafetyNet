@@ -16,60 +16,59 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @ExtendWith(MockitoExtension.class)
 public class DateUtilsTest {
+
 	/**
-	 * A mock of  {@link DateUtils}
+	 * A mock of {@link DateUtils}
 	 */
 	private DateUtils dateUtils;
-	
+
 	/**
 	 * Method which initialize dateUtils per all tests
 	 * 
 	 */
 	@BeforeEach
 	public void setUpPerTest() {
-		dateUtils= new DateUtils();
+		dateUtils = new DateUtils();
 	}
-	
-	
-	
+
 	/**
-	 * Method that test getAge for a birthDate 09/17/1974 
-	 * then return 46 years
+	 * Method that test getAge for a birthDate 09/17/1974 then return 46 years
 	 */
 	@Test
 	public void testGetAge_whenbithDateIsAString_thenReturnAge() {
-		//GIVEN
+		// GIVEN
 		DateUtils dateUtils = new DateUtils();
 		String birthDate = "09/17/1974";
-		//WHEN
+		// WHEN
 		int resultAge = dateUtils.getAge(birthDate);
-		//THEN
+		// THEN
 		assertEquals(46, resultAge);
 	}
-	
+
 	/**
-	 * Method that test getAge when the birthDate is empty
-	 * then throw an IllegalArgumentException
+	 * Method that test getAge when the birthDate is empty then throw an
+	 * IllegalArgumentException
 	 */
 	@Test
 	public void testGetAge_whenbithDateIsEmpty_thenThrowAnIllegalArgumentException() {
-		//GIVEN
+		// GIVEN
 		String birthDate = "";
-		//WHEN
-		//THEN
-		assertThrows(IllegalArgumentException.class, ()-> dateUtils.getAge(birthDate));
+		// WHEN
+		// THEN
+		assertThrows(IllegalArgumentException.class, () -> dateUtils.getAge(birthDate));
 	}
+
 	/**
-	 * Method that test getAge when the birthDate is after date actual
-	 * then return -1
+	 * Method that test getAge when the birthDate is after date actual then return
+	 * -1
 	 */
 	@Test
-	public void testGetAge_whenBirthDateIsAfterDateActual_thenReturnZero() {
-		//GIVEN
+	public void testGetAge_whenBirthDateIsAfterDateActual_thenReturnMoin1() {
+		// GIVEN
 		String birthDate = "01/25/2050";
-		//WHEN
+		// WHEN
 		int resultAge = dateUtils.getAge(birthDate);
-		//THEN
+		// THEN
 		assertEquals(-1, resultAge);
 	}
 }

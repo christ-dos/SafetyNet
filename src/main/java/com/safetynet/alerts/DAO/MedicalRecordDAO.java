@@ -24,13 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @AllArgsConstructor
 public class MedicalRecordDAO implements IMedicalRecordDAO {
-	
+
 	/**
 	 * Attribute that contain the list of medicalRecords that provide from data.json
 	 */
 	@Autowired
 	private List<MedicalRecord> listMedicalRecords;
-	
+
 	/**
 	 * Method that get the list of medicalRecords
 	 * 
@@ -40,6 +40,7 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 	public List<MedicalRecord> getMedicalRecords() {
 		return listMedicalRecords;
 	}
+
 	/**
 	 * Method that get the list of medicalRecords by a list of persons in parameter
 	 * 
@@ -74,18 +75,20 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 	@Override
 	public MedicalRecord get(String firstName, String lastName) {
 		for (MedicalRecord medicalRecord : listMedicalRecords) {
-			if (medicalRecord.getFirstName().equalsIgnoreCase(firstName) && medicalRecord.getLastName().equalsIgnoreCase(lastName)) {
+			if (medicalRecord.getFirstName().equalsIgnoreCase(firstName)
+					&& medicalRecord.getLastName().equalsIgnoreCase(lastName)) {
 				log.debug("DAO - MedicalRecord found  for person: " + firstName + " " + lastName);
 				return medicalRecord;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Method that save a medicalRecord in the ArrayList
 	 * 
-	 * @param index - An integer containing the position where will be saved the medicalRecord
+	 * @param index         - An integer containing the position where will be saved
+	 *                      the medicalRecord
 	 * @param medicalRecord - An instance of MedicalRecord
 	 * @return The MedicalRecord that was saved in the arrayList
 	 */
@@ -96,10 +99,11 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 		} else {
 			listMedicalRecords.set(index, medicalRecord);
 		}
-		log.debug("DAO - MedicalRecord saved for person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
+		log.debug("DAO - MedicalRecord saved for person: " + medicalRecord.getFirstName() + " "
+				+ medicalRecord.getLastName());
 		return medicalRecord;
 	}
-	
+
 	/**
 	 * Method that delete a medicalRecord from the ArrayList
 	 * 
@@ -109,7 +113,8 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
 	@Override
 	public String delete(MedicalRecord medicalRecord) {
 		listMedicalRecords.remove(medicalRecord);
-		log.debug("DAO - MedicalRecord deleted for person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
+		log.debug("DAO - MedicalRecord deleted for person: " + medicalRecord.getFirstName() + " "
+				+ medicalRecord.getLastName());
 		return "SUCCESS";
 	}
 }

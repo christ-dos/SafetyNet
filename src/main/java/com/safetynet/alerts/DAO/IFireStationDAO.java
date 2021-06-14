@@ -17,15 +17,16 @@ public interface IFireStationDAO {
 	 * @return an ArrayList of FireStation
 	 */
 	public List<FireStation> getFireStations();
-	
+
 	/**
-	 * Method that get the list of addresses covered by fireStation with station  number
+	 * Method that get the list of addresses covered by fireStation with station
+	 * number
 	 * 
 	 * @station - a number of fireStation
 	 * 
 	 * @return an ArrayList of String with addresses covered by fireStaiton
 	 */
-	public List<String> getAddressesCoveredByStationNumber(String station) ;
+	public List<String> getAddressesCoveredByStationNumber(String station);
 
 	/**
 	 * Method that get a fireStation by address
@@ -50,5 +51,4 @@ public interface IFireStationDAO {
 	 * @return a String to confirm the deletion
 	 */
 	public String delete(FireStation fireStation);
-
 }

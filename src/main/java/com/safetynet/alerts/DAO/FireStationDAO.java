@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FireStationDAO implements IFireStationDAO {
+	
 	/**
 	 * attribute that contain the list of fireStations that provide from data.json
 	 */
@@ -41,7 +42,7 @@ public class FireStationDAO implements IFireStationDAO {
 	public List<FireStation> getFireStations() {
 		return listFireStations;
 	}
-	
+
 	/**
 	 * Method that get the list of addresses covered by Station number input
 	 * 
@@ -51,11 +52,11 @@ public class FireStationDAO implements IFireStationDAO {
 	public List<String> getAddressesCoveredByStationNumber(String station) {
 		List<String> listAddressesCoveredByStation = new ArrayList<>();
 		for (FireStation fireStation : listFireStations) {
-			if(fireStation.getStation().equals(station)) {
+			if (fireStation.getStation().equals(station)) {
 				listAddressesCoveredByStation.add(fireStation.getAddress());
 			}
 		}
-		if(listAddressesCoveredByStation.isEmpty()) {
+		if (listAddressesCoveredByStation.isEmpty()) {
 			log.debug("DAO - FireStation not found with station number: " + station);
 			return null;
 		}
@@ -81,7 +82,7 @@ public class FireStationDAO implements IFireStationDAO {
 		log.error("DAO FireStation not found with address: " + address);
 		return null;
 	}
-	
+
 	/**
 	 * Method that save a FireStation in the ArrayList
 	 * 

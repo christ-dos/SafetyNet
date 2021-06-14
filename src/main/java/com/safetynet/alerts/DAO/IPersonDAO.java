@@ -11,15 +11,16 @@ import com.safetynet.alerts.model.Person;
  *
  */
 public interface IPersonDAO {
+	
 	/**
 	 * Method that get the list of persons
 	 * 
 	 * @return an ArrayList of Persons
 	 */
 	public List<Person> getPersons();
-	
+
 	/**
-	 * Method that get the list of person by a list of addresses 
+	 * Method that get the list of person by a list of addresses
 	 * 
 	 * @return An ArrayList of Persons with address provided in parameter
 	 */
@@ -33,7 +34,7 @@ public interface IPersonDAO {
 	 * @return an instance of Person
 	 */
 	public Person getPerson(String firstName, String lastName);
-	
+
 	/**
 	 * Method that get a person by address
 	 * 
@@ -41,7 +42,7 @@ public interface IPersonDAO {
 	 * @return A Person
 	 */
 	public Person getPersonByAddress(String address);
-	
+
 	/**
 	 * Method that save a Person in the ArrayList
 	 * 

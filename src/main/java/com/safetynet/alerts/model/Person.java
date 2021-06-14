@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
+
 	/**
 	 * A String that contain the firstName of the person
 	 */
@@ -80,5 +81,5 @@ public class Person {
 	@JsonProperty("email")
 	@JsonInclude(Include.NON_NULL)
 	private String email;
-	
+
 }

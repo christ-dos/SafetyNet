@@ -2,7 +2,6 @@ package com.safetynet.alerts.service;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,12 +51,16 @@ public class PersonServiceTest {
 	 */
 	@Mock
 	private List<Person> mockList;
-	
-	@Mock
-	List<MedicalRecord> mockListMedicalRecord ;
 
 	/**
-	 * Method that create a mock of the ArrayList mockList with 4 elements
+	 * A mock of the arraysList of {@link MedicalRecord}
+	 */
+	@Mock
+	List<MedicalRecord> mockListMedicalRecord;
+
+	/**
+	 * Method that create a mock of the ArrayList mockList with 4 elements and a
+	 * mockListMedicalRecord
 	 * 
 	 */
 	@BeforeEach
@@ -75,38 +78,32 @@ public class PersonServiceTest {
 		mockList.add(index1);
 		mockList.add(index2);
 		mockList.add(index3);
-		
+
 		mockListMedicalRecord = new ArrayList<>();
 		MedicalRecord indexMedicalRecord0 = new MedicalRecord("John", "Boyd", "03/06/1984",
-							   new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
-							   new ArrayList<>(Arrays.asList("nillacilan")));
-		MedicalRecord indexMedicalRecord1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", 
-							   new ArrayList<>(), 
-							   new ArrayList<>());
-		MedicalRecord indexMedicalRecord2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012", 
-							   new ArrayList<>(Arrays.asList()),
-							   new ArrayList<>(Arrays.asList("peanut")));
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord indexMedicalRecord1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", new ArrayList<>(),
+				new ArrayList<>());
+		MedicalRecord indexMedicalRecord2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList("peanut")));
 		MedicalRecord indexMedicalRecord3 = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
-							   new ArrayList<>(Arrays.asList()), 
-							   new ArrayList<>(Arrays.asList()));
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList()));
 		mockListMedicalRecord.add(indexMedicalRecord0);
 		mockListMedicalRecord.add(indexMedicalRecord1);
 		mockListMedicalRecord.add(indexMedicalRecord2);
 		mockListMedicalRecord.add(indexMedicalRecord3);
-		
-		personServiceTest = PersonService.builder()
-				.personDAO(personDAOMock)
-				.build();
+
+		personServiceTest = PersonService.builder().personDAO(personDAOMock).build();
 	}
 
 	/**
 	 * Method that test getPerson with firstName John and LastName Boyd when person
 	 * exist then return John Boyd and verify that the method getPerson was called
-	 * 
-	 * throws {@link EmptyFieldsException}
+	 *
 	 */
 	@Test
-	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_resultShouldReturnAPersonJohnBoyd() {
+	public void testGetPerson_whenPersonExistWithFirstNameJohnAndLastNameBoyd_thenReturnPersonJohnBoyd() {
 		// GIVEN
 		Person personInput = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");
@@ -117,7 +114,6 @@ public class PersonServiceTest {
 		Person resultPersonGetted = personServiceTest.getPerson(firstName, lastName);
 		// THEN
 		verify(personDAOMock, times(1)).getPerson(anyString(), anyString());
-		assertNotNull(resultPersonGetted);
 		assertEquals(personInput, resultPersonGetted);
 	}
 
@@ -127,12 +123,11 @@ public class PersonServiceTest {
 	 * called
 	 */
 	@Test
-	public void testGetPerson_whenInputPersonNotExist_resultThrowPersonNotFoundException() {
+	public void testGetPerson_whenInputPersonNotExist_thenThrowPersonNotFoundException() {
 		// GIVEN
 		String firstName = "Lubin";
 		String lastName = "Dujardin";
 		// WHEN
-
 		// THEN
 		// verify that method getPerson was not called
 		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
@@ -150,13 +145,12 @@ public class PersonServiceTest {
 		String firstName = "John";
 		String lastName = "";
 		// WHEN
-
 		// THEN
 		// verify that method getPerson was not called
 		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
 		assertThrows(EmptyFieldsException.class, () -> personServiceTest.getPerson(firstName, lastName));
 	}
-	
+
 	/**
 	 * Method that test addPerson when person to add not exist then return the
 	 * person saved and verify if the method savePerson was called
@@ -189,7 +183,6 @@ public class PersonServiceTest {
 				"841-874-6512", "tenz@email.com");
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		// WHEN
-
 		// THEN
 		// verify that the method getPerson was not called
 		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
@@ -232,7 +225,6 @@ public class PersonServiceTest {
 				"841-874-6513", "babar@email.com");
 		when(personDAOMock.getPerson(anyString(), anyString())).thenReturn(null);
 		// WHEN
-
 		// THEN
 		// verify that the method save was not called
 		verify(personDAOMock, times(0)).save(anyInt(), any());
@@ -283,35 +275,36 @@ public class PersonServiceTest {
 		verify(personDAOMock, times(0)).delete(any());
 		assertEquals("Person not Deleted", resultMessage);
 	}
-	
-	/** Method that test getEmailResidents when city exist then return the list of email
-	 * and verify that list contained 4 elements
+
+	/**
+	 * Method that test getEmailResidents when city exist then return the list of
+	 * email and verify that list contained 4 elements
 	 */
 	@Test
 	public void testGetEmailResidentsCityGiven_whenCityIsCulver_thenGetAllEmailsOfResidentsCulverCity() {
-		//GIVEN
+		// GIVEN
 		String city = "Culver";
 		when(personDAOMock.getPersons()).thenReturn(mockList);
-		//WHEN
+		// WHEN
 		List<String> listEmailResidentsCityCulver = personServiceTest.getEmailResidents(city);
-		//THEN
+		// THEN
 		// the list obtained contain 4 elements
 		verify(personDAOMock, times(1)).getPersons();
 		assertEquals(4, listEmailResidentsCityCulver.size());
 		assertEquals("jaboyd@email.com", listEmailResidentsCityCulver.get(0));
 		assertEquals("drk@email.com", listEmailResidentsCityCulver.get(3));
 	}
-	
+
 	/**
 	 * Method that test getEmailResidents when city not exist then throw a
 	 * {@link CityNotFoundException}
 	 */
 	@Test
 	public void testGetEmailResidentsCityGiven_whenCityNotExistInArrayList_thenThrowACityNotFoundException() {
-		//GIVEN
+		// GIVEN
 		String city = "Croix";
-		//WHEN
-		//THEN
-		assertThrows(CityNotFoundException.class, ()-> personServiceTest.getEmailResidents(city));
+		// WHEN
+		// THEN
+		assertThrows(CityNotFoundException.class, () -> personServiceTest.getEmailResidents(city));
 	}
 }

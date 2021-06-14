@@ -33,7 +33,7 @@ public interface IPersonService {
 	 * @throws PersonAlreadyExistException when the person that we want added
 	 *                                     already exist
 	 */
-	public Person addPerson(Person person) throws PersonAlreadyExistException ;
+	public Person addPerson(Person person) throws PersonAlreadyExistException;
 
 	/**
 	 * Method that delete a person
@@ -51,7 +51,7 @@ public interface IPersonService {
 	 * @return the person updated
 	 */
 	public Person updatePerson(Person person);
-	
+
 	/**
 	 * Method that filters the list of persons to get emails for a city input
 	 * 
@@ -60,5 +60,5 @@ public interface IPersonService {
 	 * @throws CityNotFoundException
 	 */
 	public List<String> getEmailResidents(String city);
-	
+
 }

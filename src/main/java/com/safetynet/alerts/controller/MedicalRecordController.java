@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class MedicalRecordController {
-	
+
 	/**
 	 * An instance of the MedicalRecordService
 	 * 
@@ -33,7 +33,7 @@ public class MedicalRecordController {
 	 */
 	@Autowired
 	private IMedicalRecordService medicalRecordService;
-	
+
 	/**
 	 * Request Get to obtain a medicalRecord
 	 * 
@@ -46,31 +46,35 @@ public class MedicalRecordController {
 		log.debug("Controller - Request to find medicalRecord for person: " + firstName + " " + lastName);
 		return medicalRecordService.getMedicalRecord(firstName, lastName);
 	}
+
 	/**
 	 * Request Post to add a medicalRecord at the ArrayList
 	 * 
 	 * @param medicalRecord - a medicalRecord obtained by the body of the request
 	 * @return the medicalRecord added in the ArrayList
-	*/
+	 */
 	@PostMapping(value = "/medicalRecord")
 	public MedicalRecord saveMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
-		log.debug("Controller - Request to save medicalRecord for person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
+		log.debug("Controller - Request to save medicalRecord for person: " + medicalRecord.getFirstName() + " "
+				+ medicalRecord.getLastName());
 		return medicalRecordService.addMedicalRecord(medicalRecord);
 	}
-	
+
 	/**
 	 * Request Delete to delete a medicalRecord from the ArrayList
 	 * 
 	 * @param firstName - a String obtained from url request
 	 * @param lastName  - a String obtained from url request
-	 * @return a String with the message "SUCCESS" or "medicalRecord cannot be deleted"
+	 * @return a String with the message "SUCCESS" or "medicalRecord cannot be
+	 *         deleted"
 	 */
 	@DeleteMapping(value = "/medicalRecord")
-	public String deleteMedicalRecordByFirstNameAndLastName(@Valid @RequestParam String firstName, @RequestParam String lastName) {
+	public String deleteMedicalRecordByFirstNameAndLastName(@Valid @RequestParam String firstName,
+			@RequestParam String lastName) {
 		log.debug("Controller - Request to delete medicalRecord for person: " + firstName + " " + lastName);
 		return medicalRecordService.deleteMedicalRecord(firstName, lastName);
 	}
-	
+
 	/**
 	 * Request Put to update a medicalRecord from the ArrayList
 	 * 
@@ -78,8 +82,9 @@ public class MedicalRecordController {
 	 * @return the medicalRecord updated in the ArrayList
 	 */
 	@PutMapping(value = "/medicalRecord")
-	public MedicalRecord updateMedicalRecord(@Valid @RequestBody  MedicalRecord medicalRecord) {
-		log.debug("Controller - Request to update person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
+	public MedicalRecord updateMedicalRecord(@Valid @RequestBody MedicalRecord medicalRecord) {
+		log.debug("Controller - Request to update person: " + medicalRecord.getFirstName() + " "
+				+ medicalRecord.getLastName());
 		return medicalRecordService.updateMedicalRecord(medicalRecord);
 	}
 }
