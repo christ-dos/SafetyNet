@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @AllArgsConstructor
 public class PersonService implements IPersonService {
+
 	/**
 	 * An instance of {@link PersonDAO}
 	 * 
@@ -53,11 +54,11 @@ public class PersonService implements IPersonService {
 	 * @param firstName - the firstName
 	 * @param lastName  - the lastName
 	 * @return an instance of Person getted
-	 * @throws EmptyFieldsException  when the field firstName or lastName is empty
+	 * @throws EmptyFieldsException    when the field firstName or lastName is empty
 	 * @throws PersonNotFoundException when person is not found
 	 */
 	@Override
-	public Person getPerson(String firstName, String lastName){
+	public Person getPerson(String firstName, String lastName) {
 		if (firstName.isEmpty() || lastName.isEmpty()) {
 			log.error("Service - The fields firstName and lastName cannot be empty ");
 			throw new EmptyFieldsException("Field cannot be empty");
@@ -67,7 +68,7 @@ public class PersonService implements IPersonService {
 			log.debug("Service - Person found: " + person.getFirstName() + " " + person.getLastName());
 			return person;
 		}
-		log.error("Service - Person not found: " + firstName +  " " + lastName);
+		log.error("Service - Person not found: " + firstName + " " + lastName);
 		throw new PersonNotFoundException("Person not found exception");
 	}
 
@@ -80,13 +81,13 @@ public class PersonService implements IPersonService {
 	 *                                     already exist
 	 */
 	@Override
-	public Person addPerson(Person person){
+	public Person addPerson(Person person) {
 		List<Person> personList = getListPersons();
 		int index = personList.indexOf(person);
 		// person Already exist
 		if (index >= 0) {
-			log.error("Service - Person cannot be saved because: " + person.getFirstName() + " "
-					+ person.getLastName() + " already exist");
+			log.error("Service - Person cannot be saved because: " + person.getFirstName() + " " + person.getLastName()
+					+ " already exist");
 			throw new PersonAlreadyExistException("Person already exist");
 		}
 		log.debug("Service - Person is saved : " + person.getFirstName() + " " + person.getLastName());
@@ -142,7 +143,7 @@ public class PersonService implements IPersonService {
 
 		return personDAO.save(indexPosition, person);
 	}
-	
+
 	/**
 	 * Method that filters the list of persons to get emails for a city input
 	 * 

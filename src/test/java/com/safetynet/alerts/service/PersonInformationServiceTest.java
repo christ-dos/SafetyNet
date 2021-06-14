@@ -41,6 +41,7 @@ import com.safetynet.alerts.utils.DateUtils;
  */
 @ExtendWith(MockitoExtension.class)
 public class PersonInformationServiceTest {
+
 	/**
 	 * An instance of {@link PersonInformationService}
 	 */
@@ -191,7 +192,6 @@ public class PersonInformationServiceTest {
 	@Test
 	public void testgetListPersonsCoveredByFireStation_whenStationNumberFireStationExist_thenReturnListPersonsAdultsAndChilds() {
 		// GIVEN
-
 		String stationNumber = "3";
 		PersonCoveredByStation expectedJohnBoyd = new PersonCoveredByStation("John", "Boyd", "1509 Culver St",
 				"841-874-6512");
@@ -200,7 +200,6 @@ public class PersonInformationServiceTest {
 		when(fireStationDAOMock.getAddressesCoveredByStationNumber(stationNumber)).thenReturn(mockListAddress);
 		when(personDAOMock.getPersonsByListAdresses(mockListAddress)).thenReturn(mockList);
 		when(medicalRecordDAOMock.getListMedicalRecordByListOfPerson(mockList)).thenReturn(mockListMedicalRecord);
-		// when(dateUtilsMock.getAge(anyString())).thenReturn(37, 9, 41);
 		// WHEN
 		PersonCoveredByStationDisplaying PersonsCovededByStationThree = personInformationService
 				.getPersonCoveredByFireStation(stationNumber);

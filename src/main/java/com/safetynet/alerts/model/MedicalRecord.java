@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicalRecord {
+
 	/**
 	 * A String that contain the firstName contained in the MedicalRecord
 	 */
@@ -55,4 +56,5 @@ public class MedicalRecord {
 	 */
 	@JsonProperty("allergies")
 	private List<String> allergies;
+
 }

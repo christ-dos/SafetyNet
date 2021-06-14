@@ -41,36 +41,34 @@ public class PersonDAO implements IPersonDAO {
 	public List<Person> getPersons() {
 		return listPersons;
 	}
-	
+
 	/**
-	 * Method that get the list of person by a list of addresses 
+	 * Method that get the list of person by a list of addresses
 	 * 
 	 * @return An ArrayList of Persons with address provided in parameter
 	 */
 	@Override
-	public List<Person> getPersonsByListAdresses(List<String> listAddress){
+	public List<Person> getPersonsByListAdresses(List<String> listAddress) {
 		List<Person> listPersonGetByListAddress = listPersons.stream()
-		.filter(person -> listAddress.contains(person.getAddress()))
-		.map(person-> person)
-		.collect(Collectors.toList());
+				.filter(person -> listAddress.contains(person.getAddress())).map(person -> person)
+				.collect(Collectors.toList());
 		log.debug("DAO - List of person found with the list address: " + listAddress);
 		return listPersonGetByListAddress;
 	}
-	
+
 	/**
 	 * Method that get the list of person by address
 	 * 
 	 * @return An ArrayList of Persons living in same address
 	 */
 	@Override
-	public List<Person> getListPersonByAddress(String address){
+	public List<Person> getListPersonByAddress(String address) {
 		List<Person> listPersonGetByAddress = listPersons.stream()
-		.filter(person -> person.getAddress().equalsIgnoreCase(address))
-		.map(person-> person)
-		.collect(Collectors.toList());
+				.filter(person -> person.getAddress().equalsIgnoreCase(address)).map(person -> person)
+				.collect(Collectors.toList());
 		log.debug("DAO - List of person found with address: " + address);
-		
-		if(listPersonGetByAddress.size() == 0) {
+
+		if (listPersonGetByAddress.size() == 0) {
 			return null;
 		}
 		return listPersonGetByAddress;
@@ -91,10 +89,10 @@ public class PersonDAO implements IPersonDAO {
 				return person;
 			}
 		}
-		log.debug("DAO - Person not found: "  + firstName  + " " + lastName);
+		log.debug("DAO - Person not found: " + firstName + " " + lastName);
 		return null;
 	}
-	
+
 	/**
 	 * Method that get person by address
 	 * 
@@ -109,14 +107,15 @@ public class PersonDAO implements IPersonDAO {
 				return person;
 			}
 		}
-		log.debug("DAO - The address not found: "  + address);
+		log.debug("DAO - The address not found: " + address);
 		return null;
 	}
 
 	/**
 	 * Method that save a Person in the ArrayList
 	 * 
-	 * @param index - An integer containing the position where will be saved the Person
+	 * @param index  - An integer containing the position where will be saved the
+	 *               Person
 	 * @param person - An instance of Person
 	 * @return The Person that was saved in the arrayList
 	 */

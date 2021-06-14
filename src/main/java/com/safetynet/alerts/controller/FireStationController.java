@@ -32,7 +32,6 @@ public class FireStationController {
 	 */
 	@Autowired
 	IFireStationService fireStationService;
-	
 
 	/**
 	 * Request get to obtain a FireStation
@@ -41,11 +40,11 @@ public class FireStationController {
 	 * @return a fireStation object
 	 */
 	@GetMapping(value = "/firestation/address")
-	public FireStation getFireStation(@Valid @RequestParam String address){
+	public FireStation getFireStation(@Valid @RequestParam String address) {
 		log.debug("Controller - fireStation found: " + address);
 		return fireStationService.getFireStation(address);
 	}
-	
+
 	/**
 	 * Request post to add a fireStation at the ArrayList
 	 * 
@@ -86,5 +85,4 @@ public class FireStationController {
 		log.debug("Controller - fireStation deleted: address: " + address);
 		return fireStationService.deleteFireStation(address);
 	}
-
 }

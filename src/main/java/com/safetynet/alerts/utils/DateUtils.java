@@ -7,15 +7,16 @@ import org.joda.time.format.DateTimeFormat;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Class that get age of persons
  * 
  * @author Christine Duarte
  *
  */
 @Slf4j
 public class DateUtils {
-	
+
 	/**
-	 * Method that get age by birthDate 
+	 * Method that get age by birthDate
 	 * 
 	 * @param birthDate - A string containing the birthDate
 	 * @return The value of age
@@ -33,9 +34,10 @@ public class DateUtils {
 		log.error("DateUtils - The bithdate is not valid");
 		return -1;
 	}
-	
+
 	/**
 	 * Method private that determines if person is adult or is child
+	 * 
 	 * @param age - A int with age of person
 	 * @return true if is adult and false if is child
 	 */

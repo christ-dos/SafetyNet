@@ -15,7 +15,7 @@ public class MedicalRecordAlreadyExistException extends RuntimeException {
 	 * Attribute that give an ID at the exception
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructor of the exception
 	 * 
@@ -24,7 +24,5 @@ public class MedicalRecordAlreadyExistException extends RuntimeException {
 	public MedicalRecordAlreadyExistException(String message) {
 		super(message);
 	}
-	
-	
 
 }

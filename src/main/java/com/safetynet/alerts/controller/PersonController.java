@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class PersonController {
-		
+
 	/**
 	 * An instance of the IPersonService
 	 * 
@@ -48,7 +48,7 @@ public class PersonController {
 		log.debug("Controller - Request to find person: " + firstName + " " + lastName);
 		return personService.getPerson(firstName, lastName);
 	}
-	
+
 	/**
 	 * Request Get to obtain the list of email of residents of the city input
 	 * 
@@ -57,7 +57,7 @@ public class PersonController {
 	 */
 	@GetMapping(value = "/communityEmail")
 	public List<String> getEmailResident(@Valid @RequestParam String city) {
-		log.debug("Controller - Request to get Email residents in city : "  + city );
+		log.debug("Controller - Request to get Email residents in city : " + city);
 		return personService.getEmailResidents(city);
 	}
 
@@ -66,9 +66,9 @@ public class PersonController {
 	 * 
 	 * @param person - a person obtained by the body of the request
 	 * @return the person added in the ArrayList
-	*/
+	 */
 	@PostMapping(value = "/person")
-	public Person savePerson(@Valid @RequestBody Person person){
+	public Person savePerson(@Valid @RequestBody Person person) {
 		log.debug("Controller - Request to save person: " + person.getFirstName() + " " + person.getLastName());
 		return personService.addPerson(person);
 	}
@@ -81,7 +81,8 @@ public class PersonController {
 	 * @return a String with the message "SUCCESS" or "Person not deleted"
 	 */
 	@DeleteMapping(value = "/person")
-	public String deletePersonByFirstNameAndLastName(@Valid @RequestParam String firstName, @RequestParam String lastName) {
+	public String deletePersonByFirstNameAndLastName(@Valid @RequestParam String firstName,
+			@RequestParam String lastName) {
 		log.debug("Controller - Request to delete person: " + firstName + " " + lastName);
 		return personService.deletePerson(firstName, lastName);
 	}

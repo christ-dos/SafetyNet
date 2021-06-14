@@ -32,6 +32,7 @@ import com.safetynet.alerts.model.FireStation;
  */
 @ExtendWith(MockitoExtension.class)
 public class FireStationServiceTest {
+
 	/**
 	 * an instance of {@link FireStationService}
 	 */
@@ -42,8 +43,7 @@ public class FireStationServiceTest {
 	 */
 	@Mock
 	private FireStationDAO fireStationDAOMock;
-	
-	
+
 	/**
 	 * A mock of the arraysList of {@link FireStation}
 	 */
@@ -68,9 +68,7 @@ public class FireStationServiceTest {
 		mockListFireStation.add(fireStationIndex2);
 		mockListFireStation.add(fireStationIndex3);
 
-		fireStationServiceTest = FireStationService.builder()
-				.fireStationDAO(fireStationDAOMock)
-			    .build();
+		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock).build();
 	}
 
 	/**

@@ -105,7 +105,6 @@ public class FireStationControllerTest {
 		when(fireStationServiceMock.getFireStation(anyString())).thenReturn(fireStationTest);
 		when(fireStationDAOMock.get(anyString())).thenReturn(fireStationTest);
 		// WHEN
-
 		// THEN
 		mockMvcFireStation.perform(get("/firestation/address?address=1509 Culver St")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.address", is("1509 Culver St"))).andExpect(jsonPath("$.station", is("3")))
@@ -124,7 +123,6 @@ public class FireStationControllerTest {
 		when(fireStationServiceMock.getFireStation(anyString()))
 				.thenThrow(new FireStationNotFoundException("The FireStation not found"));
 		// WHEN
-
 		// THEN
 		mockMvcFireStation.perform(get("/firestation/address?address=15 Flower St")).andExpect(status().isNotFound())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
@@ -145,7 +143,6 @@ public class FireStationControllerTest {
 		when(fireStationServiceMock.getFireStation(anyString()))
 				.thenThrow(new EmptyFieldsException("Field cannot be empty"));
 		// WHEN
-
 		// THEN
 		mockMvcFireStation.perform(get("/firestation/address?address=")).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.message", is("Field cannot be empty")))
@@ -168,7 +165,6 @@ public class FireStationControllerTest {
 		when(fireStationServiceMock.addFireStation(any()))
 				.thenThrow(new FireStationAlreadyExistException("The FireStation that we try to save already Exist"));
 		// WHEN
-
 		// THEN
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.post("/firestation").content(asJsonString(fireStationToAddThatExist))
@@ -193,7 +189,6 @@ public class FireStationControllerTest {
 		FireStation fireStationToAddNotExist = new FireStation("3", "15 wall Street");
 		when(fireStationServiceMock.addFireStation(any())).thenReturn(fireStationToAddNotExist);
 		// WHEN
-
 		// THEN
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.post("/firestation").content(asJsonString(fireStationToAddNotExist))
@@ -216,7 +211,6 @@ public class FireStationControllerTest {
 		FireStation fireStationToUpdate = new FireStation("5", "748 Townings Dr");
 		when(fireStationServiceMock.updateFireStation(any())).thenReturn(fireStationToUpdate);
 		// WHEN
-
 		// THEN
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToUpdate))
@@ -241,12 +235,12 @@ public class FireStationControllerTest {
 		when(fireStationServiceMock.updateFireStation(fireStationToAddNotExist))
 				.thenThrow(new FireStationNotFoundException("The FireStation not found"));
 		// WHEN
-
 		// THEN
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToAddNotExist))
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
+				.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.message", is("The FireStation not found, please try again")))
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof FireStationNotFoundException))
 				.andExpect(
 						result -> assertEquals("The FireStation not found", result.getResolvedException().getMessage()))
@@ -266,7 +260,6 @@ public class FireStationControllerTest {
 		// GIVEN
 		FireStation fireStationToUpadetaNotValid = new FireStation("3", "");
 		// WHEN
-
 		// THEN
 		mockMvcFireStation
 				.perform(MockMvcRequestBuilders.put("/firestation").content(asJsonString(fireStationToUpadetaNotValid))
@@ -289,7 +282,6 @@ public class FireStationControllerTest {
 		// GIVEN
 		when(fireStationServiceMock.deleteFireStation(anyString())).thenReturn("SUCCESS");
 		// WHEN
-
 		// THEN
 		mockMvcFireStation.perform(delete("/firestation?address=1509 Culver St")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", is("SUCCESS"))).andDo(print());
@@ -307,7 +299,6 @@ public class FireStationControllerTest {
 		// GIVEN
 		when(fireStationServiceMock.deleteFireStation(anyString())).thenReturn("FireStation cannot be deleted");
 		// WHEN
-
 		// THEN
 		mockMvcFireStation.perform(delete("/firestation?address=15 New York St")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", is("FireStation cannot be deleted"))).andDo(print());

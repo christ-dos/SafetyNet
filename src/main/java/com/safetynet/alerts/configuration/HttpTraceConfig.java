@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class HttpTraceConfig {
-	
+
 	/**
 	 * A method that permit access to the HttpTrace endpoint of actuator
+	 * 
 	 * @return An In-memory implementation of {@link HttpTraceRepository}.
 	 */
 	@Bean
-	public HttpTraceRepository htttpTraceRepository()
-	{
-	  return new InMemoryHttpTraceRepository();
+	public HttpTraceRepository htttpTraceRepository() {
+		return new InMemoryHttpTraceRepository();
 	}
 }

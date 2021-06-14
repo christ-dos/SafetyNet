@@ -36,8 +36,7 @@ public class FireStationService implements IFireStationService {
 	 */
 	@Autowired
 	private IFireStationDAO fireStationDAO;
-	
-	
+
 	/**
 	 * Method private that get a list of fireStations
 	 * 
@@ -56,7 +55,7 @@ public class FireStationService implements IFireStationService {
 	 * @throws FireStationNotFoundException when fireStation is not found
 	 */
 	@Override
-	public FireStation getFireStation(String address){
+	public FireStation getFireStation(String address) {
 		if (address.isEmpty()) {
 			log.error("Service - field can not be empty");
 			throw new EmptyFieldsException("Field cannot be empty");
@@ -70,7 +69,7 @@ public class FireStationService implements IFireStationService {
 				+ fireStationgetted.getStation());
 		return fireStationgetted;
 	}
-	
+
 	/**
 	 * Method that add a fireStation
 	 * 
@@ -83,7 +82,7 @@ public class FireStationService implements IFireStationService {
 	public FireStation addFireStation(FireStation fireStation) {
 		List<FireStation> listFireStations = getListFireStations();
 		int indexPosition = listFireStations.indexOf(fireStation);
-		//fireStation already exist
+		// fireStation already exist
 		if (indexPosition >= 0) {
 			log.error("Service - FireStation cannot be saved for address: " + fireStation.getAddress() + ", Station: "
 					+ fireStation.getStation() + " already exist");

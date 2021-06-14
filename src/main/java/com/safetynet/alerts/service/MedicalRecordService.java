@@ -29,12 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @AllArgsConstructor
 public class MedicalRecordService implements IMedicalRecordService {
+
 	/**
 	 * An instance of {@link MedicalRecordDAO}
 	 */
 	@Autowired
 	private IMedicalRecordDAO medicalRecordDAO;
-	
+
 	/**
 	 * Method private that get a list of medicalRecords
 	 * 
@@ -43,13 +44,16 @@ public class MedicalRecordService implements IMedicalRecordService {
 	private List<MedicalRecord> getListMedicalRecords() {
 		return medicalRecordDAO.getMedicalRecords();
 	}
+
 	/**
-	 * Method that get a medicalRecord by combining keys firstName and lastName recorded in the medicalRecord
+	 * Method that get a medicalRecord by combining keys firstName and lastName
+	 * recorded in the medicalRecord
 	 * 
 	 * @param firstName - the firstName recorded in the medicalRecord
-	 * @param lastName  - the lastName  recorded in the medicalRecord
+	 * @param lastName  - the lastName recorded in the medicalRecord
 	 * @return an instance of MedicalRecord getted
-	 * @throws EmptyFieldsException  when the field firstName or lastName is empty
+	 * @throws EmptyFieldsException           when the field firstName or lastName
+	 *                                        is empty
 	 * @throws MedicalRecordNotFoundException when medicalRecord is not found
 	 */
 	@Override
@@ -60,19 +64,21 @@ public class MedicalRecordService implements IMedicalRecordService {
 		}
 		MedicalRecord medicalRecord = medicalRecordDAO.get(firstName, lastName);
 		if (medicalRecord != null) {
-			log.debug("Service - MedicalRecord found for person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
+			log.debug("Service - MedicalRecord found for person: " + medicalRecord.getFirstName() + " "
+					+ medicalRecord.getLastName());
 			return medicalRecord;
 		}
 		log.error("Service - MedicalRecord not found for person: " + firstName + " " + lastName);
 		throw new MedicalRecordNotFoundException("MedicalRecord not found, please try again!");
 	}
+
 	/**
 	 * Method that add a {@link MedicalRecord}
 	 * 
 	 * @param medicalRecord - An instance of MedicalRecord
 	 * @return The medicalRecord added
-	 * @throws MedicalRecordAlreadyExistException when the medicalRecord that we want added
-	 *                                     already exist
+	 * @throws MedicalRecordAlreadyExistException when the medicalRecord that we
+	 *                                            want added already exist
 	 */
 	@Override
 	public MedicalRecord addMedicalRecord(MedicalRecord medicalRecord) {
@@ -84,9 +90,11 @@ public class MedicalRecordService implements IMedicalRecordService {
 					+ medicalRecord.getLastName() + " already have a medicalRecord");
 			throw new MedicalRecordAlreadyExistException("MedicalRecord already exist");
 		}
-		log.debug("Service - MedicalRecord is saved for the person: " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName());
+		log.debug("Service - MedicalRecord is saved for the person: " + medicalRecord.getFirstName() + " "
+				+ medicalRecord.getLastName());
 		return medicalRecordDAO.save(index, medicalRecord);
 	}
+
 	/**
 	 * Method that delete a medicalRecord
 	 * 
@@ -101,16 +109,18 @@ public class MedicalRecordService implements IMedicalRecordService {
 			log.debug("Service - MedicalRecord deleted for person: " + firstName + " " + lastName);
 			return medicalRecordDAO.delete(medicalRecordToDelete);
 		}
-		log.error("Service - MedicalRecord cannot be deleted for person: " + firstName + " " + lastName + " because not exist");
+		log.error("Service - MedicalRecord cannot be deleted for person: " + firstName + " " + lastName
+				+ " because not exist");
 		return "MedicalRecord cannot be Deleted";
 	}
-	
+
 	/**
 	 * Method that update a medicalRecord
 	 * 
 	 * @param medicalRecord - an instance of MedicalRecord
 	 * @return the medicalRecord updated
-	 * @throws MedicalRecordNotFoundException when the medicalRecord that we want update not exist
+	 * @throws MedicalRecordNotFoundException when the medicalRecord that we want
+	 *                                        update not exist
 	 */
 	@Override
 	public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {

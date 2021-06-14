@@ -2,9 +2,10 @@ package com.safetynet.alerts.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 /**
- * Class that models {@link PersonCoveredByStation}, an instance of PersonPartial contain
- * only firstName, lastName, address, phone of the person
+ * Class that models {@link PersonCoveredByStation}, an instance of
+ * PersonPartial contain only firstName, lastName, address, phone of the person
  * 
  * @author Christine Duarte
  *
@@ -12,7 +13,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PersonCoveredByStation {
-	
+
 	/**
 	 * A String that contain the firstName of the person
 	 */

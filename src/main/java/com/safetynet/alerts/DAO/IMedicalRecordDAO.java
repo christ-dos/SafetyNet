@@ -6,24 +6,25 @@ import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 
 /**
- *  Interface that manage methods CRUD of entity MedicalRecord
- *  
+ * Interface that manage methods CRUD of entity MedicalRecord
+ * 
  * @author Christine Duarte
  *
  */
 public interface IMedicalRecordDAO {
+	
 	/**
 	 * Method that get the list of medicalRecords
 	 * 
 	 * @return An ArrayList of MedicalRecords
 	 */
 	public List<MedicalRecord> getMedicalRecords();
-	
+
 	/**
 	 * Method that get the list of medicalRecords by list of Persons in parameter
 	 * 
 	 * @param listPerson - A list of persons
-	 * @return The  ArrayList of MedicalRecords with the persons input in parameter
+	 * @return The ArrayList of MedicalRecords with the persons input in parameter
 	 */
 	public List<MedicalRecord> getListMedicalRecordByListOfPerson(List<Person> listPerson);
 
@@ -40,7 +41,7 @@ public interface IMedicalRecordDAO {
 	 * Method that save a medicalRecord in the ArrayList
 	 * 
 	 * @param index - The position where will be saved the medicalRecord
-	 * @return  MedicalRecord that was saved in the arrayList
+	 * @return MedicalRecord that was saved in the arrayList
 	 */
 	public MedicalRecord save(int index, MedicalRecord medicalRecord);
 

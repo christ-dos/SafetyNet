@@ -14,6 +14,7 @@ import lombok.Builder;
 
 @Builder
 public class PersonFlood {
+	
 	/**
 	 * A String that contain the firstName of the person
 	 */
