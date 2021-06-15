@@ -131,9 +131,9 @@ public class PersonInformationService implements IPersonInformationService {
 
 		List<PersonCoveredByStation> listOfPartialPerson = new ArrayList<>();
 		for (Person person : listPersonCoveredByStation) {
-			PersonCoveredByStation personDTO = new PersonCoveredByStation(person.getFirstName(), person.getLastName(),
+			PersonCoveredByStation personCoveredByStation = new PersonCoveredByStation(person.getFirstName(), person.getLastName(),
 					person.getAddress(), person.getPhone());
-			listOfPartialPerson.add(personDTO);
+			listOfPartialPerson.add(personCoveredByStation);
 		}
 		PersonCoveredByStationDisplaying displayingListPersonsCoveredByStation = new PersonCoveredByStationDisplaying(
 				listOfPartialPerson, adultCouter, childCounter);

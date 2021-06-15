@@ -72,7 +72,7 @@ public class PersonDAOTest {
 		List<Person> resultListgetted = personDAOTest.getPersons();
 		// THEN
 		assertEquals(personJohnBoyd, resultListgetted.get(0));
-		// the list conatin 3 elements
+		// the list contain 3 elements
 		assertEquals(3, resultListgetted.size());
 	}
 
