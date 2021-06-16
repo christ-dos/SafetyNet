@@ -184,8 +184,8 @@ public class PersonServiceTest {
 		when(personDAOMock.getPersons()).thenReturn(mockList);
 		// WHEN
 		// THEN
-		// verify that the method getPerson was not called
-		verify(personDAOMock, times(0)).getPerson(anyString(), anyString());
+		// verify that the method save was not called
+		verify(personDAOMock, times(0)).save(anyInt(), any());
 		assertThrows(PersonAlreadyExistException.class, () -> personServiceTest.addPerson(personToAddAlreadyExist));
 	}
 
