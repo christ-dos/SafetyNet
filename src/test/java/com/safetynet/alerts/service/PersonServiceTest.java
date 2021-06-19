@@ -96,7 +96,25 @@ public class PersonServiceTest {
 
 		personServiceTest = PersonService.builder().personDAO(personDAOMock).build();
 	}
-
+	
+	/**
+	 * Method that test getListPersons then return a list of persons with 4 elements
+	 * and verify that John Boyd is present in the list
+	 */
+	@Test
+	public void testGetListPersons_thenreturnListOfPersons() {
+		// GIVEN
+		Person personJohnBoyd = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		// WHEN
+		List<Person> resultListgetted = personServiceTest.getListPersons();
+		// THEN
+		assertEquals(personJohnBoyd, resultListgetted.get(0));
+		// the list contain 4 elements
+		assertEquals(4, resultListgetted.size());
+	}
+	
 	/**
 	 * Method that test getPerson with firstName John and LastName Boyd when person
 	 * exist then return John Boyd and verify that the method getPerson was called

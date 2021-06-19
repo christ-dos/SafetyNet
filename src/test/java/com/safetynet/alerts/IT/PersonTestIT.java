@@ -42,7 +42,28 @@ public class PersonTestIT {
 	 */
 	@Autowired
 	private MockMvc mockMvc;
-
+	
+	/**
+	 * Method that test request getPersons then expected status 
+	 * isOk and John Boyd, Jacob Boyd and Eric Cadigan are contained in the list
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetPersons__thenReturnListOfPersons() throws Exception {
+		// GIVEN
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/persons")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].firstName", is("John")))
+				.andExpect(jsonPath("$.[0]lastName", is("Boyd")))
+				.andExpect(jsonPath("$.[1].firstName", is("Jacob")))
+				.andExpect(jsonPath("$.[1].lastName", is("Boyd")))
+				.andExpect(jsonPath("$.[22].firstName", is("Eric")))
+				.andExpect(jsonPath("$.[22].lastName", is("Cadigan")))
+				.andDo(print());
+	}
+	
 	/**
 	 * Method that test requestGet when person exist then the status of the request
 	 * isOk and the firstName and lastName is Roger Boyd

@@ -40,11 +40,11 @@ public class PersonService implements IPersonService {
 	private IPersonDAO personDAO;
 
 	/**
-	 * Method private that get a list of persons
+	 * Method  that get a list of persons
 	 * 
 	 * @return An ArrayList of Person
 	 */
-	private List<Person> getListPersons() {
+	public List<Person> getListPersons() {
 		return personDAO.getPersons();
 	}
 

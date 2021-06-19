@@ -14,7 +14,13 @@ import com.safetynet.alerts.model.Person;
  *
  */
 public interface IPersonService {
-
+	/**
+	 * A merthod that displaying list of persons 
+	 * 
+	 * @return A list of Persons
+	 */
+	public List<Person> getListPersons();
+	
 	/**
 	 * Method that get a person by combining keys firstName and lastName
 	 * 
