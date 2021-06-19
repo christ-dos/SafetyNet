@@ -1,5 +1,7 @@
 package com.safetynet.alerts.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,17 @@ public class FireStationController {
 	@Autowired
 	IFireStationService fireStationService;
 
+	/**
+	 * Request get to obtain a list of FireStation
+	 * 
+	 * @return A list of FireStation
+	 */
+	@GetMapping(value = "/firestations")
+	public List<FireStation> getFireStations() {
+		log.debug("Controller - Request to obtain a list of FireStations");
+		return fireStationService.getListFireStations();
+	}
+	
 	/**
 	 * Request get to obtain a FireStation
 	 * 

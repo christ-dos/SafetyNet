@@ -1,5 +1,7 @@
 package com.safetynet.alerts.service;
 
+import java.util.List;
+
 import com.safetynet.alerts.exceptions.EmptyFieldsException;
 import com.safetynet.alerts.model.FireStation;
 
@@ -11,7 +13,14 @@ import com.safetynet.alerts.model.FireStation;
  *
  */
 public interface IFireStationService {
-
+	
+	/**
+	 * Method  that get a list of fireStations
+	 * 
+	 * @return An ArrayList of FireStation
+	 */
+	public List<FireStation> getListFireStations();
+	
 	/**
 	 * Method that get a fireStation by address
 	 * 

@@ -35,14 +35,14 @@ public class FireStationService implements IFireStationService {
 	 * @see FireStationDAO
 	 */
 	@Autowired
-	private IFireStationDAO fireStationDAO;
+	public IFireStationDAO fireStationDAO;
 
 	/**
-	 * Method private that get a list of fireStations
+	 * Method  that get a list of fireStations
 	 * 
 	 * @return An ArrayList of FireStation
 	 */
-	private List<FireStation> getListFireStations() {
+	public List<FireStation> getListFireStations() {
 		return fireStationDAO.getFireStations();
 	}
 

@@ -41,7 +41,30 @@ public class FireStationTestIT {
 	 */
 	@Autowired
 	private MockMvc mockMvcFireStation;
-
+	
+	/**
+	 * Method that test request getFireStations then expected status 
+	 * isOk 
+	 * and sation:"3", address:"1509 Culver St"; station:"3", address:"112 Steppes Pl"; station:"2", address:"951 LoneTree Rd" 
+	 * , are contained in the list
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFireStations_thenReturnListOfFireStations() throws Exception {
+		// GIVEN
+		// WHEN
+		// THEN
+		mockMvcFireStation.perform(get("/firestations")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].station", is("3")))
+				.andExpect(jsonPath("$.[0].address", is("1509 Culver St")))
+				.andExpect(jsonPath("$.[5].station", is("3")))
+				.andExpect(jsonPath("$[5].address", is("112 Steppes Pl")))
+				.andExpect(jsonPath("$.[11].station", is("2")))
+				.andExpect(jsonPath("$[11].address", is("951 LoneTree Rd")))
+				.andDo(print());
+	}
+	
 	/**
 	 * Method that test request Get when fireStation exist then the status of the
 	 * request isOk and the address of the fireStation :"951 LoneTree Rd"

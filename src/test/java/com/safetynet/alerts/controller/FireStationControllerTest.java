@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,8 @@ public class FireStationControllerTest {
 	 */
 	@Mock
 	private List<FireStation> mockListFireStation;
-
+	
+			
 	/**
 	 * Method that write an object as JsonString to build the body of the request
 	 * mock
@@ -89,6 +91,35 @@ public class FireStationControllerTest {
 		} catch (Exception e) {
 			throw new RuntimeException("The obj does not be writting", e);
 		}
+	}
+	
+	/**
+	 * Method that test getFireStations then return a list of FireStations
+	 * and verify that station:"3", address:"1509 Culver St", station:"2", address:"29 15th St"
+	 *  are contained in the list
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetFireStations__thenReturnListOfPersons() throws Exception {
+		//GIVEN
+		mockListFireStation = new ArrayList<>();
+
+		FireStation fireStationIndex0 = new FireStation("3", "1509 Culver St");
+		FireStation fireStationIndex1 = new FireStation("2", "29 15th St");
+		FireStation fireStationIndex2 = new FireStation("3", "834 Binoc Ave");
+		FireStation fireStationIndex3 = new FireStation("3", "1509 Culver St");
+		mockListFireStation.add(fireStationIndex0);
+		mockListFireStation.add(fireStationIndex1);
+		mockListFireStation.add(fireStationIndex2);
+		mockListFireStation.add(fireStationIndex3);
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
+		when(fireStationServiceMock.getListFireStations()).thenReturn(mockListFireStation);
+		//WHEN
+		//THEN
+		mockMvcFireStation.perform(get("/firestations")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.[0].address", is("1509 Culver St"))).andExpect(jsonPath("$.[0].station", is("3")))
+		.andDo(print());
 	}
 
 	/**
