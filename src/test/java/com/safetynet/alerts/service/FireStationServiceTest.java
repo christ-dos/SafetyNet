@@ -70,7 +70,24 @@ public class FireStationServiceTest {
 
 		fireStationServiceTest = FireStationService.builder().fireStationDAO(fireStationDAOMock).build();
 	}
-
+	
+	/**
+	 * Method that test getListFireStations then return a list of fireStations with 4 elements
+	 * and verify that fireStaion: "3", address: "1509 Culver St" is present in the list
+	 */
+	@Test
+	public void testGetListFireStations_thenReturnListOfFireStations() {
+		// GIVEN
+		FireStation fireStationTest = new FireStation("3", "1509 Culver St");
+		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);
+		// WHEN
+		List<FireStation> resultListgetted = fireStationServiceTest.getListFireStations();
+		// THEN
+		assertEquals(fireStationTest, resultListgetted.get(0));
+		// the list contain 4 elements
+		assertEquals(4, resultListgetted.size());
+	}
+	
 	/**
 	 * Method that test get with address "1509 Culver St" when fireStation exist
 	 * then return a fireStation and verify that the method get was called

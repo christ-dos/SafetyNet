@@ -37,11 +37,11 @@ public class MedicalRecordService implements IMedicalRecordService {
 	private IMedicalRecordDAO medicalRecordDAO;
 
 	/**
-	 * Method private that get a list of medicalRecords
+	 * Method that get a list of medicalRecords
 	 * 
 	 * @return An ArrayList of medicalRecords
 	 */
-	private List<MedicalRecord> getListMedicalRecords() {
+	public List<MedicalRecord> getListMedicalRecords() {
 		return medicalRecordDAO.getMedicalRecords();
 	}
 

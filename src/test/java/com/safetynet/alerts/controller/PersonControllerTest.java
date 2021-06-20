@@ -91,7 +91,41 @@ public class PersonControllerTest {
 			throw new RuntimeException("The obj does not be writting", e);
 		}
 	}
-
+	
+	/**
+	 * Method that test getPersons then return a list of Persons
+	 * and verify that John Boyd, Tenley Boyd and Lilly Cooper are contained in list
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetPersons__thenReturnListOfPersons() throws Exception {
+		// GIVEN
+		mockList = new ArrayList<>();
+		Person index0 = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"jaboyd@email.com");
+		Person index1 = new Person("Lily", "Cooper", "489 Manchester St", "Culver", "97451", "841-874-9845",
+				"lily@email.com");
+		Person index2 = new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
+				"tenz@email.com");
+		mockList.add(index0);
+		mockList.add(index1);
+		mockList.add(index2);
+		
+		when(personServiceMock.getListPersons()).thenReturn(mockList);
+		when(personDAOMock.getPersons()).thenReturn(mockList);
+		// WHEN
+		// THEN
+		mockMvc.perform(get("/persons")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].firstName", is("John")))
+				.andExpect(jsonPath("$.[0]lastName", is("Boyd")))
+				.andExpect(jsonPath("$.[1].firstName", is("Lily")))
+				.andExpect(jsonPath("$.[1].lastName", is("Cooper")))
+				.andExpect(jsonPath("$.[2].firstName", is("Tenley")))
+				.andExpect(jsonPath("$.[2].lastName", is("Boyd")))
+				.andDo(print());
+	}
+	
 	/**
 	 * Method that test getPerson when person exist the status of the request is OK
 	 * and the firstName and lastName is John Boyd

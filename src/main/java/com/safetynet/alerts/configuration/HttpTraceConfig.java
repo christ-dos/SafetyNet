@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class HttpTraceConfig {
 
 	/**
-	 * A method that permit access to the HttpTrace endpoint of actuator
+	 * A method that permit access to the HttpTrace endpoint of actuators
 	 * 
 	 * @return An In-memory implementation of {@link HttpTraceRepository}.
 	 */

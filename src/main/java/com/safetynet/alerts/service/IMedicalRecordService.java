@@ -1,5 +1,7 @@
 package com.safetynet.alerts.service;
 
+import java.util.List;
+
 import com.safetynet.alerts.model.MedicalRecord;
 
 /**
@@ -11,6 +13,13 @@ import com.safetynet.alerts.model.MedicalRecord;
  */
 public interface IMedicalRecordService {
 
+	/**
+	 * Method that get a list of medicalRecords
+	 * 
+	 * @return An ArrayList of medicalRecords
+	 */
+	public List<MedicalRecord> getListMedicalRecords();
+	
 	/**
 	 * Method that get a medicalRecord by combining keys firstName and lastName
 	 * 

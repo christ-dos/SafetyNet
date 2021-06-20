@@ -90,6 +90,41 @@ public class MedicalRecordControllerTest {
 			throw new RuntimeException("The obj does not be writting", e);
 		}
 	}
+	
+	/**
+	 * Method that test getMedicalRecords then return a list of MedicalRecord
+	 * and verify that the medicalRecord of John Boyd, and Jonanathan Marrack
+	 * are contained in the list
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetMedicalRecords__thenReturnListOfMedicalRecord() throws Exception {
+		//GIVEN
+		mockListMedicalRecord = new ArrayList<>();
+		MedicalRecord index0 = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		MedicalRecord index1 = new MedicalRecord("Lily", "Cooper", "03/06/1994", new ArrayList<>(), new ArrayList<>());
+		MedicalRecord index2 = new MedicalRecord("Tenley", "Boyd", "02/08/2012", new ArrayList<>(Arrays.asList()),
+				new ArrayList<>(Arrays.asList("peanut")));
+		MedicalRecord index3 = new MedicalRecord("Jonanathan", "Marrack", "01/03/1989",
+				new ArrayList<>(Arrays.asList()), new ArrayList<>(Arrays.asList()));
+		mockListMedicalRecord.add(index0);
+		mockListMedicalRecord.add(index1);
+		mockListMedicalRecord.add(index2);
+		mockListMedicalRecord.add(index3);
+		when(medicalRecordDAOMock.getMedicalRecords()).thenReturn(mockListMedicalRecord);
+		when(medicalRecordServiceMock.getListMedicalRecords()).thenReturn(mockListMedicalRecord);
+		//WHEN
+		//THEN
+		mockMvcMedicalRecord.perform(get("/medicalRecords")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.[0].firstName", is("John"))).andExpect(jsonPath("$.[0].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.[0].birthdate", is("03/06/1984")))
+		.andExpect(jsonPath("$.[3].firstName", is("Jonanathan"))).andExpect(jsonPath("$.[3].lastName", is("Marrack")))
+		.andExpect(jsonPath("$.[3].birthdate", is("01/03/1989")))
+		.andDo(print());
+	}
 
 	/**
 	 * Method that test getMedicalRecord when medicalRecord exist the status of the

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.alerts.DAO.IReadFileJson;
 import com.safetynet.alerts.DAO.ReadFileJson;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
@@ -40,7 +41,7 @@ public class DataJson {
 	 * @see ReadFileJson
 	 */
 	@Autowired
-	private ReadFileJson reader;
+	private IReadFileJson reader;
 	/**
 	 * An instance of ObjectMapper that provides functionality for reading and
 	 * writing JSON

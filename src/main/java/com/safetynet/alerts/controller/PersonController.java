@@ -37,6 +37,17 @@ public class PersonController {
 	private IPersonService personService;
 
 	/**
+	 * Request getPersons to obtain a list of Persons
+	 * 
+	 * @return A list of Person
+	 */
+	@GetMapping(value = "/persons")
+	public List<Person> getPersons() {
+		log.debug("Controller - Request to displaying the list of persons");
+		return personService.getListPersons();
+	}
+	
+	/**
 	 * Request Get to obtain a person
 	 * 
 	 * @param firstName - a String obtained from url request

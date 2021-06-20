@@ -204,7 +204,7 @@ public class PersonInformationServiceTest {
 		PersonCoveredByStationDisplaying PersonsCovededByStationThree = personInformationService
 				.getPersonCoveredByFireStation(stationNumber);
 		// THEN
-		// verify that the list contained 7 elements of personDTO
+		// verify that the list contained 7 elements of PersonCoveredByStation
 		assertEquals(7, PersonsCovededByStationThree.getListPartialPersons().size());
 		// verify the list contain in index 0 John Boyd
 		assertEquals(expectedJohnBoyd, PersonsCovededByStationThree.getListPartialPersons().get(0));

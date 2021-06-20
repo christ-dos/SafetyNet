@@ -1,5 +1,7 @@
 package com.safetynet.alerts.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,18 @@ public class MedicalRecordController {
 	 */
 	@Autowired
 	private IMedicalRecordService medicalRecordService;
-
+	
+	/**
+	 * Request getMedicalRecords to obtain a list of MedicalRecord
+	 * 
+	 * @return  A list of MedicalRecords
+	 */
+	@GetMapping(value = "/medicalRecords")
+	public List<MedicalRecord> getMedicalRecords() {
+		log.debug("Controller - Request to get a list of medicalRecord ");
+		return medicalRecordService.getListMedicalRecords();
+	}
+	
 	/**
 	 * Request Get to obtain a medicalRecord
 	 * 

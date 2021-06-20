@@ -115,6 +115,8 @@ public class MedicalRecordDAOTest {
 		assertEquals(3, medicalRecordResult.size());
 		assertEquals(indexMRecord0, medicalRecordResult.get(0));
 		assertEquals("03/06/1984", medicalRecordResult.get(0).getBirthDate());
+		assertEquals("John", medicalRecordResult.get(0).getFirstName());
+		assertEquals("Boyd", medicalRecordResult.get(0).getLastName());
 	}
 
 	/**

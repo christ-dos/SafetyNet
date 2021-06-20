@@ -55,11 +55,11 @@ public class PersonInformationController {
 	}
 
 	/**
-	 * Request get to obtain a list of person DTO covered by a fireStation station
+	 * Request get to obtain a list of PersonCoveredByStation covered by a fireStation station
 	 * number and a counter of adults and childs
 	 * 
 	 * @param station - A String with a number of the station
-	 * @return A list of PersonDTO and a counter of adults and childs
+	 * @return A list of PersonCoveredByStation and a counter of adults and childs
 	 */
 	@GetMapping(value = "/firestation")
 	public PersonCoveredByStationDisplaying getListPersonsCoveredByStation(@Valid @RequestParam String stationNumber) {
