@@ -71,9 +71,29 @@ public class MedicalRecordServiceTest {
 		mockListMedicalRecord.add(index1);
 		mockListMedicalRecord.add(index2);
 		mockListMedicalRecord.add(index3);
+		
 		medicalRecordServiceTest = MedicalRecordService.builder().medicalRecordDAO(medicalRecordDAOMock).build();
 	}
-
+	
+	/**
+	 * Method that test getListMedicalRecord then return a list of MedicalRecord with 4 elements
+	 * and verify that John Boyd is present in the list
+	 */
+	@Test
+	public void testGetListMedicalRecord_thenReturnListOfFireStations() {
+		// GIVEN
+		MedicalRecord medicalRecordTest = new MedicalRecord("John", "Boyd", "03/06/1984",
+				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),
+				new ArrayList<>(Arrays.asList("nillacilan")));
+		when(medicalRecordDAOMock.getMedicalRecords()).thenReturn(mockListMedicalRecord);
+		// WHEN
+		List<MedicalRecord> resultListgetted = medicalRecordServiceTest.getListMedicalRecords();
+		// THEN
+		assertEquals(medicalRecordTest, resultListgetted.get(0));
+		// the list contain 4 elements
+		assertEquals(4, resultListgetted.size());
+	}
+	
 	/**
 	 * Method that test getMedicalRecord with firstName John and LastName Boyd when
 	 * medicalRecord exist then return a medicalRecord with name John Boyd and

@@ -76,7 +76,7 @@ public class FireStationServiceTest {
 	 * and verify that fireStaion: "3", address: "1509 Culver St" is present in the list
 	 */
 	@Test
-	public void testGetListFireStations_thenreturnListOfFireStations() {
+	public void testGetListFireStations_thenReturnListOfFireStations() {
 		// GIVEN
 		FireStation fireStationTest = new FireStation("3", "1509 Culver St");
 		when(fireStationDAOMock.getFireStations()).thenReturn(mockListFireStation);

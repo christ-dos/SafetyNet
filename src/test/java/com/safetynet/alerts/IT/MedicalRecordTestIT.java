@@ -44,6 +44,26 @@ public class MedicalRecordTestIT {
 	 */
 	@Autowired
 	private MockMvc mockMvcMedicalRecord;
+	
+	/**
+	 * Method that test getMedicalRecords then return a list of MedicalRecord
+	 * and verify that the medicalRecord of John Boyd, and Eric Cadigan
+	 * are contained in the list
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testRequestGetMedicalRecords__thenReturnListOfMedicalRecord() throws Exception {
+		//GIVEN
+		//WHEN
+		//THEN
+		mockMvcMedicalRecord.perform(get("/medicalRecords")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.[0].firstName", is("John"))).andExpect(jsonPath("$.[0].lastName", is("Boyd")))
+		.andExpect(jsonPath("$.[0].birthdate", is("03/06/1984")))
+		.andExpect(jsonPath("$.[22].firstName", is("Eric"))).andExpect(jsonPath("$.[22].lastName", is("Cadigan")))
+		.andExpect(jsonPath("$.[22].birthdate", is("08/06/1945")))
+		.andDo(print());
+	}
 
 	/**
 	 * Method that test request Get when MedicalRecord exist then the status of the

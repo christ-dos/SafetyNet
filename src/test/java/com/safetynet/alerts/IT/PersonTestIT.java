@@ -50,7 +50,7 @@ public class PersonTestIT {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetPersons__thenReturnListOfPersons() throws Exception {
+	public void testRequestGetPersons__thenReturnListOfPersons() throws Exception {
 		// GIVEN
 		// WHEN
 		// THEN

@@ -102,7 +102,7 @@ public class PersonServiceTest {
 	 * and verify that John Boyd is present in the list
 	 */
 	@Test
-	public void testGetListPersons_thenreturnListOfPersons() {
+	public void testGetListPersons_thenReturnListOfPersons() {
 		// GIVEN
 		Person personJohnBoyd = new Person("John", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512",
 				"jaboyd@email.com");

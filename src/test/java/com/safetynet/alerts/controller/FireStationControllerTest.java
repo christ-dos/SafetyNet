@@ -101,7 +101,7 @@ public class FireStationControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetFireStations__thenReturnListOfPersons() throws Exception {
+	public void testGetFireStations__thenReturnListOfFireStation() throws Exception {
 		//GIVEN
 		mockListFireStation = new ArrayList<>();
 

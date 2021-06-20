@@ -45,13 +45,13 @@ public class FireStationTestIT {
 	/**
 	 * Method that test request getFireStations then expected status 
 	 * isOk 
-	 * and sation:"3", address:"1509 Culver St"; station:"3", address:"112 Steppes Pl"; station:"2", address:"951 LoneTree Rd" 
+	 * and sation:"3", address:"1509 Culver St", station:"3", address:"112 Steppes Pl"; station:"2", address:"951 LoneTree Rd" 
 	 * , are contained in the list
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetFireStations_thenReturnListOfFireStations() throws Exception {
+	public void testRequestGetFireStations_thenReturnListOfFireStations() throws Exception {
 		// GIVEN
 		// WHEN
 		// THEN
