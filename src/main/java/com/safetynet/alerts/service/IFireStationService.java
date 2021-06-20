@@ -15,7 +15,7 @@ import com.safetynet.alerts.model.FireStation;
 public interface IFireStationService {
 	
 	/**
-	 * Method  that get a list of fireStations
+	 * Method that get a list of fireStations
 	 * 
 	 * @return An ArrayList of FireStation
 	 */

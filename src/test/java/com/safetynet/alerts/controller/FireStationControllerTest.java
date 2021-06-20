@@ -96,7 +96,7 @@ public class FireStationControllerTest {
 	/**
 	 * Method that test getFireStations then return a list of FireStations
 	 * and verify that station:"3", address:"1509 Culver St", station:"2", address:"29 15th St"
-	 *  are contained in the list
+	 * are contained in the list
 	 * 
 	 * @throws Exception
 	 */

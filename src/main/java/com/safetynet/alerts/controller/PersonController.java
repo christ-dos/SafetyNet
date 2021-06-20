@@ -37,7 +37,7 @@ public class PersonController {
 	private IPersonService personService;
 
 	/**
-	 * Request Get to obtain a list of Persons
+	 * Request getPersons to obtain a list of Persons
 	 * 
 	 * @return A list of Person
 	 */

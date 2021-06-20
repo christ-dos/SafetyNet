@@ -80,7 +80,7 @@ public class MedicalRecordServiceTest {
 	 * and verify that John Boyd is present in the list
 	 */
 	@Test
-	public void testGetListMedicalRecord_thenReturnListOfFireStations() {
+	public void testGetListMedicalRecord_thenReturnListOfMedicalRecords() {
 		// GIVEN
 		MedicalRecord medicalRecordTest = new MedicalRecord("John", "Boyd", "03/06/1984",
 				new ArrayList<>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg")),

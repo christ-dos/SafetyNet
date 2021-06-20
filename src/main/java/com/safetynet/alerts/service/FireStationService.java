@@ -38,7 +38,7 @@ public class FireStationService implements IFireStationService {
 	public IFireStationDAO fireStationDAO;
 
 	/**
-	 * Method  that get a list of fireStations
+	 * Method that get a list of fireStations
 	 * 
 	 * @return An ArrayList of FireStation
 	 */

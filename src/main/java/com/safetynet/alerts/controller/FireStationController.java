@@ -36,7 +36,7 @@ public class FireStationController {
 	IFireStationService fireStationService;
 
 	/**
-	 * Request get to obtain a list of FireStation
+	 * Request getFireStations to obtain a list of FireStation
 	 * 
 	 * @return A list of FireStation
 	 */

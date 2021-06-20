@@ -94,7 +94,7 @@ public class PersonControllerTest {
 	
 	/**
 	 * Method that test getPersons then return a list of Persons
-	 * and verify that John Boyd is contained in list
+	 * and verify that John Boyd, Tenley Boyd and Lilly Cooper are contained in list
 	 * 
 	 * @throws Exception
 	 */

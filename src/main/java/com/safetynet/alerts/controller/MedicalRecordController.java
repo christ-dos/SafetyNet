@@ -37,7 +37,7 @@ public class MedicalRecordController {
 	private IMedicalRecordService medicalRecordService;
 	
 	/**
-	 * Request GetMedicalRecords to obtain a list of MedicalRecord
+	 * Request getMedicalRecords to obtain a list of MedicalRecord
 	 * 
 	 * @return  A list of MedicalRecords
 	 */

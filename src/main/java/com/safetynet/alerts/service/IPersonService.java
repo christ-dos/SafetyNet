@@ -15,7 +15,7 @@ import com.safetynet.alerts.model.Person;
  */
 public interface IPersonService {
 	/**
-	 * A merthod that get list of persons 
+	 * Method that get list of persons 
 	 * 
 	 * @return A list of Persons
 	 */

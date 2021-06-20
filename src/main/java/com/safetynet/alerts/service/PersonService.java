@@ -40,7 +40,7 @@ public class PersonService implements IPersonService {
 	private IPersonDAO personDAO;
 
 	/**
-	 * Method  that get a list of persons
+	 * Method that get a list of persons
 	 * 
 	 * @return An ArrayList of Person
 	 */
