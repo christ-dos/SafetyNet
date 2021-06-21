@@ -3,7 +3,6 @@ package com.safetynet.alerts.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,29 +17,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class DateUtilsTest {
 
 	/**
-	 * A mock of {@link DateUtils}
-	 */
-	private DateUtils dateUtils;
-
-	/**
-	 * Method which initialize dateUtils per all tests
-	 * 
-	 */
-	@BeforeEach
-	public void setUpPerTest() {
-		dateUtils = new DateUtils();
-	}
-
-	/**
 	 * Method that test getAge for a birthDate 09/17/1974 then return 46 years
 	 */
 	@Test
 	public void testGetAge_whenbithDateIsAString_thenReturnAge() {
 		// GIVEN
-		DateUtils dateUtils = new DateUtils();
 		String birthDate = "09/17/1974";
 		// WHEN
-		int resultAge = dateUtils.getAge(birthDate);
+		int resultAge = DateUtils.getAge(birthDate);
 		// THEN
 		assertEquals(46, resultAge);
 	}
@@ -55,7 +39,7 @@ public class DateUtilsTest {
 		String birthDate = "";
 		// WHEN
 		// THEN
-		assertThrows(IllegalArgumentException.class, () -> dateUtils.getAge(birthDate));
+		assertThrows(IllegalArgumentException.class, () -> DateUtils.getAge(birthDate));
 	}
 
 	/**
@@ -67,7 +51,7 @@ public class DateUtilsTest {
 		// GIVEN
 		String birthDate = "01/25/2050";
 		// WHEN
-		int resultAge = dateUtils.getAge(birthDate);
+		int resultAge = DateUtils.getAge(birthDate);
 		// THEN
 		assertEquals(-1, resultAge);
 	}
