@@ -100,11 +100,27 @@ public class PersonFlood {
 	public Integer getAge() {
 		return age;
 	}
-
 	/**
-	 * method equals
+	 * Method hashCode
 	 * 
-	 * @return true if equals
+	 * @return An integer containing result
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((age == null) ? 0 : age.hashCode());
+		result = prime * result + ((allergies == null) ? 0 : allergies.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((medication == null) ? 0 : medication.hashCode());
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		return result;
+	}
+	/**
+	 * Method equals
+	 * 
+	 * @return true
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -147,4 +163,5 @@ public class PersonFlood {
 			return false;
 		return true;
 	}
+	
 }
